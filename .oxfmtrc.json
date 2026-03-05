@@ -1,0 +1,8 @@
+{
+  "ignorePatterns": [],
+  "experimentalTailwindcss": {
+    "attributes": ["className"],
+    "stylesheet": "./src/app/globals.css",
+    "functions": ["clsx", "cn"]
+  }
+}

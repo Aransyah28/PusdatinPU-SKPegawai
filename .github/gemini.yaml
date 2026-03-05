@@ -1,0 +1,13 @@
+version: 1
+reviews:
+  enabled: true
+  ignore:
+    - "package-lock.json"
+    - "bun.lock"
+    - "bun.lockb"
+    - "yarn.lock"
+    - "dist/**"
+    - ".next/**"
+    - "out/**"
+    - "drizzle/**"
+    - "node_modules/**"

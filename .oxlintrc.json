@@ -1,0 +1,32 @@
+{
+  "plugins": ["unicorn", "typescript", "oxc"],
+  "categories": {},
+  "rules": {
+    "no-unused-vars": "error",
+    "no-explicit-any": "error",
+    "no-debugger": "warn",
+    "no-console": "warn",
+    "no-empty": "warn",
+    "max-lines": ["warn", { "max": 200, "skipBlankLines": true, "skipComments": true }],
+    "typescript/no-floating-promises": "warn",
+    "typescript/no-misused-new": "warn",
+    "typescript/prefer-as-const": "warn",
+    "typescript/no-wrapper-object-types": "warn",
+    "unicorn/no-await-in-promise-methods": "warn",
+    "unicorn/no-unnecessary-await": "warn",
+    "oxc/bad-array-method-on-arguments": "warn",
+    "oxc/missing-throw": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["src/components/**/*.tsx"],
+      "rules": {
+        "max-lines": ["warn", { "max": 150, "skipBlankLines": true, "skipComments": true }]
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "src/components/ui/**",
+    "drizzle/**"
+  ]
+}
