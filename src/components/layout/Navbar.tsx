@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, Settings } from "lucide-react";
+import { ArrowLeft, Sparkles, Settings, LogOut } from "lucide-react";
 import { signOut } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
 import type { User } from "@/lib/auth/auth";
+import { cn } from "@/lib/utils/cn";
 
 interface NavbarProps {
   user: User | null;
@@ -16,16 +17,6 @@ function getInitial(name: string): string {
   return name.trim().charAt(0).toUpperCase();
 }
 
-/**
- * Navbar redesign sesuai referensi:
- * ← [icon] SK Kepegawaian          [Kelola Admin | ---] Admin [A]
- *
- * - Back arrow → htupusdatin.vercel.app/kepegawaian
- * - Avatar = inisial, klik = popup (email + logout)
- * - Admin: tampilkan "Kelola Admin", separator, label "Admin", lalu avatar
- * - User: tampilkan avatar saja (tanpa separator, tanpa label)
- * - Guest: tombol Masuk & Daftar
- */
 export function Navbar({ user }: NavbarProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +24,6 @@ export function Navbar({ user }: NavbarProps) {
 
   const isAdmin = user?.role === "admin";
 
-  // Tutup dropdown saat klik di luar
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (
@@ -56,7 +46,7 @@ export function Navbar({ user }: NavbarProps) {
   };
 
   return (
-    <nav className="fixed left-0 right-0 top-0 z-50 border-b border-gray-100 bg-white py-2 shadow-sm">
+    <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border bg-white/80 py-2 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
 
@@ -64,16 +54,18 @@ export function Navbar({ user }: NavbarProps) {
           <div className="flex items-center gap-4">
             <a
               href="https://htupusdatin.vercel.app/kepegawaian"
-              className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600"
+              className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
               title="Kembali ke portal kepegawaian"
             >
               <ArrowLeft className="h-5 w-5" />
             </a>
 
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-6 w-6 fill-current text-[#1a2f6e]" />
-              <span className="text-[17px] font-bold tracking-tight text-[#1a2f6e]">
-                SK Kepegawaian
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl text-primary">
+                <Sparkles className="h-6 w-6 fill-current" />
+              </div>
+              <span className="text-lg font-bold tracking-tight text-heading">
+                Layanan Kepegawaian & JF
               </span>
             </div>
           </div>
@@ -81,48 +73,49 @@ export function Navbar({ user }: NavbarProps) {
           {/* Kanan: auth section */}
           {user ? (
             <div className="flex items-center gap-6">
-              {/* Admin only: Kelola Admin + separator */}
               {isAdmin && (
                 <>
                   <Link
                     href="/admin/users"
-                    className="flex items-center gap-1.5 text-sm font-medium text-[#1a2f6e] transition-colors hover:text-[#0e1e50]"
+                    className="flex items-center gap-2 text-sm font-bold text-primary transition-all hover:opacity-80"
                   >
                     <Settings className="h-4 w-4" />
                     <span className="hidden sm:inline">Kelola Admin</span>
                   </Link>
-                  <div className="h-5 w-px bg-gray-200" />
+                  <div className="hidden h-5 w-px bg-border sm:block" />
                 </>
               )}
 
-              {/* Avatar + dropdown popup */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsOpen((v) => !v)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1a2f6e] text-sm font-bold text-white transition-colors hover:bg-[#0e1e50]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white shadow-md transition-all hover:scale-105 active:scale-95"
                   aria-label="Menu akun"
                 >
                   {getInitial(user.name)}
                 </button>
 
-                {/* Popup dropdown */}
                 {isOpen && (
-                  <div className="absolute right-0 top-11 z-50 w-56 rounded-xl border bg-white p-3 shadow-lg">
-                    <div className="mb-3 border-b pb-3">
-                      <p className="text-xs font-medium text-gray-400">
-                        Akun aktif
-                      </p>
-                      <p className="mt-0.5 truncate text-sm font-semibold text-gray-800">
-                        {user.name}
-                      </p>
-                      <p className="truncate text-xs text-gray-400">
-                        {user.email}
-                      </p>
+                  <div className="absolute right-0 top-12 z-50 w-64 origin-top-right rounded-2xl border border-border bg-white p-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+                    <div className="mb-4 flex items-center gap-3 border-b border-border pb-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-sm font-bold text-heading">
+                        {getInitial(user.name)}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-bold text-heading">
+                          {user.name}
+                        </p>
+                        <p className="truncate text-xs text-body/60">
+                          {user.email}
+                        </p>
+                      </div>
                     </div>
+                    
                     <button
                       onClick={handleLogout}
-                      className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
+                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-destructive transition-all hover:bg-destructive/5"
                     >
+                      <LogOut className="h-4 w-4" />
                       Keluar
                     </button>
                   </div>
@@ -130,17 +123,16 @@ export function Navbar({ user }: NavbarProps) {
               </div>
             </div>
           ) : (
-            /* Guest: tombol Masuk & Daftar */
             <div className="flex items-center gap-3">
               <Link
                 href="/auth/login"
-                className="rounded-md px-4 py-1.5 text-sm text-gray-600 hover:bg-gray-100"
+                className="rounded-full px-5 py-2 text-sm font-bold text-body hover:bg-muted transition-all"
               >
                 Masuk
               </Link>
               <Link
                 href="/auth/register"
-                className="rounded-md bg-[#1a2f6e] px-4 py-1.5 text-sm font-medium text-white hover:bg-[#0e1e50]"
+                className="rounded-full bg-primary px-6 py-2 text-sm font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95"
               >
                 Daftar
               </Link>

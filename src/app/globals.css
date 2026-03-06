@@ -36,33 +36,40 @@
   --color-accent-orange: hsl(var(--accent-orange));
   --color-accent-orange-foreground: hsl(var(--accent-orange-foreground));
 
+  /* Typography Tokens */
+  --font-size-headline-lg: 34px;
+  --font-size-headline-sm: 24px;
+  --font-size-title-lg: 20px;
+  --font-size-body-md: 15px;
+  --font-size-body-sm: 13px;
+  --font-size-label-md: 12px;
+
   /* Font colors */
   --color-heading: hsl(var(--heading));
   --color-body: hsl(var(--body));
 
-  /* Border radius */
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* Border radius — standardized to 2xl for containers */
+  --radius-2xl: 1rem;
+  --radius-xl: 0.75rem;
+  --radius-lg: 0.5rem;
+  --radius-md: 0.375rem;
+  --radius-sm: 0.25rem;
 }
 
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 20% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Primary: Biru — identitas instansi pemerintah */
-    --primary: 221.2 83.2% 53.3%;
-    --primary-hover: 221.2 83.2% 63.3%;
-    --primary-active: 221.2 83.2% 40%;
+    /* Primary: Navy Blue Pusdatin Identity */
+    --primary: 226 68% 26%; /* #142B6F - Matching Pusdatin Logo */
     --primary-foreground: 0 0% 100%;
 
-    --base: 220 27% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -73,35 +80,24 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 226 68% 26%;
     --radius: 0.5rem;
 
-    /* Accent Colors — untuk badge status, label, indikator */
+    /* Accent Colors — status indicators */
     --accent-blue: 214 95% 93%;
     --accent-blue-foreground: 226 71% 40%;
-
     --accent-yellow: 48 96% 89%;
     --accent-yellow-foreground: 32 95% 44%;
-
     --accent-green: 149 80% 90%;
     --accent-green-foreground: 161 94% 30%;
-
-    --accent-cyan: 180 70% 92%;
-    --accent-cyan-foreground: 180 70% 40%;
-
-    --accent-rose: 340 90% 94%;
-    --accent-rose-foreground: 340 80% 55%;
-
     --accent-orange: 6 100% 94%;
     --accent-orange-foreground: 21 90% 48%;
-
     --accent-red: 0 84% 94%;
     --accent-red-foreground: 0 72% 51%;
 
     /* Font colors */
-    --heading: 215 28% 17%;
-    --body: 220 9% 46%;
-    --light: 0 0% 100%;
+    --heading: 226 68% 26%;
+    --body: 215 16% 47%;
   }
 }
 
@@ -110,43 +106,57 @@
     @apply border-border;
   }
   html {
-    /* Sembunyikan scrollbar — tampilan lebih bersih */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  html::-webkit-scrollbar {
-    display: none;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground)) transparent;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: "Inter", system-ui, sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  /* Typography Utilities */
+  .text-headline-lg {
+    font-size: var(--font-size-headline-lg);
+    @apply font-extrabold leading-tight tracking-tight text-heading;
+  }
+  .text-headline-sm {
+    font-size: var(--font-size-headline-sm);
+    @apply font-bold leading-snug text-heading;
+  }
+  .text-title-lg {
+    font-size: var(--font-size-title-lg);
+    @apply font-semibold leading-normal text-heading;
+  }
+  .text-body-md {
+    font-size: var(--font-size-body-md);
+    @apply font-medium text-body;
+  }
+  .text-body-sm {
+    font-size: var(--font-size-body-sm);
+    @apply text-body/80;
   }
 }
 
 @layer utilities {
-  /* RAM Grid — responsive card layout otomatis */
-  /* Contoh: className="grid-squish" style={{ "--min-card-width": "280px" }} */
+  .section-padding {
+    @apply px-4 py-10 md:px-[64px] xl:px-[140px];
+  }
+
+  /* RAM Grid */
   .grid-squish {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min-card-width, 280px)), 1fr));
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
-  /* Minimum 44px touch target — aksesibilitas mobile */
   .touch-target {
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
   }
 
-  /* Focus ring yang konsisten untuk keyboard navigation */
   .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
   }
 
-  /* Sembunyikan scrollbar tapi tetap bisa scroll */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -155,14 +165,9 @@
     display: none;
   }
 
-  /* Hapus panah naik/turun pada input number (dipakai di field Tahun) */
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
   }
 }
