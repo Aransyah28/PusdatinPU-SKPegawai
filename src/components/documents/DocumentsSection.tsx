@@ -301,7 +301,6 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
-            isLoading={isLoading}
           />
         </div>
       )}
