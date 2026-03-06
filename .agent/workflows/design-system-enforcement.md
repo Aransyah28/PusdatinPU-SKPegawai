@@ -10,12 +10,13 @@ This workflow audits code against visual standards and fixes style violations.
 
 ## STEP 1: SCAN & AUDIT
 
-### 1.1 Card Containers
+### 1.1 Card Containers (Pusdatin Brand)
 
-| Rule          | Standard               | Violation                                            |
+| Rule          | Standard               | Brand Identity Constraint                            |
 | ------------- | ---------------------- | ---------------------------------------------------- |
-| Border Radius | `rounded-2xl`          | `rounded-md`, `rounded-lg`, `rounded-xl`, or missing |
-| Borders       | `border border-border` | Missing or non-semantic borders                      |
+| Border Radius | `rounded-2xl`          | Mandatory for all major UI containers                |
+| Borders       | `border border-border` | Subtle separation using semantic tokens              |
+| Identity      | `text-heading`         | Use Pusdatin Navy for titles                         |
 
 **Search Patterns:**
 
@@ -38,11 +39,12 @@ grep -rn "rounded-md\|rounded-lg\|rounded-xl" --include="*.tsx" src/components/
 grep -rn "<input\|<textarea" --include="*.tsx" src/components/
 ```
 
-### 1.3 Buttons
+### 1.3 Buttons (Pusdatin Brand)
 
-| Rule  | Standard                     | Violation                                   |
-| ----- | ---------------------------- | ------------------------------------------- |
-| Shape | `rounded-full` (pill-shaped) | `rounded-md`, `rounded-lg`, angular buttons |
+| Rule  | Standard                     | Requirement                             |
+| ----- | ---------------------------- | --------------------------------------- |
+| Shape | `rounded-full` (pill-shaped) | **Exclusively** pill-shaped buttons     |
+| Color | `bg-primary`                 | Use `#142B6F` (Navy) via `--primary`    |
 
 **Search Patterns:**
 
