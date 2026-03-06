@@ -8,42 +8,42 @@ export default async function HomePage() {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24">
+    <div className="min-h-screen bg-background pt-20">
       <Navbar user={session?.user ?? null} />
 
-      <main className="mx-auto max-w-7xl px-6 py-10">
+      <main className="section-padding mx-auto max-w-7xl">
         {/* Breadcrumb */}
-        <nav className="mb-4 flex items-center gap-1.5 text-sm text-gray-400">
+        <nav className="mb-6 flex items-center gap-2 text-sm font-medium text-body/40">
           <a
             href="https://htupusdatin.vercel.app/"
-            className="transition-colors hover:text-gray-600"
+            className="transition-colors hover:text-primary"
           >
             Home
           </a>
-          <span>›</span>
+          <span>/</span>
           <a
             href="https://htupusdatin.vercel.app/kepegawaian"
-            className="transition-colors hover:text-gray-600"
+            className="transition-colors hover:text-primary"
           >
-            Kepegawaian dan Jabatan Fungsional
+            Kepegawaian
           </a>
-          <span>›</span>
-          <span className="font-semibold text-[#142B6F]">SK Kepegawaian</span>
+          <span>/</span>
+          <span className="font-bold text-primary">SK Kepegawaian</span>
         </nav>
 
         {/* Header halaman */}
-        <div className="mb-8">
-          <h1 className="mb-1 text-[34px] font-extrabold leading-tight tracking-tight text-[#142B6F]">
+        <div className="mb-10 lg:mb-12">
+          <h1 className="text-headline-lg">
             Surat Keterangan Kepegawaian
           </h1>
-          <p className="text-[15px] font-medium text-gray-500">
+          <p className="text-body-md mt-2 max-w-2xl">
             {isAdmin
-              ? "Kelola daftar Surat Keterangan Kepegawaian Pusdatin PU."
-              : "Unduh Surat Keterangan Kepegawaian yang tersedia."}
+              ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU."
+              : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU melalui portal satu pintu."}
           </p>
         </div>
 
-        {/* Komponen tabel — menangani data fetching & tampilan admin/publik */}
+        {/* Komponen tabel */}
         <DocumentsSection isAdmin={isAdmin} />
       </main>
     </div>

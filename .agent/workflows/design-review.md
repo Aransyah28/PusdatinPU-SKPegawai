@@ -67,13 +67,15 @@ Create a structured report with:
 
 ## Phase 3: Compliance Rules
 
-### 3.1 Design System Enforcement
+### 3.1 Design System Enforcement (Pusdatin Identity)
 
-| Element         | Required Standard                  |
-| --------------- | ---------------------------------- |
-| Card containers | `rounded-2xl border border-border` |
-| Buttons         | `rounded-full`                     |
-| Form inputs     | `<FormTextField />` component      |
+| Element         | Required Standard                      | Brand Constraint          |
+| --------------- | -------------------------------------- | ------------------------- |
+| Primary Identity| `#142B6F` (Navy Blue)                  | Use `--primary` token     |
+| Card containers | `rounded-2xl border border-border`     | Large rounded corners     |
+| Buttons         | `rounded-full`                         | Pill-shaped exclusively   |
+| Form inputs     | `<FormTextField />` component          | Consistent accessibility  |
+| Typography      | Inter / Custom Semantic Tokens         | Use `text-headline-lg` etc|
 
 ### 3.2 Semantic Colors
 
