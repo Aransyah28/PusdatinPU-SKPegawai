@@ -25,11 +25,11 @@ export default async function AdminUsersPage() {
     .orderBy(users.createdAt);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <header className="border-b bg-white px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <h1 className="text-lg font-semibold text-gray-900">Kelola Pengguna</h1>
-          <a href="/" className="text-sm text-blue-600 hover:underline">
+          <h1 className="text-title-lg text-heading">Kelola Pengguna</h1>
+          <a href="/" className="text-body-sm text-primary hover:underline">
             ← Kembali
           </a>
         </div>

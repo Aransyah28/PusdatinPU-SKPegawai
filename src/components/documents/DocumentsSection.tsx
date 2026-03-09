@@ -140,7 +140,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-full border border-border bg-white pl-10 pr-4 py-2 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+              className="w-full rounded-full border border-border bg-white pl-10 pr-4 py-2 text-body-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
             />
           </div>
           
@@ -151,7 +151,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                 setSelectedYear(e.target.value);
                 setCurrentPage(1);
               }}
-              className="appearance-none rounded-full border border-border bg-white pl-4 pr-10 py-2 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10 cursor-pointer"
+              className="appearance-none rounded-full border border-border bg-white pl-4 pr-10 py-2 text-body-md font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10 cursor-pointer"
             >
               <option value="all">Semua Tahun</option>
               {uniqueYears.map((year) => (
@@ -169,7 +169,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         {isAdmin && (
           <button
             onClick={() => setUploadOpen(true)}
-            className="flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95"
+            className="flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-body-md font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95"
           >
             <Plus className="h-4 w-4" />
             Tambah SK
@@ -199,7 +199,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             <FileText className="h-10 w-10 text-muted-foreground" />
           </div>
           <p className="text-lg font-bold text-heading">Belum ada dokumen</p>
-          <p className="text-sm text-body/70 mt-1 max-w-xs">
+          <p className="text-body-sm text-body/70 mt-1 max-w-xs">
             {searchQuery 
               ? `Tidak ditemukan dokumen untuk kata kunci "${searchQuery}"`
               : "Daftar Surat Keterangan Kepegawaian akan muncul di sini."}
@@ -227,13 +227,13 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                       {(currentPage - 1) * itemsPerPage + idx + 1}
                     </td>
                     <td className="px-6 py-5">
-                      <div className="text-lg font-bold text-heading">{doc.title}</div>
+                      <div className="text-title-lg text-heading">{doc.title}</div>
                       {doc.description && (
                         <div className="mt-1 text-base text-body/60">{doc.description}</div>
                       )}
                     </td>
                     <td className="px-6 py-5 text-center">
-                      <span className="inline-flex items-center rounded-full bg-accent-blue/50 px-3 py-1 text-sm font-bold text-accent-blue-foreground">
+                      <span className="inline-flex items-center rounded-full bg-accent-blue/50 px-3 py-1 text-label-md font-bold text-accent-blue-foreground">
                         {doc.year}
                       </span>
                     </td>

@@ -4,7 +4,12 @@ import { Navbar } from "@/components/layout/Navbar";
 import { DocumentsSection } from "@/components/documents/DocumentsSection";
 
 export default async function HomePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  let session = null;
+  try {
+    session = await auth.api.getSession({ headers: await headers() });
+  } catch (error) {
+    console.error("Failed to fetch session:", error);
+  }
   const isAdmin = session?.user?.role === "admin";
 
   return (
@@ -13,7 +18,7 @@ export default async function HomePage() {
 
       <main className="section-padding mx-auto max-w-7xl">
         {/* Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-sm font-medium text-body/40">
+        <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
           <a
             href="https://htupusdatin.vercel.app/"
             className="transition-colors hover:text-primary"
