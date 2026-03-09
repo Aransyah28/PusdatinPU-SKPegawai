@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen bg-background`}>
         <Providers>
           {children}
-          <Toaster richColors position="top-right" />
+          <Toaster richColors position="top-right" duration={1500} />
         </Providers>
       </body>
     </html>
