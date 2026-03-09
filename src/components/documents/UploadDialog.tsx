@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2, UploadCloud, X, FileText } from "lucide-react";
@@ -21,6 +21,18 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
+
+  // Background locking
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [open]);
 
   const resetForm = () => {
     setTitle("");
@@ -86,10 +98,16 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-heading/40 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl bg-white p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-heading/40 p-4 backdrop-blur-sm"
+      onClick={() => onOpenChange(false)}
+    >
+      <div 
+        className="w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-5 flex items-center justify-between">
           <div>
             <h2 className="text-title-lg text-heading">
               Unggah SK Kepegawaian
@@ -107,7 +125,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
         </div>
 
         {/* Form */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* File upload */}
           <div className="space-y-2">
             <label className="text-body-sm font-semibold text-heading/80 ml-1">
@@ -143,7 +161,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
             ) : (
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border py-10 transition-all hover:border-primary/50 hover:bg-primary/5"
+                className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border py-6 transition-all hover:border-primary/50 hover:bg-primary/5"
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all group-hover:bg-primary/10 group-hover:text-primary">
                   <UploadCloud className="h-7 w-7" />
@@ -196,7 +214,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
         </div>
 
         {/* Actions */}
-        <div className="mt-10 flex items-center justify-end gap-3">
+        <div className="mt-6 flex items-center justify-end gap-3">
           <button
             onClick={() => onOpenChange(false)}
             className="rounded-full px-6 py-2.5 text-body-md font-bold text-body hover:bg-muted transition-all"
