@@ -114,7 +114,7 @@ export function Navbar({ user }: NavbarProps) {
                         className="flex w-full items-center gap-2 rounded-full px-3 py-2 text-sm font-bold text-destructive transition-all hover:bg-destructive/5"
                       >
                         <LogOut className="h-4 w-4" />
-                        Sign Out
+                        Keluar
                       </button>
                     </div>
                   </div>
