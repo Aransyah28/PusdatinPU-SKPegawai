@@ -15,7 +15,7 @@ export const FormTextField = React.forwardRef<
   const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
 
   const inputClasses = cn(
-    "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 disabled:bg-muted",
+    "w-full rounded-xl border border-border bg-background px-4 py-3 text-body-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 disabled:bg-muted",
     error && "border-destructive focus:ring-destructive/20 focus:border-destructive",
     className
   );
@@ -25,7 +25,7 @@ export const FormTextField = React.forwardRef<
       {label && (
         <label
           htmlFor={inputId}
-          className="text-sm font-semibold text-heading/80 ml-1"
+          className="text-body-sm font-semibold text-heading/80 ml-1"
         >
           {label} {props.required && <span className="text-destructive">*</span>}
         </label>
@@ -48,7 +48,7 @@ export const FormTextField = React.forwardRef<
       )}
 
       {error && (
-        <span className="text-xs font-medium text-destructive ml-1">
+        <span className="text-label-md font-medium text-destructive ml-1">
           {error}
         </span>
       )}

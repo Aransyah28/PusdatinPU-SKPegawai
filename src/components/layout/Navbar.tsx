@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, Settings, LogOut } from "lucide-react";
+import { ArrowLeft, Sparkles, LogOut, Shield } from "lucide-react";
 import { signOut } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
@@ -64,8 +64,8 @@ export function Navbar({ user }: NavbarProps) {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl text-primary">
                 <Sparkles className="h-6 w-6 fill-current" />
               </div>
-              <span className="text-lg font-bold tracking-tight text-heading">
-                Layanan Kepegawaian & JF
+              <span className="text-title-lg tracking-tight text-heading">
+                SK Kepegawaian
               </span>
             </div>
           </div>
@@ -77,10 +77,10 @@ export function Navbar({ user }: NavbarProps) {
                 <>
                   <Link
                     href="/admin/users"
-                    className="flex items-center gap-2 text-sm font-bold text-primary transition-all hover:opacity-80"
+                    className="ml-2 flex items-center gap-1.5 rounded-full border border-accent-blue-foreground/10 bg-blue-50 px-3 py-1.5 text-body-md font-bold text-primary shadow-sm transition-colors hover:bg-accent-blue/80"
                   >
-                    <Settings className="h-4 w-4" />
-                    <span className="hidden sm:inline">Kelola Admin</span>
+                    <Shield className="h-4 w-4" />
+                    <span className="hidden sm:inline">Portal Admin</span>
                   </Link>
                   <div className="hidden h-5 w-px bg-border sm:block" />
                 </>
@@ -96,28 +96,27 @@ export function Navbar({ user }: NavbarProps) {
                 </button>
 
                 {isOpen && (
-                  <div className="absolute right-0 top-12 z-50 w-64 origin-top-right rounded-2xl border border-border bg-white p-4 shadow-2xl animate-in fade-in zoom-in duration-200">
-                    <div className="mb-4 flex items-center gap-3 border-b border-border pb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-sm font-bold text-heading">
-                        {getInitial(user.name)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold text-heading">
-                          {user.name}
-                        </p>
-                        <p className="truncate text-xs text-body/60">
-                          {user.email}
-                        </p>
-                      </div>
+                  <div className="absolute right-0 top-full z-50 mt-2 w-48 origin-top-right overflow-hidden rounded-2xl border border-border bg-white py-1 shadow-xl animate-in fade-in zoom-in duration-200">
+                    {/* Header: Nama & Email */}
+                    <div className="bg-muted/30 px-4 py-3 border-b border-border">
+                      <p className="truncate text-body-md font-bold text-heading">
+                        {user.name}
+                      </p>
+                      <p className="truncate text-label-md text-body/60">
+                        {user.email}
+                      </p>
                     </div>
                     
-                    <button
-                      onClick={handleLogout}
-                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold text-destructive transition-all hover:bg-destructive/5"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Keluar
-                    </button>
+                    {/* Logout Button */}
+                    <div className="p-1">
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 rounded-full px-3 py-2 text-sm font-bold text-destructive transition-all hover:bg-destructive/5"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Keluar
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -126,13 +125,13 @@ export function Navbar({ user }: NavbarProps) {
             <div className="flex items-center gap-3">
               <Link
                 href="/auth/login"
-                className="rounded-full px-5 py-2 text-sm font-bold text-body hover:bg-muted transition-all"
+                className="rounded-full px-5 py-2 text-body-md font-bold text-body hover:bg-muted transition-all"
               >
                 Masuk
               </Link>
               <Link
                 href="/auth/register"
-                className="rounded-full bg-primary px-6 py-2 text-sm font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95"
+                className="rounded-full bg-primary px-6 py-2 text-body-md font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95"
               >
                 Daftar
               </Link>

@@ -58,47 +58,47 @@ export function AdminUsersTable({ users, currentUserId }: AdminUsersTableProps) 
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b bg-gray-50 text-left">
-            <th className="px-4 py-3 font-medium text-gray-600">Nama</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Email</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Role</th>
-            <th className="px-4 py-3 font-medium text-gray-600">Terdaftar</th>
-            <th className="px-4 py-3 text-center font-medium text-gray-600">Aksi</th>
+          <tr className="border-b border-border bg-muted/30 text-left">
+            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Nama</th>
+            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Email</th>
+            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Role</th>
+            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Terdaftar</th>
+            <th className="px-4 py-3 text-center text-body-sm font-bold text-heading/60">Aksi</th>
           </tr>
         </thead>
         <tbody>
           {localUsers.map((user) => (
-            <tr key={user.id} className="border-b last:border-0 hover:bg-gray-50">
-              <td className="px-4 py-3 font-medium text-gray-800">{user.name}</td>
-              <td className="px-4 py-3 text-gray-500">{user.email}</td>
+            <tr key={user.id} className="border-b border-border/50 last:border-0 hover:bg-muted/10 transition-colors">
+              <td className="px-4 py-3 text-body-md font-bold text-heading">{user.name}</td>
+              <td className="px-4 py-3 text-body-sm text-body">{user.email}</td>
               <td className="px-4 py-3">
                 {user.role === "admin" ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">
-                    <ShieldCheck className="h-3 w-3" />
-                    Admin
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
-                    <User className="h-3 w-3" />
-                    User
-                  </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-accent-blue/30 px-2.5 py-0.5 text-label-md font-bold text-accent-blue-foreground">
+                      <ShieldCheck className="h-3 w-3" />
+                      Admin
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-label-md font-bold text-body">
+                      <User className="h-3 w-3" />
+                      User
+                    </span>
                 )}
               </td>
-              <td className="px-4 py-3 text-gray-500">
+              <td className="px-4 py-3 text-body-sm text-body/70">
                 {formatDate(user.createdAt)}
               </td>
               <td className="px-4 py-3 text-center">
                 {user.id === currentUserId ? (
-                  <span className="text-xs text-gray-400">(Anda)</span>
+                  <span className="text-label-md text-body/30">(Anda)</span>
                 ) : (
-                  <button
-                    onClick={() => toggleRole(user)}
-                    disabled={pendingId === user.id}
-                    className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-50"
-                  >
+                    <button
+                      onClick={() => toggleRole(user)}
+                      disabled={pendingId === user.id}
+                      className="rounded-full border border-border px-3 py-1.5 text-label-md font-bold text-body transition-all hover:bg-muted active:scale-95 disabled:opacity-50"
+                    >
                     {pendingId === user.id ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
                     ) : user.role === "admin" ? (

@@ -91,10 +91,10 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-heading">
+            <h2 className="text-title-lg text-heading">
               Unggah SK Kepegawaian
             </h2>
-            <p className="text-sm text-body/60 mt-1">
+            <p className="text-body-sm text-body/60 mt-1">
               Tambahkan dokumen surat keterangan baru ke sistem.
             </p>
           </div>
@@ -110,7 +110,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
         <div className="space-y-6">
           {/* File upload */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-heading/80 ml-1">
+            <label className="text-body-sm font-semibold text-heading/80 ml-1">
               File PDF <span className="text-destructive">*</span>
             </label>
             <input
@@ -126,10 +126,10 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
                   <FileText className="h-6 w-6" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-heading">
+                  <p className="truncate text-body-md font-bold text-heading">
                     {file.name}
                   </p>
-                  <p className="text-xs text-body/60">
+                  <p className="text-label-md text-body/60">
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
@@ -149,8 +149,8 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
                   <UploadCloud className="h-7 w-7" />
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-bold text-heading">Klik untuk memilih file PDF</p>
-                  <p className="mt-1 text-xs text-body/60">
+                  <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
+                  <p className="mt-1 text-label-md text-body/60">
                     Judul dan tahun akan terisi otomatis
                   </p>
                 </div>
@@ -167,13 +167,13 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
           />
 
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-heading/80 ml-1">
+            <label className="text-body-sm font-semibold text-heading/80 ml-1">
               Tahun <span className="text-destructive">*</span>
             </label>
             <select
               value={year}
               onChange={(e) => setYear(e.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             >
               <option value="" disabled>
                 {file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
@@ -199,14 +199,14 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
         <div className="mt-10 flex items-center justify-end gap-3">
           <button
             onClick={() => onOpenChange(false)}
-            className="rounded-full px-6 py-2.5 text-sm font-bold text-body hover:bg-muted transition-all"
+            className="rounded-full px-6 py-2.5 text-body-md font-bold text-body hover:bg-muted transition-all"
           >
             Batal
           </button>
           <button
             onClick={() => uploadMutation.mutate()}
             disabled={!file || !title || !year || uploadMutation.isPending}
-            className="flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-primary/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-body-md font-bold text-white shadow-lg transition-all hover:bg-primary/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {uploadMutation.isPending && (
               <Loader2 className="h-4 w-4 animate-spin" />

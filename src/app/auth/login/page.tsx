@@ -6,6 +6,7 @@ import Link from "next/link";
 import { signIn } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { Loader2, ShieldCheck } from "lucide-react";
+import { FormTextField } from "@/components/shared/FormTextField";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,59 +32,49 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm rounded-2xl border bg-white p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-white p-8 shadow-sm">
         {/* Logo */}
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-            <ShieldCheck className="h-6 w-6 text-blue-600" />
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent-blue/30">
+            <ShieldCheck className="h-6 w-6 text-primary" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900">Masuk</h1>
-          <p className="mt-1 text-sm text-gray-500">Portal SK Kepegawaian Pusdatin PU</p>
+          <h1 className="text-title-lg text-heading">Masuk</h1>
+          <p className="mt-1 text-body-sm text-body/60">Portal SK Kepegawaian Pusdatin PU</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="email@example.com"
-              className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <FormTextField
+            label="Email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email@example.com"
+          />
 
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Kata Sandi
-            </label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <FormTextField
+            label="Kata Sandi"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+          />
 
           <button
             type="submit"
             disabled={isLoading}
-            className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-primary py-2.5 text-body-md font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95 disabled:opacity-50"
           >
             {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
             Masuk
           </button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-gray-500">
+        <p className="mt-5 text-center text-body-sm text-body/60">
           Belum punya akun?{" "}
-          <Link href="/auth/register" className="text-blue-600 hover:underline">
+          <Link href="/auth/register" className="font-bold text-primary hover:underline">
             Daftar sekarang
           </Link>
         </p>
