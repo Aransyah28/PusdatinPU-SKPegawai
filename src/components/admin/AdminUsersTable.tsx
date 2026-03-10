@@ -62,11 +62,11 @@ export function AdminUsersTable({ users, currentUserId }: AdminUsersTableProps) 
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/30 text-left">
-            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Nama</th>
-            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Email</th>
-            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Role</th>
-            <th className="px-4 py-3 text-body-sm font-bold text-heading/60">Terdaftar</th>
-            <th className="px-4 py-3 text-center text-body-sm font-bold text-heading/60">Aksi</th>
+            <th className="px-4 py-4 text-title-lg font-bold text-heading">Nama</th>
+            <th className="px-4 py-4 text-title-lg font-bold text-heading">Email</th>
+            <th className="px-4 py-4 text-title-lg font-bold text-heading">Role</th>
+            <th className="px-4 py-4 text-title-lg font-bold text-heading">Terdaftar</th>
+            <th className="px-4 py-4 text-center text-title-lg font-bold text-heading">Aksi</th>
           </tr>
         </thead>
         <tbody>
