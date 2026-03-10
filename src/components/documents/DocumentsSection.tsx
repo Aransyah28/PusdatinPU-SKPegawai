@@ -130,7 +130,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
       {/* Toolbar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 items-center gap-2 max-w-2xl">
-          <div className="relative flex-1 max-w-xs">
+          <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body/40" />
             <input
               type="text"
@@ -211,13 +211,13 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-primary">
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white">No</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white">Nama SK</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white text-center">Tahun</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white">Diunggah Oleh</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white">Tanggal Upload</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white">Ukuran</th>
-                  <th className="px-6 py-5 text-sm font-bold uppercase tracking-wider text-white text-center">Aksi</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white">No</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white">Judul SK</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white text-center">Tahun</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white whitespace-nowrap text-center">Diunggah Oleh</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white w-56 text-center">Tanggal Unggah</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white">Ukuran File</th>
+                  <th className="px-6 py-5 text-title-lg font-bold text-white text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
@@ -237,12 +237,12 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                         {doc.year}
                       </span>
                     </td>
-                    <td className="px-6 py-5">
+                    <td className="px-6 py-5 text-center">
                       <div className="text-base font-medium text-body">
                         {doc.uploaderName ?? <span className="text-body/30">—</span>}
                       </div>
                     </td>
-                    <td className="px-6 py-5">
+                    <td className="px-6 py-5 text-center">
                       <div className="text-base text-body/70">
                         {formatDate(new Date(doc.createdAt))}
                       </div>

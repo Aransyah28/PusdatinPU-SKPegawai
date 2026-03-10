@@ -12,10 +12,18 @@
     "typescript/no-misused-new": "warn",
     "typescript/prefer-as-const": "warn",
     "typescript/no-wrapper-object-types": "warn",
+    "typescript/await-thenable": "warn",
+    "typescript/no-array-delete": "warn",
+    "typescript/no-misused-spread": "warn",
+    "typescript/no-unnecessary-parameter-property-assignment": "warn",
     "unicorn/no-await-in-promise-methods": "warn",
     "unicorn/no-unnecessary-await": "warn",
+    "unicorn/no-empty-file": "warn",
+    "unicorn/no-invalid-fetch-options": "warn",
     "oxc/bad-array-method-on-arguments": "warn",
-    "oxc/missing-throw": "warn"
+    "oxc/missing-throw": "warn",
+    "oxc/bad-object-literal-comparison": "warn",
+    "oxc/erasing-op": "warn"
   },
   "overrides": [
     {
@@ -27,6 +35,8 @@
   ],
   "ignorePatterns": [
     "src/components/ui/**",
-    "drizzle/**"
+    "drizzle/**",
+    ".next/**",
+    "node_modules/**"
   ]
 }

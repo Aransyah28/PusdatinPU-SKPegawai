@@ -1,0 +1,1 @@
+- Check for the presence of AGENTS.md and SSoT.md files in the project workspace, crucial to be read on every prompt and session since this serves as the authoritative guide for project background, maintaining code quality, architectural and technical specifications, project compliant best practices, and stylistic consistency.

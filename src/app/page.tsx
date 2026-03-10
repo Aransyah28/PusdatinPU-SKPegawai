@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import { DocumentsSection } from "@/components/documents/DocumentsSection";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   let session = null;
   try {
@@ -16,7 +18,7 @@ export default async function HomePage() {
     <div className="min-h-screen bg-background pt-20">
       <Navbar user={session?.user ?? null} />
 
-      <main className="section-padding mx-auto max-w-7xl">
+      <main className="section-padding mx-auto max-w-[1600px]">
         {/* Breadcrumb */}
         <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
           <a
