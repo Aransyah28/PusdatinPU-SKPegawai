@@ -71,7 +71,7 @@ Create a structured report with:
 
 | Element         | Required Standard                      | Brand Constraint          |
 | --------------- | -------------------------------------- | ------------------------- |
-| Primary Identity| `#142B6F` (Navy Blue)                  | Use `--primary` token     |
+| Primary Identity| `#182c6a`                              | Use `--primary` token     |
 | Card containers | `rounded-2xl border border-border`     | Large rounded corners     |
 | Buttons         | `rounded-full`                         | Pill-shaped exclusively   |
 | Form inputs     | `<FormTextField />` component          | Consistent accessibility  |
