@@ -118,7 +118,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   if (isError) {
     return (
       <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-        <p className="text-sm font-semibold text-destructive">
+        <p className="text-label-lg text-destructive">
           Gagal memuat data. Silakan muat ulang halaman.
         </p>
       </div>
@@ -198,7 +198,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
           <div className="rounded-full bg-muted p-4 mb-4">
             <FileText className="h-10 w-10 text-muted-foreground" />
           </div>
-          <p className="text-lg font-bold text-heading">Belum ada dokumen</p>
+          <p className="text-title-lg font-bold text-heading">Belum ada dokumen</p>
           <p className="text-body-sm text-body/70 mt-1 max-w-xs">
             {searchQuery 
               ? `Tidak ditemukan dokumen untuk kata kunci "${searchQuery}"`
@@ -211,25 +211,25 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-primary">
-                  <th className="px-6 py-5 text-title-lg font-bold text-white">No</th>
-                  <th className="px-6 py-5 text-title-lg font-bold text-white">Judul SK</th>
-                  <th className="px-6 py-5 text-title-lg font-bold text-white text-center">Tahun</th>
-                  <th className="px-6 py-5 text-title-lg font-bold text-white whitespace-nowrap text-center">Diunggah Oleh</th>
-                  <th className="px-6 py-5 text-title-lg font-bold text-white w-56 text-center">Tanggal Unggah</th>
-                  <th className="px-6 py-5 text-title-lg font-bold text-white">Ukuran File</th>
-                  <th className="px-6 py-5 text-title-lg font-bold text-white text-center">Aksi</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white">No</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white">Judul SK</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white text-center">Tahun</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white whitespace-nowrap text-center">Diunggah Oleh</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white w-56 text-center">Tanggal Unggah</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white">Ukuran File</th>
+                  <th className="px-6 py-3 text-title-sm font-bold text-white text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
                 {paginatedDocuments.map((doc, idx) => (
                    <tr key={doc.id} className="transition-colors hover:bg-muted/10">
-                    <td className="px-6 py-6 text-base font-medium text-body/40">
+                    <td className="px-6 py-6 text-body-lg font-medium text-body/40">
                       {(currentPage - 1) * itemsPerPage + idx + 1}
                     </td>
                     <td className="px-6 py-5">
                       <div className="text-title-lg text-heading">{doc.title}</div>
                       {doc.description && (
-                        <div className="mt-1 text-base text-body/60">{doc.description}</div>
+                        <div className="mt-1 text-body-lg text-body/60">{doc.description}</div>
                       )}
                     </td>
                     <td className="px-6 py-5 text-center">
@@ -238,17 +238,17 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                       </span>
                     </td>
                     <td className="px-6 py-5 text-center">
-                      <div className="text-base font-medium text-body">
+                      <div className="text-body-lg font-medium text-body">
                         {doc.uploaderName ?? <span className="text-body/30">—</span>}
                       </div>
                     </td>
                     <td className="px-6 py-5 text-center">
-                      <div className="text-base text-body/70">
+                      <div className="text-body-lg text-body/70">
                         {formatDate(new Date(doc.createdAt))}
                       </div>
                     </td>
                     <td className="px-6 py-5">
-                      <div className="text-base text-body/70">
+                      <div className="text-body-lg text-body/70">
                         {formatFileSize(doc.fileSize)}
                       </div>
                     </td>
