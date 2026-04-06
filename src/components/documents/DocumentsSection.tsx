@@ -5,7 +5,7 @@ import { Eye, Download, Trash2, Plus, FileText, Loader2, Search, ChevronDown } f
 import { toast } from "sonner";
 import { formatFileSize, formatDate } from "@/lib/utils/formatters";
 import { UploadDialog } from "./UploadDialog";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -49,8 +49,10 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("all");
+  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const yearDropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: documents = [], isLoading, isError } = useQuery<Document[]>({
     queryKey: ["documents"],
@@ -86,6 +88,20 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredDocuments.slice(start, start + itemsPerPage);
   }, [filteredDocuments, currentPage]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        yearDropdownRef.current &&
+        !yearDropdownRef.current.contains(event.target as Node)
+      ) {
+        setYearDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -144,34 +160,75 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             />
           </div>
           
-          <div className="relative">
-            <select
-              value={selectedYear}
-              onChange={(e) => {
-                setSelectedYear(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="h-9 appearance-none rounded-full border border-border bg-white pl-3 pr-9 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10 cursor-pointer"
+          <div className="relative" ref={yearDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setYearDropdownOpen((open) => !open)}
+              className="flex h-12 min-w-[164px] items-center justify-between gap-3 rounded-[18px] border border-[#ececec] bg-white/95 px-4 text-left text-sm font-medium text-foreground shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_8px_18px_rgba(24,44,106,0.06)] transition-all duration-150 hover:border-[#e6e6e6] hover:shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_10px_20px_rgba(24,44,106,0.08)] focus:outline-none focus:ring-2 focus:ring-primary/10"
+              aria-haspopup="listbox"
+              aria-expanded={yearDropdownOpen}
             >
-              <option value="all">Semua Tahun</option>
-              {uniqueYears.map((year) => (
-                <option key={year} value={year.toString()}>
-                  Tahun {year}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-              <ChevronDown className="h-4 w-4 text-body/40" />
-            </div>
+              <span className="truncate">
+                {selectedYear === "all" ? "Semua Tahun" : `Tahun ${selectedYear}`}
+              </span>
+              <ChevronDown
+                className={`h-4 w-4 shrink-0 text-body/35 transition-transform duration-150 ${
+                  yearDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {yearDropdownOpen && (
+              <div className="absolute left-0 top-full z-20 mt-2 min-w-full overflow-hidden rounded-[18px] border border-[#ececec] bg-white p-1.5 shadow-[0_18px_30px_rgba(24,44,106,0.12)]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedYear("all");
+                    setCurrentPage(1);
+                    setYearDropdownOpen(false);
+                  }}
+                  className={`flex w-full items-center rounded-[14px] px-4 py-2.5 text-left text-sm transition-colors duration-150 hover:bg-[#f5f8ff] ${
+                    selectedYear === "all" ? "bg-primary text-white hover:bg-primary" : "text-foreground"
+                  }`}
+                  role="option"
+                  aria-selected={selectedYear === "all"}
+                >
+                  Semua Tahun
+                </button>
+                {uniqueYears.map((year) => {
+                  const yearValue = year.toString();
+                  const isSelected = selectedYear === yearValue;
+
+                  return (
+                    <button
+                      key={year}
+                      type="button"
+                      onClick={() => {
+                        setSelectedYear(yearValue);
+                        setCurrentPage(1);
+                        setYearDropdownOpen(false);
+                      }}
+                      className={`flex w-full items-center rounded-[14px] px-4 py-2.5 text-left text-sm transition-colors duration-150 hover:bg-[#f5f8ff] ${
+                        isSelected ? "bg-primary text-white hover:bg-primary" : "text-foreground"
+                      }`}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      Tahun {year}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
         {isAdmin && (
           <button
             onClick={() => setUploadOpen(true)}
-            className="flex h-9 items-center justify-center gap-1.5 rounded-full bg-primary px-4 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary/90 active:scale-95"
+            className="group inline-flex h-12 min-w-[168px] items-center justify-center gap-2 rounded-[18px] bg-[#182c6a] px-6 text-[15px] font-black tracking-tight text-white shadow-[0_4px_0_0_#ffd602,0_12px_24px_rgba(24,44,106,0.18)] transition-all duration-150 hover:-translate-y-[1px] hover:shadow-[0_4px_0_0_#ffd602,0_14px_28px_rgba(24,44,106,0.2)] active:translate-y-[2px] active:shadow-[0_4px_0_0_#ffd602,0_8px_16px_rgba(24,44,106,0.14)]"
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus className="h-4 w-4 text-[#ffd602] transition-transform duration-150 group-hover:scale-105" />
             Tambah SK
           </button>
         )}
@@ -227,9 +284,9 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                       {(currentPage - 1) * itemsPerPage + idx + 1}
                     </td>
                     <td className="px-4 py-3.5">
-                      <div className="text-base font-medium text-heading">{doc.title}</div>
+                      <div className="text-body-lg font-bold text-heading">{doc.title}</div>
                       {doc.description && (
-                        <div className="mt-0.5 text-sm text-body/60">{doc.description}</div>
+                        <div className="mt-0.5 text-body-sm text-body/60">{doc.description}</div>
                       )}
                     </td>
                     <td className="px-4 py-3.5 text-center">
