@@ -4,7 +4,7 @@ import { db } from "@/lib/db/client";
 import { documents, users } from "@/lib/db/schema";
 import { put } from "@vercel/blob";
 import { headers } from "next/headers";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, like } from "drizzle-orm";
 
 /**
  * GET /api/documents
@@ -28,6 +28,7 @@ export async function GET() {
       })
       .from(documents)
       .leftJoin(users, eq(documents.uploadedBy, users.id))
+      .where(like(documents.fileUrl, "%/SKPegawai/%"))
       .orderBy(desc(documents.year), desc(documents.createdAt));
 
     return NextResponse.json(docs);
@@ -81,8 +82,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Upload ke Vercel Blob
-    const blob = await put(file.name, file, {
+    // Upload ke Vercel Blob (direktori SKPegawai)
+    const safeFileName = file.name.replace(/\s+/g, "-");
+    const blobPath = `SKPegawai/${Date.now()}-${safeFileName}`;
+
+    const blob = await put(blobPath, file, {
       access: "public",
       contentType: "application/pdf",
     });

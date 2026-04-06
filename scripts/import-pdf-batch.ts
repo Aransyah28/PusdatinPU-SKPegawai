@@ -7,6 +7,10 @@ const inputDir = process.argv[2]
   ? path.resolve(process.cwd(), process.argv[2])
   : path.resolve(process.cwd(), "test-data", "pdfs");
 
+const blobDirectory = (process.argv[3] ?? "SKPegawai")
+  .replace(/^\/+|\/+$/g, "")
+  .trim();
+
 async function loadEnvFiles() {
   const envFiles = [".env.local", ".env"];
 
@@ -113,7 +117,7 @@ async function runBatchImport() {
 
     try {
       const buffer = await readFile(filePath);
-      const blobPath = `documents/batch/${Date.now()}-${fileName}`;
+      const blobPath = `${blobDirectory}/${Date.now()}-${fileName}`;
 
       const blob = await put(blobPath, buffer, {
         access: "public",
@@ -142,6 +146,7 @@ async function runBatchImport() {
   console.log(`   Berhasil: ${successCount}`);
   console.log(`   Gagal   : ${failCount}`);
   console.log(`   Folder  : ${inputDir}`);
+  console.log(`   Prefix  : ${blobDirectory}/`);
 }
 
 runBatchImport().catch((error) => {
