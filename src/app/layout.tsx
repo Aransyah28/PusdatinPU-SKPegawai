@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers/providers";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const plusJakartaSans = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  fallback: ["Segoe UI", "Roboto", "Arial", "sans-serif"],
+  variable: "--font-plus-jakarta",
+});
 
 export const metadata: Metadata = {
   title: "Pusdatin PU — SK Kepegawaian",
@@ -18,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id">
-      <body className={`${inter.className} min-h-screen bg-background`}>
+    <html lang="id" className={plusJakartaSans.variable}>
+      <body className="font-sans min-h-screen bg-background antialiased">
         <Providers>
           {children}
           <Toaster richColors position="top-right" duration={1500} />
