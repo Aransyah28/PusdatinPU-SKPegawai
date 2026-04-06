@@ -126,10 +126,10 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Toolbar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 items-center gap-2 max-w-2xl">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-1 items-center gap-2 max-w-xl">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body/40" />
             <input
@@ -140,7 +140,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full rounded-full border border-border bg-white pl-10 pr-4 py-2 text-body-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+              className="h-9 w-full rounded-full border border-border bg-white pl-10 pr-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
             />
           </div>
           
@@ -151,7 +151,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                 setSelectedYear(e.target.value);
                 setCurrentPage(1);
               }}
-              className="appearance-none rounded-full border border-border bg-white pl-4 pr-10 py-2 text-body-md font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10 cursor-pointer"
+              className="h-9 appearance-none rounded-full border border-border bg-white pl-3 pr-9 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10 cursor-pointer"
             >
               <option value="all">Semua Tahun</option>
               {uniqueYears.map((year) => (
@@ -169,9 +169,9 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         {isAdmin && (
           <button
             onClick={() => setUploadOpen(true)}
-            className="flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-body-md font-bold text-white shadow-md transition-all hover:bg-primary/90 active:scale-95"
+            className="flex h-9 items-center justify-center gap-1.5 rounded-full bg-primary px-4 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary/90 active:scale-95"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-3.5 w-3.5" />
             Tambah SK
           </button>
         )}
@@ -194,98 +194,98 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
           </div>
         </div>
       ) : filteredDocuments.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border py-20 text-center">
-          <div className="rounded-full bg-muted p-4 mb-4">
-            <FileText className="h-10 w-10 text-muted-foreground" />
+        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border py-14 text-center">
+          <div className="mb-3 rounded-full bg-muted p-3">
+            <FileText className="h-8 w-8 text-muted-foreground" />
           </div>
-          <p className="text-title-lg font-bold text-heading">Belum ada dokumen</p>
-          <p className="text-body-sm text-body/70 mt-1 max-w-xs">
+          <p className="text-title-md font-semibold text-heading">Belum ada dokumen</p>
+          <p className="mt-1 max-w-xs text-sm text-body/70">
             {searchQuery 
               ? `Tidak ditemukan dokumen untuk kata kunci "${searchQuery}"`
               : "Daftar Surat Keterangan Kepegawaian akan muncul di sini."}
           </p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="overflow-x-auto rounded-2xl border border-border bg-white shadow-sm">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-primary">
-                  <th className="px-6 py-3 text-title-sm font-bold text-white">No</th>
-                  <th className="px-6 py-3 text-title-sm font-bold text-white">Judul SK</th>
-                  <th className="px-6 py-3 text-title-sm font-bold text-white text-center">Tahun</th>
-                  <th className="px-6 py-3 text-title-sm font-bold text-white whitespace-nowrap text-center">Diunggah Oleh</th>
-                  <th className="px-6 py-3 text-title-sm font-bold text-white w-56 text-center">Tanggal Unggah</th>
-                  <th className="px-6 py-3 text-title-sm font-bold text-white">Ukuran File</th>
-                  <th className="px-6 py-3 text-title-sm font-bold text-white text-center">Aksi</th>
+                  <th className="px-4 py-2.5 text-sm font-semibold text-white">No</th>
+                  <th className="px-4 py-2.5 text-sm font-semibold text-white">Judul SK</th>
+                  <th className="px-4 py-2.5 text-center text-sm font-semibold text-white">Tahun</th>
+                  <th className="whitespace-nowrap px-4 py-2.5 text-center text-sm font-semibold text-white">Diunggah Oleh</th>
+                  <th className="w-48 px-4 py-2.5 text-center text-sm font-semibold text-white">Tanggal Unggah</th>
+                  <th className="px-4 py-2.5 text-sm font-semibold text-white">Ukuran File</th>
+                  <th className="px-4 py-2.5 text-center text-sm font-semibold text-white">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
                 {paginatedDocuments.map((doc, idx) => (
                    <tr key={doc.id} className="transition-colors hover:bg-muted/10">
-                    <td className="px-6 py-6 text-body-lg font-medium text-body/40">
+                    <td className="px-4 py-3.5 text-sm font-medium text-body/40">
                       {(currentPage - 1) * itemsPerPage + idx + 1}
                     </td>
-                    <td className="px-6 py-5">
-                      <div className="text-title-lg text-heading">{doc.title}</div>
+                    <td className="px-4 py-3.5">
+                      <div className="text-base font-medium text-heading">{doc.title}</div>
                       {doc.description && (
-                        <div className="mt-1 text-body-lg text-body/60">{doc.description}</div>
+                        <div className="mt-0.5 text-sm text-body/60">{doc.description}</div>
                       )}
                     </td>
-                    <td className="px-6 py-5 text-center">
-                      <span className="inline-flex items-center rounded-full bg-accent-blue/50 px-3 py-1 text-label-md font-bold text-accent-blue-foreground">
+                    <td className="px-4 py-3.5 text-center">
+                      <span className="inline-flex items-center rounded-full bg-accent-blue/50 px-2.5 py-0.5 text-xs font-semibold text-accent-blue-foreground">
                         {doc.year}
                       </span>
                     </td>
-                    <td className="px-6 py-5 text-center">
-                      <div className="text-body-lg font-medium text-body">
+                    <td className="px-4 py-3.5 text-center">
+                      <div className="text-sm font-medium text-body">
                         {doc.uploaderName ?? <span className="text-body/30">—</span>}
                       </div>
                     </td>
-                    <td className="px-6 py-5 text-center">
-                      <div className="text-body-lg text-body/70">
+                    <td className="px-4 py-3.5 text-center">
+                      <div className="text-sm text-body/70">
                         {formatDate(new Date(doc.createdAt))}
                       </div>
                     </td>
-                    <td className="px-6 py-5">
-                      <div className="text-body-lg text-body/70">
+                    <td className="px-4 py-3.5">
+                      <div className="text-sm text-body/70">
                         {formatFileSize(doc.fileSize)}
                       </div>
                     </td>
-                     <td className="px-6 py-5">
-                      <div className="flex items-center justify-center gap-3">
+                     <td className="px-4 py-3.5">
+                      <div className="flex items-center justify-center gap-2">
                         <a
                           href={doc.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="touch-target h-11 w-11 rounded-full bg-muted text-body transition-all hover:bg-muted/80"
+                          className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-body transition-all hover:bg-muted/80"
                           title="Lihat"
                         >
-                          <Eye className="h-5 w-5" />
+                          <Eye className="h-4 w-4" />
                         </a>
                         <button
                           onClick={() => handleDownload(doc)}
                           disabled={downloadingId === doc.id}
-                          className="touch-target h-11 w-11 rounded-full bg-accent-blue/20 text-accent-blue-foreground transition-all hover:bg-accent-blue/40 disabled:opacity-50"
+                          className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-blue/20 text-accent-blue-foreground transition-all hover:bg-accent-blue/40 disabled:opacity-50"
                           title="Unduh"
                         >
                           {downloadingId === doc.id ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                           ) : (
-                            <Download className="h-5 w-5" />
+                            <Download className="h-4 w-4" />
                           )}
                         </button>
                         {isAdmin && (
                           <button
                             onClick={() => handleDelete(doc.id)}
                             disabled={deletingId === doc.id}
-                            className="touch-target h-11 w-11 rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50"
+                            className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50"
                             title="Hapus"
                           >
                             {deletingId === doc.id ? (
-                              <Loader2 className="h-5 w-5 animate-spin" />
+                              <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
-                              <Trash2 className="h-5 w-5" />
+                              <Trash2 className="h-4 w-4" />
                             )}
                           </button>
                         )}
