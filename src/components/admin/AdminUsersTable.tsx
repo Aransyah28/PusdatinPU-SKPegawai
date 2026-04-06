@@ -59,18 +59,19 @@ export function AdminUsersTable({ users, currentUserId }: AdminUsersTableProps) 
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-border bg-muted/30 text-left">
-            <th className="px-4 py-4 text-title-lg font-bold text-heading">Nama</th>
-            <th className="px-4 py-4 text-title-lg font-bold text-heading">Email</th>
-            <th className="px-4 py-4 text-title-lg font-bold text-heading">Role</th>
-            <th className="px-4 py-4 text-title-lg font-bold text-heading">Terdaftar</th>
-            <th className="px-4 py-4 text-center text-title-lg font-bold text-heading">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {localUsers.map((user) => (
+      <div className="overflow-x-auto">
+        <table className="w-full text-body-sm">
+          <thead>
+            <tr className="border-b border-border bg-muted/30 text-left">
+              <th className="px-4 py-4 text-title-sm font-bold text-heading">Nama</th>
+              <th className="px-4 py-4 text-title-sm font-bold text-heading">Email</th>
+              <th className="px-4 py-4 text-title-sm font-bold text-heading">Role</th>
+              <th className="px-4 py-4 text-title-sm font-bold text-heading">Terdaftar</th>
+              <th className="px-4 py-4 text-center text-title-sm font-bold text-heading">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {localUsers.map((user) => (
             <tr key={user.id} className="border-b border-border/50 last:border-0 hover:bg-muted/10 transition-colors">
               <td className="px-4 py-3 text-body-md font-bold text-heading">{user.name}</td>
               <td className="px-4 py-3 text-body-sm text-body">{user.email}</td>
@@ -113,6 +114,7 @@ export function AdminUsersTable({ users, currentUserId }: AdminUsersTableProps) 
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers/providers";
 import { Toaster } from "@/components/ui/sonner";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Pusdatin PU — SK Kepegawaian",
@@ -19,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className={`${inter.className} min-h-screen bg-background`}>
+      <body className="font-sans min-h-screen bg-background antialiased">
         <Providers>
           {children}
           <Toaster richColors position="top-right" duration={1500} />

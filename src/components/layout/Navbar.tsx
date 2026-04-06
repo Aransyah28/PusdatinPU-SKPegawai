@@ -64,7 +64,7 @@ export function Navbar({ user }: NavbarProps) {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl text-primary">
                 <Sparkles className="h-6 w-6 fill-current" />
               </div>
-              <span className="text-title-lg tracking-tight text-heading">
+              <span className="text-title-lg">
                 SK Kepegawaian
               </span>
             </div>
@@ -89,7 +89,7 @@ export function Navbar({ user }: NavbarProps) {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsOpen((v) => !v)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white shadow-md transition-all hover:scale-105 active:scale-95"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-label-lg text-white shadow-md transition-all hover:scale-105 active:scale-95"
                   aria-label="Menu akun"
                 >
                   {getInitial(user.name)}
@@ -111,7 +111,7 @@ export function Navbar({ user }: NavbarProps) {
                     <div className="p-1">
                       <button
                         onClick={handleLogout}
-                        className="flex w-full items-center gap-2 rounded-full px-3 py-2 text-sm font-bold text-destructive transition-all hover:bg-destructive/5"
+                        className="flex w-full items-center gap-2 rounded-full px-3 py-2 text-label-lg text-destructive transition-all hover:bg-destructive/5"
                       >
                         <LogOut className="h-4 w-4" />
                         Keluar

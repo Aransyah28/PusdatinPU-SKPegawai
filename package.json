@@ -11,6 +11,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx scripts/seed.ts",
+    "pdf:generate:test": "tsx scripts/generate-test-pdfs.ts",
+    "pdf:import:batch": "tsx scripts/import-pdf-batch.ts",
     "fl": "oxlint && bun format:check",
     "format": "oxfmt --write",
     "format:check": "oxfmt --check",

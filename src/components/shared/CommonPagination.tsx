@@ -35,7 +35,7 @@ export function CommonPagination({
             onClick={() => onPageChange(i)}
             disabled={isLoading}
             className={cn(
-              "flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-all",
+              "flex h-9 w-9 items-center justify-center rounded-full text-label-lg font-medium transition-all",
               currentPage === i
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground"

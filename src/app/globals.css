@@ -6,6 +6,7 @@
  * Contoh penggunaan: bg-primary, text-heading, bg-accent-green, text-accent-green-foreground
  */
 @theme {
+  --font-sans: "Segoe UI", Roboto, Arial, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -39,9 +40,13 @@
   /* Typography Tokens */
   --font-size-headline-lg: 34px;
   --font-size-headline-sm: 24px;
-  --font-size-title-lg: 20px;
-  --font-size-body-md: 15px;
+  --font-size-title-lg: 18px;
+  --font-size-title-md: 18px;
+  --font-size-title-sm: 14px;
+  --font-size-body-lg: 16px;
+  --font-size-body-md: 14px;
   --font-size-body-sm: 13px;
+  --font-size-label-lg: 14px;
   --font-size-label-md: 12px;
 
   /* Font colors */
@@ -59,6 +64,8 @@
 
 @layer base {
   :root {
+    --fontFamilyBase: "Segoe UI", Roboto, Arial, sans-serif;
+    
     --background: #f7f9fb;
     --foreground: #020817;
     --card: #ffffff;
@@ -106,12 +113,24 @@
     @apply border-border;
   }
   html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--muted-foreground) transparent;
+    scrollbar-color: #ffd602 #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #ffd602;
+    border: 2px solid #f1f1f1;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
   }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-inter), system-ui, sans-serif;
   }
   
   /* Typography Utilities */
@@ -121,11 +140,27 @@
   }
   .text-headline-sm {
     font-size: var(--font-size-headline-sm);
-    @apply font-bold leading-snug text-heading;
+    @apply font-bold leading-tight tracking-tight text-heading;
   }
   .text-title-lg {
     font-size: var(--font-size-title-lg);
-    @apply font-semibold leading-normal text-heading;
+    @apply font-bold leading-tight tracking-tight text-heading;
+  }
+  .text-title-md {
+    font-size: var(--font-size-title-md);
+    @apply font-medium leading-tight tracking-tight text-heading;
+  }
+  .text-title-sm {
+    font-size: var(--font-size-title-sm);
+    @apply font-medium leading-tight tracking-tight text-heading;
+  }
+  .text-label-lg {
+    font-size: var(--font-size-label-lg);
+    @apply font-semibold leading-tight tracking-tight text-heading;
+  }
+  .text-body-lg {
+    font-size: var(--font-size-body-lg);
+    @apply text-body;
   }
   .text-body-md {
     font-size: var(--font-size-body-md);
@@ -139,7 +174,7 @@
 
 @layer utilities {
   .section-padding {
-    @apply px-4 py-10 md:px-[64px] xl:px-[140px];
+    @apply px-4 py-10 md:px-[24px] xl:px-[140px];
   }
 
   /* RAM Grid */
