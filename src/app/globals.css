@@ -41,10 +41,10 @@
   --font-size-headline-lg: 34px;
   --font-size-headline-sm: 24px;
   --font-size-title-lg: 18px;
-  --font-size-title-md: 16px;
+  --font-size-title-md: 18px;
   --font-size-title-sm: 14px;
   --font-size-body-lg: 16px;
-  --font-size-body-md: 18px;
+  --font-size-body-md: 14px;
   --font-size-body-sm: 13px;
   --font-size-label-lg: 14px;
   --font-size-label-md: 12px;
@@ -144,7 +144,7 @@
   }
   .text-title-lg {
     font-size: var(--font-size-title-lg);
-    @apply font-semibold leading-tight tracking-tight text-heading;
+    @apply font-bold leading-tight tracking-tight text-heading;
   }
   .text-title-md {
     font-size: var(--font-size-title-md);
@@ -174,7 +174,7 @@
 
 @layer utilities {
   .section-padding {
-    @apply px-4 py-10 md:px-[64px] xl:px-[140px];
+    @apply px-4 py-10 md:px-[24px] xl:px-[140px];
   }
 
   /* RAM Grid */

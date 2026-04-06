@@ -27,15 +27,15 @@ export default async function HomePage() {
           >
             Home
           </a>
-          <span>/</span>
+          <span className="text-slate-300;">&gt;</span>
           <a
             href="https://htupusdatin.vercel.app/kepegawaian"
             className="transition-colors hover:text-primary"
           >
             Kepegawaian
           </a>
-          <span>/</span>
-          <span className="font-bold text-primary">SK Kepegawaian</span>
+          <span className="text-slate-300;">&gt;</span>
+          <span className="font-black tracking-tight text-primary">SK Kepegawaian</span>
         </nav>
 
         {/* Header halaman */}
@@ -43,9 +43,9 @@ export default async function HomePage() {
           <h1 className="text-headline-lg mb-1">
             Surat Keterangan Kepegawaian
           </h1>
-          <p className="text-body-md mt-2 max-w-2xl">
+          <p className="text-title-md mt-2 max-w-2xl text-body/80">
             {isAdmin
-              ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU."
+              ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU"
               : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU melalui portal satu pintu."}
           </p>
         </div>
