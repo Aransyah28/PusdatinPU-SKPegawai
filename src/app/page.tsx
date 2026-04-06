@@ -40,7 +40,7 @@ export default async function HomePage() {
 
         {/* Header halaman */}
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg">
+          <h1 className="text-headline-lg mb-1">
             Surat Keterangan Kepegawaian
           </h1>
           <p className="text-body-md mt-2 max-w-2xl">

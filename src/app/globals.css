@@ -6,7 +6,7 @@
  * Contoh penggunaan: bg-primary, text-heading, bg-accent-green, text-accent-green-foreground
  */
 @theme {
-  --font-sans: var(--font-plus-jakarta, var(--fontFamilyBase));
+  --font-sans: "Segoe UI", Roboto, Arial, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -140,23 +140,23 @@
   }
   .text-headline-sm {
     font-size: var(--font-size-headline-sm);
-    @apply font-bold leading-snug text-heading;
+    @apply font-bold leading-tight tracking-tight text-heading;
   }
   .text-title-lg {
     font-size: var(--font-size-title-lg);
-    @apply font-semibold leading-normal text-heading;
+    @apply font-semibold leading-tight tracking-tight text-heading;
   }
   .text-title-md {
     font-size: var(--font-size-title-md);
-    @apply font-medium leading-normal text-heading;
+    @apply font-medium leading-tight tracking-tight text-heading;
   }
   .text-title-sm {
     font-size: var(--font-size-title-sm);
-    @apply font-medium text-heading;
+    @apply font-medium leading-tight tracking-tight text-heading;
   }
   .text-label-lg {
     font-size: var(--font-size-label-lg);
-    @apply font-semibold text-heading;
+    @apply font-semibold leading-tight tracking-tight text-heading;
   }
   .text-body-lg {
     font-size: var(--font-size-body-lg);
