@@ -21,11 +21,9 @@ export default async function LaporanTriwulanPage() {
 
       <main className="section-padding mx-auto max-w-[1600px]">
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg">Surat Keterangan Kepegawaian</h1>
+          <h1 className="text-headline-lg">Laporan Triwulan</h1>
           <p className="text-body-md mt-2 max-w-2xl">
-            {isAdmin
-              ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU."
-              : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU melalui portal satu pintu."}
+            Placeholder untuk deskripsi laporan triwulan.
           </p>
         </div>
       </main>
