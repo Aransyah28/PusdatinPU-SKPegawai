@@ -18,6 +18,20 @@ function getInitial(name: string): string {
 }
 
 function getTitleFromPathname(pathname: string): string {
+  // Handle dynamic routes like /laporanbulanan/2026
+  const yearMatch = pathname.match(/^\/(laporan\w+)\/(\d+)$/);
+  if (yearMatch) {
+    const [, reportType, year] = yearMatch;
+    const typeMap: Record<string, string> = {
+      laporanbulanan: "Laporan Bulanan",
+      laporankinerja: "Laporan Kinerja",
+      laporanmingguan: "Laporan Mingguan",
+      laporantriwulan: "Laporan Triwulan",
+    };
+    const title = typeMap[reportType] || "Laporan";
+    return `${title} ${year}`;
+  }
+
   const pathMap: Record<string, string> = {
     "/": "Surat Keterangan Kepegawaian",
     "/admin/users": "Kelola Pengguna",
