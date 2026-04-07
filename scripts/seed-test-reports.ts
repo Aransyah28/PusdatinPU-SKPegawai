@@ -1,32 +1,34 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { put } from "@vercel/blob";
+import { eq, like, or } from "drizzle-orm";
 import { db } from "@/lib/db/client";
-import { documents } from "@/lib/db/schema";
+import { documents, users } from "@/lib/db/schema";
 
 const OUTPUT_DIR = path.resolve(process.cwd(), "test-data", "pdfs");
 
 // Report types and their configurations
 const REPORT_TYPES = [
   {
-    name: "bulanan",
+    name: "laporanbulanan",
     label: "Laporan Bulanan",
     years: [2022, 2023, 2024, 2025, 2026],
     filesPerYear: 20,
   },
   {
-    name: "kinerja",
+    name: "laporankinerja",
     label: "Laporan Kinerja",
     years: [2022, 2023, 2024, 2025, 2026],
     filesPerYear: 20,
   },
   {
-    name: "mingguan",
+    name: "laporanmingguan",
     label: "Laporan Mingguan",
     years: [2022, 2023, 2024, 2025, 2026],
     filesPerYear: 20,
   },
   {
-    name: "triwulan",
+    name: "laporantriwulan",
     label: "Laporan Triwulan",
     years: [2022, 2023, 2024, 2025, 2026],
     filesPerYear: 20,
@@ -72,8 +74,75 @@ function buildSimplePdf(text: string): Buffer {
   return Buffer.from(pdf, "utf8");
 }
 
+async function loadEnvFiles() {
+  const envFiles = [".env.local", ".env"];
+
+  for (const fileName of envFiles) {
+    const envPath = path.resolve(process.cwd(), fileName);
+
+    try {
+      const content = await readFile(envPath, "utf8");
+      const lines = content.split(/\r?\n/);
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) {
+          continue;
+        }
+
+        const idx = trimmed.indexOf("=");
+        const key = trimmed.slice(0, idx).trim();
+        const rawValue = trimmed.slice(idx + 1).trim();
+        const value = rawValue.replace(/^['"]|['"]$/g, "");
+
+        if (key && process.env[key] === undefined) {
+          process.env[key] = value;
+        }
+      }
+    } catch {
+      // Abaikan jika file env tidak ada.
+    }
+  }
+}
+
+async function resolveUploadedBy(): Promise<string | null> {
+  const adminEmail = process.env.BATCH_UPLOAD_ADMIN_EMAIL;
+  if (!adminEmail) return null;
+
+  const admin = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, adminEmail))
+    .limit(1);
+
+  return admin[0]?.id ?? null;
+}
+
+async function cleanupOldSeed() {
+  await db
+    .delete(documents)
+    .where(
+      or(
+        like(documents.description, "Data uji laporanbulanan %"),
+        like(documents.description, "Data uji laporankinerja %"),
+        like(documents.description, "Data uji laporanmingguan %"),
+        like(documents.description, "Data uji laporantriwulan %"),
+      ),
+    );
+}
+
 async function generateAndSeed() {
+  await loadEnvFiles();
+
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    console.error("❌ BLOB_READ_WRITE_TOKEN belum diatur di environment.");
+    process.exit(1);
+  }
+
   await mkdir(OUTPUT_DIR, { recursive: true });
+  await cleanupOldSeed();
+
+  const uploadedBy = await resolveUploadedBy();
 
   let totalFiles = 0;
 
@@ -88,7 +157,6 @@ async function generateAndSeed() {
       for (let fileNum = 1; fileNum <= reportType.filesPerYear; fileNum += 1) {
         const fileName = `${reportType.label}_${year}_${String(fileNum).padStart(2, "0")}.pdf`;
         const filePath = path.join(yearDir, fileName);
-        const fileSize = 2048 + Math.random() * 3072; // 2-5 KB
 
         // Generate PDF
         const pdfContent = buildSimplePdf(
@@ -98,19 +166,25 @@ async function generateAndSeed() {
 
         // Insert to database
         try {
+          const blobPath = `${reportType.name}/${year}/${fileName}`;
+          const blob = await put(blobPath, pdfContent, {
+            access: "public",
+            contentType: "application/pdf",
+          });
+
           await db.insert(documents).values({
             title: fileName,
             year: year,
-            description: `${reportType.label} tahun ${year}`,
-            fileUrl: `file://${filePath}`,
+            description: `Data uji ${reportType.name} tahun ${year}`,
+            fileUrl: blob.url,
             fileName: fileName,
-            fileSize: Math.round(fileSize),
-            uploadedBy: null,
+            fileSize: pdfContent.byteLength,
+            uploadedBy,
           });
 
           totalFiles++;
           console.log(
-            `✓ Created: ${reportType.name}/${year}/${fileName} (${totalFiles})`
+            `✓ Imported: /${reportType.name}/${year}/${fileName} (${totalFiles})`
           );
         } catch (error) {
           console.error(
@@ -123,9 +197,10 @@ async function generateAndSeed() {
   }
 
   console.log(
-    `\n✅ Done! Generated and seeded ${totalFiles} test files.`
+    `\n✅ Done! Generated dan import ${totalFiles} file ke Turso.`
   );
   console.log(`📁 Location: ${OUTPUT_DIR}`);
+  console.log("🗂️ Prefix Blob: /laporan.../year");
 }
 
 generateAndSeed().catch((error) => {
