@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ArrowLeft, Sparkles, LogOut, Shield } from "lucide-react";
 import { signOut } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
@@ -17,12 +17,27 @@ function getInitial(name: string): string {
   return name.trim().charAt(0).toUpperCase();
 }
 
+function getTitleFromPathname(pathname: string): string {
+  const pathMap: Record<string, string> = {
+    "/": "Surat Keterangan Kepegawaian",
+    "/admin/users": "Kelola Pengguna",
+    "/laporanbulanan": "Laporan Bulanan",
+    "/laporankinerja": "Laporan Kinerja",
+    "/laporanmingguan": "Laporan Mingguan",
+    "/laporantriwulan": "Laporan Triwulan",
+  };
+
+  return pathMap[pathname] || "Surat Keterangan Kepegawaian";
+}
+
 export function Navbar({ user }: NavbarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isAdmin = user?.role === "admin";
+  const pageTitle = getTitleFromPathname(pathname);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -65,7 +80,7 @@ export function Navbar({ user }: NavbarProps) {
                 <Sparkles className="h-6 w-6 fill-current" />
               </div>
               <span className="text-title-lg">
-                SK Kepegawaian
+                {pageTitle}
               </span>
             </div>
           </div>
