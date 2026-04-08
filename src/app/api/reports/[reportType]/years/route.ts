@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db/client";
-import { documents } from "@/lib/db/schema";
-import { sql } from "drizzle-orm";
+import { getReportYears } from "@/lib/reports/report-queries";
+import { isReportType } from "@/lib/reports/report-types";
 
 interface AvailableYear {
   year: number;
@@ -15,32 +14,14 @@ export async function GET(
   try {
     const { reportType } = await context.params;
 
-    // Map reportType ke description prefix
-    const typeMap: Record<string, string> = {
-      bulanan: "bulanan",
-      kinerja: "kinerja",
-      mingguan: "mingguan",
-      triwulan: "triwulan",
-    };
-
-    const prefix = typeMap[reportType];
-    if (!prefix) {
+    if (!isReportType(reportType)) {
       return NextResponse.json(
         { error: "Report type tidak valid" },
         { status: 400 }
       );
     }
 
-    // Fetch years dengan count documents
-    const result = await db
-      .select({
-        year: documents.year,
-        count: sql<number>`count(*)`,
-      })
-      .from(documents)
-      .where(sql`LOWER(${documents.description}) LIKE ${"%" + prefix.toLowerCase() + "%"}`)
-      .groupBy(documents.year)
-      .orderBy((t) => sql`${t.year} DESC`);
+    const result = await getReportYears(reportType);
 
     const data: AvailableYear[] = result.map((r) => ({
       year: r.year,

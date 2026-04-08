@@ -3,6 +3,9 @@ import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { notFound } from "next/navigation";
+import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumentsTable";
+import { getReportDocumentsByYear } from "@/lib/reports/report-queries";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +17,15 @@ export default async function LaporanMingguanYearPage({
   params,
 }: LaporanMingguanYearPageProps) {
   const { year } = await params;
+  const yearNumber = Number.parseInt(year, 10);
+
+  if (Number.isNaN(yearNumber)) {
+    notFound();
+  }
+
   let session = null;
+  let reportDocuments: Awaited<ReturnType<typeof getReportDocumentsByYear>> = [];
+  let fetchError = false;
 
   try {
     session = await auth.api.getSession({ headers: await headers() });
@@ -22,7 +33,12 @@ export default async function LaporanMingguanYearPage({
     console.error("Failed to fetch session:", error);
   }
 
-  const isAdmin = session?.user?.role === "admin";
+  try {
+    reportDocuments = await getReportDocumentsByYear("mingguan", yearNumber);
+  } catch (error) {
+    console.error("Failed to fetch laporan mingguan:", error);
+    fetchError = true;
+  }
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -63,12 +79,15 @@ export default async function LaporanMingguanYearPage({
           </p>
         </div>
 
-        {/* Placeholder untuk DocumentsSection dengan filter year */}
-        <div className="rounded-lg border border-dashed border-border bg-muted/30 py-12 text-center">
-          <p className="text-body-md text-body/60">
-            Konten laporan mingguan tahun {year} akan ditampilkan di sini.
-          </p>
-        </div>
+        {fetchError ? (
+          <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
+            <p className="text-label-lg text-destructive">
+              Gagal memuat data laporan. Silakan muat ulang halaman.
+            </p>
+          </div>
+        ) : (
+          <YearReportDocumentsTable documents={reportDocuments} />
+        )}
       </main>
     </div>
   );
