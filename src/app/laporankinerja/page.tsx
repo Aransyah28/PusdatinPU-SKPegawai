@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
-import { YearSelector } from "@/components/reports/YearSelector";
+import { ReportLandingSection } from "@/components/reports/ReportLandingSection";
 
 export const dynamic = "force-dynamic";
 
@@ -32,17 +32,13 @@ export default async function LaporanKinerjaPage() {
           <span className="font-black tracking-tight text-primary">Laporan Kinerja</span>
         </nav>
 
-        <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg mb-1">Laporan Kinerja</h1>
-          <p className="text-title-md mt-2 max-w-2xl text-body/80">
-            Pilih tahun untuk melihat laporan kinerja Pusdatin PU yang tersedia.
-          </p>
-        </div>
-
-        <div className="mb-8">
-          <h2 className="text-title-lg font-bold mb-4">Pilih Tahun</h2>
-          <YearSelector reportType="kinerja" baseUrl="/laporankinerja" />
-        </div>
+        <ReportLandingSection
+          title="Laporan Kinerja"
+          description="Pilih tahun untuk melihat laporan kinerja Pusdatin PU yang tersedia."
+          reportType="kinerja"
+          baseUrl="/laporankinerja"
+          isAdmin={isAdmin}
+        />
       </main>
     </div>
   );
