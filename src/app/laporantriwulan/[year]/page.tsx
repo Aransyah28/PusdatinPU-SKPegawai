@@ -46,13 +46,6 @@ export default async function LaporanTriwulanYearPage({
 
       <main className="section-padding mx-auto max-w-[1600px]">
         <div className="mb-6 flex items-center gap-3">
-          <Link
-            href="/laporantriwulan"
-            className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
-            title="Kembali ke pilih tahun"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
           <nav className="flex items-center gap-2 text-body-sm font-medium text-body/40">
             <a
               href="https://htupusdatin.vercel.app/"

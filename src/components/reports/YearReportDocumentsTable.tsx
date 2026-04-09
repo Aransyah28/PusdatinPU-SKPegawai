@@ -27,8 +27,9 @@ export function YearReportDocumentsTable({ documents }: YearReportDocumentsTable
         <thead>
           <tr className="bg-primary">
             <th className="px-4 py-2.5 text-sm font-semibold text-white">No</th>
-            <th className="px-4 py-2.5 text-sm font-semibold text-white">Judul</th>
-            <th className="px-4 py-2.5 text-center text-sm font-semibold text-white">Diunggah Oleh</th>
+            <th className="px-4 py-2.5 text-sm font-semibold text-white">Judul Laporan</th>
+            <th className="px-4 py-2.5 text-center text-sm font-semibold text-white">Tahun</th>
+            <th className="whitespace-nowrap px-4 py-2.5 text-center text-sm font-semibold text-white">Diunggah Oleh</th>
             <th className="w-48 px-4 py-2.5 text-center text-sm font-semibold text-white">Tanggal Unggah</th>
             <th className="px-4 py-2.5 text-sm font-semibold text-white">Ukuran File</th>
             <th className="px-4 py-2.5 text-center text-sm font-semibold text-white">Aksi</th>
@@ -43,6 +44,11 @@ export function YearReportDocumentsTable({ documents }: YearReportDocumentsTable
                 {doc.description && (
                   <div className="mt-0.5 text-body-sm text-body/60">{doc.description}</div>
                 )}
+              </td>
+              <td className="px-4 py-3.5 text-center">
+                <span className="inline-flex items-center rounded-full bg-accent-blue/50 px-2.5 py-0.5 text-xs font-semibold text-accent-blue-foreground">
+                  {doc.year}
+                </span>
               </td>
               <td className="px-4 py-3.5 text-center">
                 <div className="text-sm font-medium text-body">
