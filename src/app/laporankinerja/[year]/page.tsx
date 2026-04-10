@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumentsTable";
 import { getReportDocumentsByYear } from "@/lib/reports/report-queries";
@@ -23,22 +22,18 @@ export default async function LaporanKinerjaYearPage({
     notFound();
   }
 
-  let session = null;
-  let reportDocuments: Awaited<ReturnType<typeof getReportDocumentsByYear>> = [];
   let fetchError = false;
-
-  try {
-    session = await auth.api.getSession({ headers: await headers() });
-  } catch (error) {
-    console.error("Failed to fetch session:", error);
-  }
-
-  try {
-    reportDocuments = await getReportDocumentsByYear("kinerja", yearNumber);
-  } catch (error) {
-    console.error("Failed to fetch laporan kinerja:", error);
-    fetchError = true;
-  }
+  const [session, reportDocuments] = await Promise.all([
+    auth.api.getSession({ headers: await headers() }).catch((error) => {
+      console.error("Failed to fetch session:", error);
+      return null;
+    }),
+    getReportDocumentsByYear("kinerja", yearNumber).catch((error) => {
+      console.error("Failed to fetch laporan kinerja:", error);
+      fetchError = true;
+      return [];
+    }),
+  ]);
 
   return (
     <div className="min-h-screen bg-background pt-20">
