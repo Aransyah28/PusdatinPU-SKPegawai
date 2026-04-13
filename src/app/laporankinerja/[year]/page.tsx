@@ -24,7 +24,7 @@ export default async function LaporanKinerjaYearPage({
 
   let fetchError = false;
   const [session, reportDocuments] = await Promise.all([
-    auth.api.getSession({ headers: await headers() }).catch((error) => {
+    headers().then((h) => auth.api.getSession({ headers: h })).catch((error) => {
       console.error("Failed to fetch session:", error);
       return null;
     }),
