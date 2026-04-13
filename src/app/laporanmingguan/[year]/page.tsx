@@ -74,7 +74,12 @@ export default async function LaporanMingguanYearPage({
             </p>
           </div>
         ) : (
-          <YearReportDocumentsTable documents={reportDocuments} />
+          <YearReportDocumentsTable 
+            documents={reportDocuments}
+            isAdmin={session?.user?.role === "admin"}
+            reportType="mingguan"
+            year={yearNumber}
+          />
         )}
       </main>
     </div>

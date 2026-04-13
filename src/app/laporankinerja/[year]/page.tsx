@@ -74,7 +74,12 @@ export default async function LaporanKinerjaYearPage({
             </p>
           </div>
         ) : (
-          <YearReportDocumentsTable documents={reportDocuments} />
+          <YearReportDocumentsTable 
+            documents={reportDocuments}
+            isAdmin={session?.user?.role === "admin"}
+            reportType="kinerja"
+            year={yearNumber}
+          />
         )}
       </main>
     </div>
