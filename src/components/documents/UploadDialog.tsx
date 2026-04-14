@@ -103,7 +103,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
       onClick={() => onOpenChange(false)}
     >
       <div 
-        className="w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200"
+        className="w-full max-w-lg max-h-[95vh] overflow-y-auto rounded-2xl bg-card p-6 shadow-2xl animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
