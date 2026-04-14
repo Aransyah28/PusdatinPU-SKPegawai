@@ -62,9 +62,12 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"title-asc" | "title-desc" | "date-desc" | "date-asc">("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const yearDropdownRef = useRef<HTMLDivElement>(null);
+  const sortDropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: documents = [], isLoading, isError } = useQuery<Document[]>({
     queryKey: ["documents"],
@@ -88,12 +91,23 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         return matchesSearch && matchesYear;
       })
       .sort((a, b) => {
-        if (b.year !== a.year) {
-          return b.year - a.year; // Year DESC
+        if (sortOrder === "title-asc") {
+          return a.title.localeCompare(b.title);
         }
-        return a.title.localeCompare(b.title); // Title ASC
+        if (sortOrder === "title-desc") {
+          return b.title.localeCompare(a.title);
+        }
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        if (sortOrder === "date-desc") {
+          return dateB - dateA;
+        }
+        if (sortOrder === "date-asc") {
+          return dateA - dateB;
+        }
+        return 0;
       });
-  }, [documents, searchQuery, selectedYear]);
+  }, [documents, searchQuery, selectedYear, sortOrder]);
 
   const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
   const paginatedDocuments = useMemo(() => {
@@ -108,6 +122,12 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         !yearDropdownRef.current.contains(event.target as Node)
       ) {
         setYearDropdownOpen(false);
+      }
+      if (
+        sortDropdownRef.current &&
+        !sortDropdownRef.current.contains(event.target as Node)
+      ) {
+        setSortDropdownOpen(false);
       }
     };
 
@@ -187,6 +207,58 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             />
           </div>
           
+          <div className="relative" ref={sortDropdownRef}>
+            <button
+              type="button"
+              onClick={() => setSortDropdownOpen((open) => !open)}
+              className="flex h-9 min-w-[120px] items-center justify-between gap-2.5 rounded-full border border-border bg-card/95 px-3 text-left text-sm font-medium text-foreground shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_6px_14px_rgba(24,44,106,0.05)] transition-all duration-150 hover:border-border hover:shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_8px_16px_rgba(24,44,106,0.07)] focus:outline-none focus:ring-2 focus:ring-primary/10"
+              aria-haspopup="listbox"
+              aria-expanded={sortDropdownOpen}
+            >
+              <span className="truncate">
+                {sortOrder === "title-asc" && "A - Z"}
+                {sortOrder === "title-desc" && "Z - A"}
+                {sortOrder === "date-desc" && "Terbaru"}
+                {sortOrder === "date-asc" && "Terlama"}
+              </span>
+              <ChevronDown
+                className={`h-3.5 w-3.5 shrink-0 text-body/35 transition-transform duration-150 ${
+                  sortDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {sortDropdownOpen && (
+              <div className="absolute right-0 top-full z-20 mt-2 min-w-full overflow-hidden rounded-2xl border border-border bg-white p-1 shadow-[0_14px_24px_rgba(24,44,106,0.1)]">
+                {[
+                  { value: "title-asc", label: "A - Z" },
+                  { value: "title-desc", label: "Z - A" },
+                  { value: "date-desc", label: "Terbaru" },
+                  { value: "date-asc", label: "Terlama" },
+                ].map((option) => {
+                  const isSelected = sortOrder === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        setSortOrder(option.value as any);
+                        setSortDropdownOpen(false);
+                      }}
+                      className={`flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 hover:bg-muted/50 ${
+                        isSelected ? "bg-primary text-white hover:bg-primary" : "text-foreground"
+                      }`}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
           <div className="relative" ref={yearDropdownRef}>
             <button
               type="button"
