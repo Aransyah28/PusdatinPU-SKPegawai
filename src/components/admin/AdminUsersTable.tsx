@@ -58,7 +58,7 @@ export function AdminUsersTable({ users, currentUserId }: AdminUsersTableProps) 
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-body-sm">
           <thead>

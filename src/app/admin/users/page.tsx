@@ -26,7 +26,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-white px-4 py-3 shadow-sm">
+      <header className="border-b bg-card px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <h1 className="text-title-lg text-heading">Kelola Pengguna</h1>
           <a href="/" className="text-body-sm text-primary hover:underline">

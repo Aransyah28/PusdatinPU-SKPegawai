@@ -24,7 +24,7 @@ export default async function LaporanMingguanYearPage({
 
   let fetchError = false;
   const [session, reportDocuments] = await Promise.all([
-    auth.api.getSession({ headers: await headers() }).catch((error) => {
+    headers().then((h) => auth.api.getSession({ headers: h })).catch((error) => {
       console.error("Failed to fetch session:", error);
       return null;
     }),
@@ -74,7 +74,12 @@ export default async function LaporanMingguanYearPage({
             </p>
           </div>
         ) : (
-          <YearReportDocumentsTable documents={reportDocuments} />
+          <YearReportDocumentsTable 
+            documents={reportDocuments}
+            isAdmin={session?.user?.role === "admin"}
+            reportType="mingguan"
+            year={yearNumber}
+          />
         )}
       </main>
     </div>
