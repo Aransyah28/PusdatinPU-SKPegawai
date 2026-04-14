@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import type { ReportDocumentRow } from "@/lib/reports/report-queries";
 
+export type SortOrder = "title-asc" | "title-desc" | "date-desc" | "date-asc";
+
 export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage = 10) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,12 +18,19 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
   
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>("title-asc");
 
   const filteredDocuments = useMemo(() => {
-    return documents.filter((doc) =>
-      doc.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [documents, searchQuery]);
+    return documents
+      .filter((doc) => doc.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      .sort((a, b) => {
+        if (sortOrder === "title-asc") return a.title.localeCompare(b.title);
+        if (sortOrder === "title-desc") return b.title.localeCompare(a.title);
+        if (sortOrder === "date-desc") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        if (sortOrder === "date-asc") return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        return 0;
+      });
+  }, [documents, searchQuery, sortOrder]);
 
   const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
   
@@ -118,6 +127,8 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
     setDeleteConfirmOpen,
     handleDownload,
     handleUploadSuccess,
-    itemsPerPage
+    itemsPerPage,
+    sortOrder,
+    setSortOrder
   };
 }
