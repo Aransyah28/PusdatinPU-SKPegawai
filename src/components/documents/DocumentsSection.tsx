@@ -8,6 +8,16 @@ import { UploadDialog } from "./UploadDialog";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Document {
   id: string;
@@ -47,6 +57,8 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
@@ -112,17 +124,32 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
       toast.success("Dokumen berhasil dihapus.");
       setDeletingId(null);
+      setDeleteConfirmOpen(false);
+      setDocumentToDelete(null);
     },
     onError: () => {
       toast.error("Gagal menghapus dokumen.");
       setDeletingId(null);
+      setDeleteConfirmOpen(false);
+      setDocumentToDelete(null);
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus dokumen ini?")) return;
-    setDeletingId(id);
-    deleteMutation.mutate(id);
+  const handleDeleteClick = (id: string) => {
+    setDocumentToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (documentToDelete) {
+      setDeletingId(documentToDelete);
+      deleteMutation.mutate(documentToDelete);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmOpen(false);
+    setDocumentToDelete(null);
   };
 
   const handleDownload = async (doc: Document) => {
@@ -226,7 +253,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         {isAdmin && (
           <button
             onClick={() => setUploadOpen(true)}
-            className="group inline-flex h-12 min-w-[168px] items-center justify-center gap-2 rounded-[18px] bg-[#182c6a] px-6 text-[15px] font-black tracking-tight text-white shadow-[0_5px_0_0_#ffd602,0_12px_24px_rgba(24,44,106,0.18)] transition-all duration-150 hover:-translate-y-[1px] hover:shadow-[0_7px_0_0_#ffd602,0_14px_28px_rgba(24,44,106,0.2)] active:translate-y-[2px] active:shadow-[0_4px_0_0_#ffd602,0_8px_16px_rgba(24,44,106,0.14)]"
+            className="group inline-flex h-12 min-w-[168px] items-center justify-center gap-2 rounded-[18px] bg-primary px-6 text-[15px] font-black tracking-tight text-white shadow-[0_5px_0_0_#ffd602,0_12px_24px_rgba(24,44,106,0.18)] transition-all duration-150 hover:-translate-y-[1px] hover:shadow-[0_7px_0_0_#ffd602,0_14px_28px_rgba(24,44,106,0.2)] active:translate-y-[2px] active:shadow-[0_4px_0_0_#ffd602,0_8px_16px_rgba(24,44,106,0.14)]"
           >
             <Plus className="h-4 w-4 text-[#ffd602] transition-transform duration-150 group-hover:scale-105" />
             Tambah SK
@@ -334,7 +361,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                         </button>
                         {isAdmin && (
                           <button
-                            onClick={() => handleDelete(doc.id)}
+                            onClick={() => handleDeleteClick(doc.id)}
                             disabled={deletingId === doc.id}
                             className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50"
                             title="Hapus"
@@ -363,13 +390,32 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
       )}
 
       {isAdmin && (
-        <UploadDialog
-          open={uploadOpen}
-          onOpenChange={setUploadOpen}
-          onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ["documents"] });
-          }}
-        />
+        <>
+          <UploadDialog
+            open={uploadOpen}
+            onOpenChange={setUploadOpen}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ["documents"] });
+            }}
+          />
+
+          <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Hapus Dokumen</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Apakah Anda yakin ingin menghapus dokumen ini? Tindakan ini tidak dapat dibatalkan dan file akan dihapus secara permanen.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={cancelDelete}>Batal</AlertDialogCancel>
+                <AlertDialogAction onClick={confirmDelete} className="bg-destructive font-semibold text-destructive-foreground hover:bg-destructive/90">
+                  Hapus
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
       )}
     </div>
   );

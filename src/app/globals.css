@@ -87,7 +87,7 @@
     --destructive-foreground: #f8fafc;
     --border: #e2e8f0;
     --input: #e2e8f0;
-    --ring: #182c6a;
+    --ring: #142B6F;
     --radius: 0.5rem;
 
     /* Accent Colors — status indicators */
@@ -103,7 +103,7 @@
     --accent-red-foreground: #dc2828;
 
     /* Font colors */
-    --heading: #182c6a;
+    --heading: #142B6F;
     --body: #64748b;
   }
 }

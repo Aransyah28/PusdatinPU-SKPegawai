@@ -13,6 +13,9 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
 
   const filteredDocuments = useMemo(() => {
     return documents.filter((doc) =>
@@ -38,18 +41,33 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
     onSuccess: () => {
       toast.success("Dokumen berhasil dihapus.");
       setDeletingId(null);
+      setDeleteConfirmOpen(false);
+      setDocumentToDelete(null);
       router.refresh(); // Fetch new server side data
     },
     onError: (error) => {
       toast.error(error.message || "Gagal menghapus dokumen.");
       setDeletingId(null);
+      setDeleteConfirmOpen(false);
+      setDocumentToDelete(null);
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus dokumen ini?")) return;
-    setDeletingId(id);
-    deleteMutation.mutate(id);
+  const handleDeleteClick = (id: string) => {
+    setDocumentToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (documentToDelete) {
+      setDeletingId(documentToDelete);
+      deleteMutation.mutate(documentToDelete);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmOpen(false);
+    setDocumentToDelete(null);
   };
 
   const handleDownload = async (doc: ReportDocumentRow) => {
@@ -93,8 +111,13 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
     filteredDocuments,
     paginatedDocuments,
     totalPages,
-    handleDelete,
+    handleDelete: handleDeleteClick,
+    confirmDelete,
+    cancelDelete,
+    deleteConfirmOpen,
+    setDeleteConfirmOpen,
     handleDownload,
-    handleUploadSuccess
+    handleUploadSuccess,
+    itemsPerPage
   };
 }

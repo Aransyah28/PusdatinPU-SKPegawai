@@ -5,6 +5,16 @@ import { formatDate, formatFileSize } from "@/lib/utils/formatters";
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { ReportUploadDialog } from "./ReportUploadDialog";
 import { useYearReportTable } from "@/hooks/use-year-report-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import type { ReportDocumentRow } from "@/lib/reports/report-queries";
 import type { ReportType } from "@/lib/reports/report-types";
 
@@ -34,8 +44,13 @@ export function YearReportDocumentsTable({
     paginatedDocuments,
     totalPages,
     handleDelete,
+    confirmDelete,
+    cancelDelete,
+    deleteConfirmOpen,
+    setDeleteConfirmOpen,
     handleDownload,
-    handleUploadSuccess
+    handleUploadSuccess,
+    itemsPerPage
   } = useYearReportTable(documents, 10);
 
   return (
@@ -88,7 +103,7 @@ export function YearReportDocumentsTable({
                 {paginatedDocuments.map((doc, idx) => (
                   <tr key={doc.id} className="transition-colors hover:bg-muted/10">
                     <td className="px-4 py-3.5 text-sm font-medium text-body/40">
-                      {(currentPage - 1) * 10 + idx + 1}
+                      {(currentPage - 1) * itemsPerPage + idx + 1}
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="text-body-lg font-bold text-heading">{doc.title}</div>
@@ -166,13 +181,32 @@ export function YearReportDocumentsTable({
       )}
 
       {isAdmin && (
-        <ReportUploadDialog
-          open={uploadOpen}
-          onOpenChange={setUploadOpen}
-          defaultReportType={reportType}
-          defaultYear={year}
-          onSuccess={handleUploadSuccess}
-        />
+        <>
+          <ReportUploadDialog
+            open={uploadOpen}
+            onOpenChange={setUploadOpen}
+            defaultReportType={reportType}
+            defaultYear={year}
+            onSuccess={handleUploadSuccess}
+          />
+          
+          <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Hapus Dokumen</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Apakah Anda yakin ingin menghapus dokumen ini? Tindakan ini tidak dapat dibatalkan dan file akan dihapus secara permanen.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={cancelDelete}>Batal</AlertDialogCancel>
+                <AlertDialogAction onClick={confirmDelete} className="bg-destructive font-semibold text-destructive-foreground hover:bg-destructive/90">
+                  Hapus
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
       )}
     </div>
   );
