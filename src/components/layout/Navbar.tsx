@@ -200,9 +200,12 @@ export function Navbar({ user }: NavbarProps) {
       {isSidebarOpen && (
         <div className="sm:hidden">
           {/* Overlay */}
-          <div
-            className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm animate-in fade-in"
+          <button
+            type="button"
+            aria-label="Tutup sidebar"
+            className="fixed inset-0 z-50 w-full h-full cursor-default border-none bg-black/20 outline-none backdrop-blur-sm animate-in fade-in"
             onClick={() => setIsSidebarOpen(false)}
+            tabIndex={-1}
           />
 
           {/* Sidebar Panel */}
