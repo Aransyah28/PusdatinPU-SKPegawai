@@ -84,13 +84,23 @@ export function Navbar({ user }: NavbarProps) {
 
           {/* Kiri: back arrow + logo + judul */}
           <div className="flex items-center gap-4">
-            <a
-              href="https://htupusdatin.vercel.app/kepegawaian"
-              className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
-              title="Kembali ke portal kepegawaian"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </a>
+            {pathname.match(/^\/(laporan\w+)\/(\d+)$/) ? (
+              <Link
+                href={`/${pathname.match(/^\/(laporan\w+)\/(\d+)$/)?.[1]}`}
+                className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
+                title="Kembali ke pemilihan tahun"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+            ) : (
+              <a
+                href="https://htupusdatin.vercel.app/kepegawaian"
+                className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
+                title="Kembali ke portal kepegawaian"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </a>
+            )}
 
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl text-primary">
