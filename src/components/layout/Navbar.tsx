@@ -86,7 +86,7 @@ export function Navbar({ user }: NavbarProps) {
           <div className="flex items-center gap-4">
             {pathname.match(/^\/(laporan\w+)\/(\d+)$/) ? (
               <Link
-                href={`/${pathname.match(/^\/(laporan\w+)\/(\d+)$/)?.[1]}`}
+                href={`/${pathname.split(`/`)[1]}`}
                 className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
                 title="Kembali ke pemilihan tahun"
               >
