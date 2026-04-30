@@ -55,34 +55,37 @@ export function DocumentsMobileList({
               href={doc.fileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-body transition-all hover:bg-muted/80"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-muted text-body transition-all hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               title="Lihat"
+              aria-label={`Lihat dokumen ${doc.title}`}
             >
-              <Eye className="h-4 w-4" />
+              <Eye className="h-5 w-5" />
             </a>
             <button
               onClick={() => onDownload(doc)}
               disabled={downloadingId === doc.id}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-blue/20 text-accent-blue-foreground transition-all hover:bg-accent-blue/40 disabled:opacity-50"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-accent-blue/20 text-accent-blue-foreground transition-all hover:bg-accent-blue/40 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               title="Unduh"
+              aria-label={`Unduh dokumen ${doc.title}`}
             >
               {downloadingId === doc.id ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                <Download className="h-4 w-4" />
+                <Download className="h-5 w-5" />
               )}
             </button>
             {isAdmin && (
               <button
                 onClick={() => onDelete(doc.id)}
                 disabled={deletingId === doc.id}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 title="Hapus"
+                aria-label={`Hapus dokumen ${doc.title}`}
               >
                 {deletingId === doc.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-5 w-5" />
                 )}
               </button>
             )}

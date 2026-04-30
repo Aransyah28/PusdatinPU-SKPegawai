@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { Loader2, UploadCloud, X, FileText } from "lucide-react";
 import { FormTextField } from "@/components/shared/FormTextField";
 import { useReportUploadForm } from "@/hooks/use-report-upload-form";
+import { MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 import type { ReportType } from "@/lib/reports/report-types";
 
 interface ReportUploadDialogProps {
@@ -133,7 +134,7 @@ export function ReportUploadDialog({
                 <div className="text-center">
                   <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
                   <p className="mt-1 text-label-md text-body/60">
-                    Jenis laporan dan tahun akan terdeteksi otomatis (Maks. 10 MB)
+                    Jenis laporan dan tahun akan terdeteksi otomatis (Maks. {MAX_UPLOAD_FILE_SIZE_MB} MB)
                   </p>
                 </div>
               </button>

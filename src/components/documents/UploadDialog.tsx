@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2, UploadCloud, X, FileText } from "lucide-react";
 import { FormTextField } from "@/components/shared/FormTextField";
+import { MAX_UPLOAD_FILE_SIZE, MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 
 interface UploadDialogProps {
   open: boolean;
@@ -42,8 +43,8 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
   };
 
   const handleFileChange = (selectedFile: File | null) => {
-    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
-      toast.error("Ukuran file tidak boleh lebih dari 10 MB.");
+    if (selectedFile && selectedFile.size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(`Ukuran file tidak boleh lebih dari ${MAX_UPLOAD_FILE_SIZE_MB} MB.`);
       return;
     }
 
@@ -174,7 +175,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
                 <div className="text-center">
                   <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
                   <p className="mt-1 text-label-md text-body/60">
-                    Judul dan tahun akan terisi otomatis (Maks. 10 MB)
+                    Judul dan tahun akan terisi otomatis (Maks. {MAX_UPLOAD_FILE_SIZE_MB} MB)
                   </p>
                 </div>
               </button>

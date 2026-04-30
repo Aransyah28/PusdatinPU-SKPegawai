@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { reportTypeMap, type ReportType } from "@/lib/reports/report-types";
+import { MAX_UPLOAD_FILE_SIZE, MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 
 type ReportTypeValue = ReportType | "";
 
@@ -67,8 +68,8 @@ export function useReportUploadForm(
   };
 
   const handleFileChange = (selectedFile: File | null) => {
-    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
-      toast.error("Ukuran file tidak boleh lebih dari 10 MB.");
+    if (selectedFile && selectedFile.size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(`Ukuran file tidak boleh lebih dari ${MAX_UPLOAD_FILE_SIZE_MB} MB.`);
       return;
     }
 
