@@ -67,6 +67,11 @@ export function useReportUploadForm(
   };
 
   const handleFileChange = (selectedFile: File | null) => {
+    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+      toast.error("Ukuran file tidak boleh lebih dari 10 MB.");
+      return;
+    }
+
     setFile(selectedFile);
 
     if (!selectedFile) {

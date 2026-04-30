@@ -133,7 +133,7 @@ export function ReportUploadDialog({
                 <div className="text-center">
                   <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
                   <p className="mt-1 text-label-md text-body/60">
-                    Jenis laporan dan tahun akan terdeteksi otomatis
+                    Jenis laporan dan tahun akan terdeteksi otomatis (Maks. 10 MB)
                   </p>
                 </div>
               </button>

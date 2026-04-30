@@ -42,6 +42,11 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
   };
 
   const handleFileChange = (selectedFile: File | null) => {
+    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+      toast.error("Ukuran file tidak boleh lebih dari 10 MB.");
+      return;
+    }
+
     setFile(selectedFile);
     if (!selectedFile) return;
 
@@ -169,7 +174,7 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
                 <div className="text-center">
                   <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
                   <p className="mt-1 text-label-md text-body/60">
-                    Judul dan tahun akan terisi otomatis
+                    Judul dan tahun akan terisi otomatis (Maks. 10 MB)
                   </p>
                 </div>
               </button>
