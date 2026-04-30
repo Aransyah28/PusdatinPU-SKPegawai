@@ -30,7 +30,7 @@ export function DocumentsDesktopList({
       <table className="w-full text-left">
         <thead>
           <tr className="bg-primary">
-            <th className="px-4 py-2.5 text-sm font-semibold text-white">No</th>
+            <th className="px-4 py-2.5 text-sm font-semibold text-white">Nomor</th>
             <th className="px-4 py-2.5 text-sm font-semibold text-white">Judul SK</th>
             <th className="px-4 py-2.5 text-center text-sm font-semibold text-white">Tahun</th>
             <th className="whitespace-nowrap px-4 py-2.5 text-center text-sm font-semibold text-white">Diunggah Oleh</th>
@@ -77,16 +77,18 @@ export function DocumentsDesktopList({
                     href={doc.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-body transition-all hover:bg-muted/80"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-body transition-all hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     title="Lihat"
+                    aria-label={`Lihat dokumen ${doc.title}`}
                   >
                     <Eye className="h-4 w-4" />
                   </a>
                   <button
                     onClick={() => onDownload(doc)}
                     disabled={downloadingId === doc.id}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-blue/20 text-accent-blue-foreground transition-all hover:bg-accent-blue/40 disabled:opacity-50"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-blue/20 text-accent-blue-foreground transition-all hover:bg-accent-blue/40 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     title="Unduh"
+                    aria-label={`Unduh dokumen ${doc.title}`}
                   >
                     {downloadingId === doc.id ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -98,8 +100,9 @@ export function DocumentsDesktopList({
                     <button
                       onClick={() => onDelete(doc.id)}
                       disabled={deletingId === doc.id}
-                      className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50"
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-red/20 text-accent-red-foreground transition-all hover:bg-accent-red/40 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       title="Hapus"
+                      aria-label={`Hapus dokumen ${doc.title}`}
                     >
                       {deletingId === doc.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
