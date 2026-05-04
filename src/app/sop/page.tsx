@@ -43,7 +43,7 @@ export default async function SOPPage() {
             href="https://htupusdatin.vercel.app/"
             className="transition-colors hover:text-primary"
           >
-            Home
+            Beranda
           </a>
           <span className="text-slate-300">&gt;</span>
           <span className="font-black tracking-tight text-primary">SOP</span>
@@ -70,7 +70,7 @@ export default async function SOPPage() {
 
             {/* Konten Card Tahun untuk masing-masing Bidang */}
             {BIDANG_LIST.map((bidang) => (
-              <TabsContent key={bidang.id} value={bidang.id} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+              <TabsContent key={bidang.id} value={bidang.id} className="mt-0">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {TAHUN_LIST.map((tahun) => (
                     <Link
