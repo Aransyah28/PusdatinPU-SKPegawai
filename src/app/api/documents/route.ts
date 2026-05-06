@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db/client";
 import { documents, users } from "@/lib/db/schema";
-import { put } from "@vercel/blob";
+import { uploadSkPegawaiDocument } from "@/lib/documents/document-services";
 import { headers } from "next/headers";
 import { desc, eq, like } from "drizzle-orm";
 
@@ -82,28 +82,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Upload ke Vercel Blob (direktori SKPegawai)
-    const safeFileName = file.name.replace(/\s+/g, "-");
-    const blobPath = `SKPegawai/${Date.now()}-${safeFileName}`;
-
-    const blob = await put(blobPath, file, {
-      access: "public",
-      contentType: "application/pdf",
+    // Upload ke Vercel Blob dan Simpan ke database via Service
+    const doc = await uploadSkPegawaiDocument({
+      file,
+      title: title,
+      year: parseInt(year, 10),
+      description: description,
+      uploadedBy: session.user.id,
     });
-
-    // Simpan ke database
-    const [doc] = await db
-      .insert(documents)
-      .values({
-        title: title.trim(),
-        year: parseInt(year, 10),
-        description: description?.trim() ?? null,
-        fileUrl: blob.url,
-        fileName: file.name,
-        fileSize: file.size,
-        uploadedBy: session.user.id,
-      })
-      .returning();
 
     return NextResponse.json(doc, { status: 201 });
   } catch (err) {

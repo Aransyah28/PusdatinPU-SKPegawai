@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db/client";
-import { documents } from "@/lib/db/schema";
-import { isReportType, reportTypeMap } from "@/lib/reports/report-types";
+import { isReportType } from "@/lib/reports/report-types";
+import { uploadReportDocument } from "@/lib/reports/report-services";
 
 export async function POST(req: NextRequest) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -50,29 +48,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const config = reportTypeMap[reportType];
-    const safeFileName = file.name.replace(/\s+/g, "-");
-    const blobPath = `${config.blobDirectory}/${year}/${Date.now()}-${safeFileName}`;
-
-    const blob = await put(blobPath, file, {
-      access: "public",
-      contentType: "application/pdf",
+    const doc = await uploadReportDocument({
+      file,
+      title: title,
+      year: Number.parseInt(year, 10),
+      reportType: reportType,
+      description: description,
+      uploadedBy: session.user.id,
     });
 
-    const [doc] = await db
-      .insert(documents)
-      .values({
-        title: title.trim(),
-        year: Number.parseInt(year, 10),
-        description: description?.trim() ?? null,
-        fileUrl: blob.url,
-        fileName: file.name,
-        fileSize: file.size,
-        uploadedBy: session.user.id,
-      })
-      .returning();
-
-    return NextResponse.json({ ...doc, reportType }, { status: 201 });
+    return NextResponse.json(doc, { status: 201 });
   } catch (error) {
     console.error("[POST /api/reports] Upload gagal:", error);
     return NextResponse.json(
