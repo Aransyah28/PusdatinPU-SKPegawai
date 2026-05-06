@@ -4,7 +4,7 @@ import { db } from "@/lib/db/client";
 import { sopDocuments } from "@/lib/db/schema";
 import { put } from "@vercel/blob";
 import { headers } from "next/headers";
-import { isSopBidang } from "@/lib/sops/sop-types";
+import { isSopBidang, type SopBidang } from "@/lib/sops/sop-types";
 import { getSopDocuments } from "@/lib/sops/sop-queries";
 
 export async function GET(req: NextRequest) {
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const docs = await getSopDocuments(
-      bidang as any, 
+      bidang as SopBidang | undefined, 
       parsedYear
     );
     return NextResponse.json(docs);

@@ -22,12 +22,12 @@ export async function getSopDocuments(bidang?: SopBidang, year?: number) {
     .leftJoin(users, eq(sopDocuments.uploadedBy, users.id))
     .$dynamic();
 
-  if (bidang && year) {
-    query = query.where(and(eq(sopDocuments.bidang, bidang), eq(sopDocuments.year, year)));
-  } else if (bidang) {
-    query = query.where(eq(sopDocuments.bidang, bidang));
-  } else if (year) {
-    query = query.where(eq(sopDocuments.year, year));
+  const filters = [];
+  if (bidang) filters.push(eq(sopDocuments.bidang, bidang));
+  if (year) filters.push(eq(sopDocuments.year, year));
+  
+  if (filters.length > 0) {
+    query = query.where(and(...filters));
   }
 
   return query.orderBy(desc(sopDocuments.createdAt));
