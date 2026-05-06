@@ -111,3 +111,26 @@ export const documents = sqliteTable("document", {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+/**
+ * Tabel SOP (Standard Operating Procedure).
+ * Dokumen PDF dengan 4 bidang khusus: MTI, BDA, PDBI, TU.
+ */
+export const sopDocuments = sqliteTable("sop_document", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: text("title").notNull(),
+  year: integer("year").notNull(),
+  bidang: text("bidang", { enum: ["MTI", "BDA", "PDBI", "TU"] }).notNull(),
+  description: text("description"),
+  fileUrl: text("file_url").notNull(),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size"),
+  uploadedBy: text("uploaded_by").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
