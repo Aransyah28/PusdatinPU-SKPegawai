@@ -1,6 +1,8 @@
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { db } from "@/lib/db/client";
 import { documents } from "@/lib/db/schema";
+
+import { sanitizeFileName } from "@/lib/utils/formatters";
 
 interface UploadSkPegawaiParams {
   file: File;
@@ -20,26 +22,32 @@ export async function uploadSkPegawaiDocument({
   description,
   uploadedBy,
 }: UploadSkPegawaiParams) {
-  const safeFileName = file.name.replace(/\s+/g, "-");
-  const blobPath = `SKPegawai/${Date.now()}-${safeFileName}`;
+  const safeFileName = sanitizeFileName(file.name);
+  const blobPath = `SKPegawai/${year}/${Date.now()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
     access: "public",
     contentType: "application/pdf",
   });
 
-  const [doc] = await db
-    .insert(documents)
-    .values({
-      title: title.trim(),
-      year: year,
-      description: description?.trim() ?? null,
-      fileUrl: blob.url,
-      fileName: file.name,
-      fileSize: file.size,
-      uploadedBy: uploadedBy,
-    })
-    .returning();
+  try {
+    const [doc] = await db
+      .insert(documents)
+      .values({
+        title: title.trim(),
+        year: year,
+        description: description?.trim() ?? null,
+        fileUrl: blob.url,
+        fileName: file.name,
+        fileSize: file.size,
+        uploadedBy: uploadedBy,
+      })
+      .returning();
 
-  return doc;
+    return doc;
+  } catch (error) {
+    // Jika gagal menyimpan ke database, hapus file yang sudah terlanjur diunggah
+    await del(blob.url);
+    throw error;
+  }
 }

@@ -21,3 +21,11 @@ export function formatDate(date: Date | null | undefined): string {
     year: "numeric",
   }).format(date);
 }
+
+/**
+ * Sanitasi nama file untuk storage dengan mengganti spasi menjadi tanda hubung (-).
+ * Contoh: "Dokumen Penting 2024.pdf" → "Dokumen-Penting-2024.pdf"
+ */
+export function sanitizeFileName(fileName: string): string {
+  return fileName.replace(/\s+/g, "-");
+}

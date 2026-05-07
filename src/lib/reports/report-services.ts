@@ -1,7 +1,9 @@
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { db } from "@/lib/db/client";
 import { documents } from "@/lib/db/schema";
 import { reportTypeMap, type ReportType } from "./report-types";
+
+import { sanitizeFileName } from "@/lib/utils/formatters";
 
 interface UploadReportParams {
   file: File;
@@ -24,7 +26,7 @@ export async function uploadReportDocument({
   uploadedBy,
 }: UploadReportParams) {
   const config = reportTypeMap[reportType];
-  const safeFileName = file.name.replace(/\s+/g, "-");
+  const safeFileName = sanitizeFileName(file.name);
   const blobPath = `${config.blobDirectory}/${year}/${Date.now()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
@@ -32,18 +34,23 @@ export async function uploadReportDocument({
     contentType: "application/pdf",
   });
 
-  const [doc] = await db
-    .insert(documents)
-    .values({
-      title: title.trim(),
-      year: year,
-      description: description?.trim() ?? null,
-      fileUrl: blob.url,
-      fileName: file.name,
-      fileSize: file.size,
-      uploadedBy: uploadedBy,
-    })
-    .returning();
+  try {
+    const [doc] = await db
+      .insert(documents)
+      .values({
+        title: title.trim(),
+        year: year,
+        description: description?.trim() ?? null,
+        fileUrl: blob.url,
+        fileName: file.name,
+        fileSize: file.size,
+        uploadedBy: uploadedBy,
+      })
+      .returning();
 
-  return { ...doc, reportType };
+    return { ...doc, reportType };
+  } catch (error) {
+    await del(blob.url);
+    throw error;
+  }
 }
