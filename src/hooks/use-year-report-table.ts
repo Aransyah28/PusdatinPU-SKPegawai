@@ -26,8 +26,8 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
       .sort((a, b) => {
         if (sortOrder === "title-asc") return a.title.localeCompare(b.title);
         if (sortOrder === "title-desc") return b.title.localeCompare(a.title);
-        if (sortOrder === "date-desc") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        if (sortOrder === "date-asc") return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        if (sortOrder === "date-desc") return b.createdAt.getTime() - a.createdAt.getTime();
+        if (sortOrder === "date-asc") return a.createdAt.getTime() - b.createdAt.getTime();
         return 0;
       });
   }, [documents, searchQuery, sortOrder]);

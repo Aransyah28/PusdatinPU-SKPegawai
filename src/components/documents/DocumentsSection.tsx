@@ -1,12 +1,14 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Eye, Download, Trash2, Plus, FileText, Loader2, Search, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import { formatFileSize, formatDate } from "@/lib/utils/formatters";
 import { UploadDialog } from "./UploadDialog";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { CommonPagination } from "@/components/shared/CommonPagination";
+import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
+import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
+import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertDialog,
@@ -64,12 +66,10 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
-  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<"title-asc" | "title-desc" | "date-desc" | "date-asc">("date-desc");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const yearDropdownRef = useRef<HTMLDivElement>(null);
-  const sortDropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: documents = [], isLoading, isError } = useQuery<Document[]>({
     queryKey: ["documents"],
@@ -124,12 +124,6 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         !yearDropdownRef.current.contains(event.target as Node)
       ) {
         setYearDropdownOpen(false);
-      }
-      if (
-        sortDropdownRef.current &&
-        !sortDropdownRef.current.contains(event.target as Node)
-      ) {
-        setSortDropdownOpen(false);
       }
     };
 
@@ -192,80 +186,21 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
 
   return (
     <div className="space-y-4">
-      {/* Toolbar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 items-center gap-2 max-w-xl">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body/40" />
-            <input
-              type="text"
-              placeholder="Cari nama SK..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="h-9 w-full rounded-full border border-border bg-white pl-10 pr-3 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
-            />
-          </div>
-          
-          <div className="relative" ref={sortDropdownRef}>
-            <button
-              type="button"
-              onClick={() => setSortDropdownOpen((open) => !open)}
-              className="flex h-9 min-w-[90px] items-center justify-between gap-2.5 rounded-full border border-border bg-card/95 px-3 text-left text-sm font-medium text-foreground shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_6px_14px_rgba(24,44,106,0.05)] transition-all duration-150 hover:border-border hover:shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_8px_16px_rgba(24,44,106,0.07)] focus:outline-none focus:ring-2 focus:ring-primary/10"
-              aria-haspopup="listbox"
-              aria-expanded={sortDropdownOpen}
-            >
-              <span className="truncate">
-                {sortOrder === "title-asc" && "A - Z"}
-                {sortOrder === "title-desc" && "Z - A"}
-                {sortOrder === "date-desc" && "Terbaru"}
-                {sortOrder === "date-asc" && "Terlama"}
-              </span>
-              <ChevronDown
-                className={`h-3.5 w-3.5 shrink-0 text-body/35 transition-transform duration-150 ${
-                  sortDropdownOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {sortDropdownOpen && (
-              <div className="absolute right-0 top-full z-20 mt-2 min-w-full overflow-hidden rounded-2xl border border-border bg-white p-1 shadow-[0_14px_24px_rgba(24,44,106,0.1)]">
-                {[
-                  { value: "title-asc", label: "A - Z" },
-                  { value: "title-desc", label: "Z - A" },
-                  { value: "date-desc", label: "Terbaru" },
-                  { value: "date-asc", label: "Terlama" },
-                ].map((option) => {
-                  const isSelected = sortOrder === option.value;
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => {
-                        setSortOrder(option.value as any);
-                        setSortDropdownOpen(false);
-                      }}
-                      className={`flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 hover:bg-muted/50 ${
-                        isSelected ? "bg-primary text-white hover:bg-primary" : "text-foreground"
-                      }`}
-                      role="option"
-                      aria-selected={isSelected}
-                    >
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
+      <DocumentsToolbar
+        searchQuery={searchQuery}
+        onSearchChange={(query) => {
+          setSearchQuery(query);
+          setCurrentPage(1);
+        }}
+        searchPlaceholder="Cari nama SK..."
+        sortOrder={sortOrder}
+        onSortChange={(order) => setSortOrder(order as any)}
+        extraFilters={
           <div className="relative" ref={yearDropdownRef}>
             <button
               type="button"
               onClick={() => setYearDropdownOpen((open) => !open)}
-              className="flex h-9 min-w-[132px] items-center justify-between gap-2.5 rounded-full border border-[#ececec] bg-white/95 px-3 text-left text-sm font-medium text-foreground shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_6px_14px_rgba(24,44,106,0.05)] transition-all duration-150 hover:border-[#e6e6e6] hover:shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_8px_16px_rgba(24,44,106,0.07)] focus:outline-none focus:ring-2 focus:ring-primary/10"
+              className="flex h-9 min-w-[132px] items-center justify-between gap-2.5 rounded-full border border-border bg-card/95 px-3 text-left text-sm font-medium text-foreground shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_6px_14px_rgba(24,44,106,0.05)] transition-all duration-150 hover:border-border hover:shadow-[0_1px_0_0_rgba(0,0,0,0.02),0_8px_16px_rgba(24,44,106,0.07)] focus:outline-none focus:ring-2 focus:ring-primary/10"
               aria-haspopup="listbox"
               aria-expanded={yearDropdownOpen}
             >
@@ -280,7 +215,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             </button>
 
             {yearDropdownOpen && (
-              <div className="absolute left-0 top-full z-20 mt-2 min-w-full overflow-hidden rounded-2xl border border-[#ececec] bg-white p-1 shadow-[0_14px_24px_rgba(24,44,106,0.1)]">
+              <div className="absolute right-0 sm:left-0 top-full z-20 mt-2 min-w-[132px] overflow-hidden rounded-2xl border border-border bg-white p-1 shadow-[0_14px_24px_rgba(24,44,106,0.1)]">
                 <button
                   type="button"
                   onClick={() => {
@@ -288,7 +223,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                     setCurrentPage(1);
                     setYearDropdownOpen(false);
                   }}
-                  className={`flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 hover:bg-[#f5f8ff] ${
+                  className={`flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 hover:bg-muted/50 ${
                     selectedYear === "all" ? "bg-primary text-white hover:bg-primary" : "text-foreground"
                   }`}
                   role="option"
@@ -309,7 +244,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
                         setCurrentPage(1);
                         setYearDropdownOpen(false);
                       }}
-                      className={`flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 hover:bg-[#f5f8ff] ${
+                      className={`flex w-full items-center rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 hover:bg-muted/50 ${
                         isSelected ? "bg-primary text-white hover:bg-primary" : "text-foreground"
                       }`}
                       role="option"
@@ -322,18 +257,16 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
               </div>
             )}
           </div>
-        </div>
-
-        {isAdmin && (
-          <button
-            onClick={() => setUploadOpen(true)}
-            className="group inline-flex h-12 min-w-[168px] items-center justify-center gap-2 rounded-[18px] bg-primary px-6 text-[15px] font-black tracking-tight text-white shadow-[0_5px_0_0_#ffd602,0_12px_24px_rgba(24,44,106,0.18)] transition-all duration-150 hover:-translate-y-[1px] hover:shadow-[0_7px_0_0_#ffd602,0_14px_28px_rgba(24,44,106,0.2)] active:translate-y-[2px] active:shadow-[0_4px_0_0_#ffd602,0_8px_16px_rgba(24,44,106,0.14)]"
-          >
-            <Plus className="h-4 w-4 text-[#ffd602] transition-transform duration-150 group-hover:scale-105" />
-            Tambah SK
-          </button>
-        )}
-      </div>
+        }
+        actionButton={
+          isAdmin ? (
+            <DocumentsAddButton
+              onClick={() => setUploadOpen(true)}
+              label="Tambah SK"
+            />
+          ) : undefined
+        }
+      />
 
       {/* Content */}
       {isLoading ? (
@@ -375,17 +308,10 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
           </div>
         </div>
       ) : filteredDocuments.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border py-14 text-center">
-          <div className="mb-3 rounded-full bg-muted p-3">
-            <FileText className="h-8 w-8 text-muted-foreground" />
-          </div>
-          <p className="text-title-md font-semibold text-heading">Belum ada dokumen</p>
-          <p className="mt-1 max-w-xs text-sm text-body/70">
-            {searchQuery 
-              ? `Tidak ditemukan dokumen untuk kata kunci "${searchQuery}"`
-              : "Daftar Surat Keterangan Kepegawaian akan muncul di sini."}
-          </p>
-        </div>
+        <DocumentsEmptyState
+          searchQuery={searchQuery}
+          emptyMessage="Daftar Surat Keterangan Kepegawaian akan muncul di sini."
+        />
       ) : (
         <div className="space-y-4">
           <DocumentsDesktopList
