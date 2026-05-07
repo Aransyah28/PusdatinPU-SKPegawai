@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
-import { db } from "@/lib/db/client";
-import { sopDocuments } from "@/lib/db/schema";
-import { put } from "@vercel/blob";
 import { headers } from "next/headers";
 import { isSopBidang, type SopBidang } from "@/lib/sops/sop-types";
 import { getSopDocuments } from "@/lib/sops/sop-queries";
+import { uploadSopDocument } from "@/lib/sops/sop-services";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -83,27 +81,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const safeFileName = file.name.replace(/\s+/g, "-");
-    const blobPath = `SOP/${bidang}/${year}/${Date.now()}-${safeFileName}`;
-
-    const blob = await put(blobPath, file, {
-      access: "public",
-      contentType: "application/pdf",
+    const doc = await uploadSopDocument({
+      file,
+      title: title,
+      year: Number.parseInt(year, 10),
+      bidang: bidang as SopBidang,
+      description: description,
+      uploadedBy: session.user.id,
     });
-
-    const [doc] = await db
-      .insert(sopDocuments)
-      .values({
-        title: title.trim(),
-        year: Number.parseInt(year, 10),
-        bidang: bidang,
-        description: description?.trim() ?? null,
-        fileUrl: blob.url,
-        fileName: file.name,
-        fileSize: file.size,
-        uploadedBy: session.user.id,
-      })
-      .returning();
 
     return NextResponse.json(doc, { status: 201 });
   } catch (err) {
