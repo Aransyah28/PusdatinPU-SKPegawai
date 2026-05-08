@@ -63,8 +63,18 @@ export function SopDocumentsTable({
     setSortOrder
   } = useSopTable(documents, 10);
 
-  // Cast SopDocumentRow to Document for the generic list components
-  const desktopDocs = paginatedDocuments as unknown as Document[];
+  // Map SopDocumentRow to Document for the generic list components
+  const desktopDocs: Document[] = paginatedDocuments.map((doc) => ({
+    id: doc.id,
+    title: doc.title,
+    year: doc.year,
+    description: doc.description,
+    fileUrl: doc.fileUrl,
+    fileName: doc.fileName,
+    fileSize: doc.fileSize,
+    uploaderName: doc.uploaderName,
+    createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt),
+  }));
 
   return (
     <div className="space-y-4">
@@ -99,7 +109,7 @@ export function SopDocumentsTable({
             isAdmin={isAdmin}
             downloadingId={downloadingId}
             deletingId={deletingId}
-            onDownload={(doc) => handleDownload(doc as unknown as SopDocumentRow)}
+            onDownload={handleDownload}
             onDelete={handleDelete}
           />
           <DocumentsMobileList
@@ -107,7 +117,7 @@ export function SopDocumentsTable({
             isAdmin={isAdmin}
             downloadingId={downloadingId}
             deletingId={deletingId}
-            onDownload={(doc) => handleDownload(doc as unknown as SopDocumentRow)}
+            onDownload={handleDownload}
             onDelete={handleDelete}
           />
 

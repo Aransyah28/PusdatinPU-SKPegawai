@@ -79,7 +79,7 @@ export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
     setDocumentToDelete(null);
   };
 
-  const handleDownload = async (doc: SopDocumentRow) => {
+  const handleDownload = async (doc: { id: string; fileUrl: string; fileName: string }) => {
     setDownloadingId(doc.id);
     try {
       const res = await fetch(doc.fileUrl);

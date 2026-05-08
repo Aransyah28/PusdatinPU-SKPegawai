@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { type SopBidang } from "@/lib/sops/sop-types";
+import { type SopBidang, sopBidangList } from "@/lib/sops/sop-types";
 import { MAX_UPLOAD_FILE_SIZE, MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 
 type BidangValue = SopBidang | "";
@@ -106,12 +106,7 @@ export function useSopUploadForm(
     file,
     handleFileChange,
     bidang,
-    bidangOptions: [
-      { label: "MTI", value: "MTI" },
-      { label: "BDA", value: "BDA" },
-      { label: "PDBI", value: "PDBI" },
-      { label: "TU", value: "TU" },
-    ],
+    bidangOptions: sopBidangList.map((b) => ({ label: b, value: b })),
     resetForm,
     setDescription,
     setBidang,
