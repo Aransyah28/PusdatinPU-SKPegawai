@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { Loader2, UploadCloud, X, FileText } from "lucide-react";
+import { useEffect } from "react";
+import { Loader2, X } from "lucide-react";
 import { FormTextField } from "@/components/shared/FormTextField";
+import { FormSelectField } from "@/components/shared/FormSelectField";
+import { FileUploadDropzone } from "@/components/shared/FileUploadDropzone";
 import { useReportUploadForm } from "@/hooks/use-report-upload-form";
 import { MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 import type { ReportType } from "@/lib/reports/report-types";
@@ -22,7 +24,6 @@ export function ReportUploadDialog({
   defaultYear,
   onSuccess,
 }: ReportUploadDialogProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     description,
     file,
@@ -51,7 +52,6 @@ export function ReportUploadDialog({
 
   useEffect(() => {
     if (!open) {
-      fileInputRef.current && (fileInputRef.current.value = "");
       resetForm();
     }
   }, [open, resetForm]);
@@ -94,52 +94,11 @@ export function ReportUploadDialog({
         </div>
 
         <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="ml-1 text-body-sm font-semibold text-heading/80">
-              File PDF <span className="text-destructive">*</span>
-            </label>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="application/pdf"
-              className="hidden"
-              onChange={(event) => handleFileChange(event.target.files?.[0] ?? null)}
-            />
-            {file ? (
-              <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 transition-all">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <FileText className="h-6 w-6" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-body-md font-bold text-heading">{file.name}</p>
-                  <p className="text-label-md text-body/60">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleFileChange(null)}
-                  className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-destructive"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border py-6 transition-all hover:border-primary/50 hover:bg-primary/5"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all group-hover:bg-primary/10 group-hover:text-primary">
-                  <UploadCloud className="h-7 w-7" />
-                </div>
-                <div className="text-center">
-                  <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
-                  <p className="mt-1 text-label-md text-body/60">
-                    Jenis laporan dan tahun akan terdeteksi otomatis (Maks. {MAX_UPLOAD_FILE_SIZE_MB} MB)
-                  </p>
-                </div>
-              </button>
-            )}
-          </div>
+          <FileUploadDropzone
+            file={file}
+            onFileChange={handleFileChange}
+            helperText={`Jenis laporan dan tahun akan terdeteksi otomatis (Maks. ${MAX_UPLOAD_FILE_SIZE_MB} MB)`}
+          />
 
           <FormTextField
             label="Judul Dokumen"
@@ -149,45 +108,23 @@ export function ReportUploadDialog({
             placeholder="Contoh: Laporan Kinerja 2025"
           />
 
-          <div className="space-y-1.5">
-            <label className="ml-1 text-body-sm font-semibold text-heading/80">
-              Jenis Laporan <span className="text-destructive">*</span>
-            </label>
-            <select
-              value={reportType}
-              onChange={(event) => setReportType(event.target.value as ReportType)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body-md transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            >
-              <option value="" disabled>
-                Pilih jenis laporan
-              </option>
-              {reportTypeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <FormSelectField
+            label="Jenis Laporan"
+            required
+            value={reportType}
+            onChange={(event) => setReportType(event.target.value as ReportType)}
+            options={reportTypeOptions}
+            placeholder="Pilih jenis laporan"
+          />
 
-          <div className="space-y-1.5">
-            <label className="ml-1 text-body-sm font-semibold text-heading/80">
-              Tahun <span className="text-destructive">*</span>
-            </label>
-            <select
-              value={year}
-              onChange={(event) => setYear(event.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body-md transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            >
-              <option value="" disabled>
-                {file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
-              </option>
-              {years.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </div>
+          <FormSelectField
+            label="Tahun"
+            required
+            value={year}
+            onChange={(event) => setYear(event.target.value)}
+            options={years.map((y) => ({ value: y, label: String(y) }))}
+            placeholder={file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
+          />
 
           <FormTextField
             label="Deskripsi (opsional)"
