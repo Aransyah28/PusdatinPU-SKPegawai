@@ -20,15 +20,18 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function SOPPage() {
-  let session = null;
-
-  try {
-    session = await auth.api.getSession({ headers: await headers() });
-  } catch (error) {
+  const headersList = await headers();
+  const sessionPromise = auth.api.getSession({ headers: headersList }).catch((error) => {
     console.error("Failed to fetch session:", error);
-  }
+    return null;
+  });
 
-  const availableYearsData = await getAvailableSopYears();
+  const availableYearsPromise = getAvailableSopYears();
+
+  const [session, availableYearsData] = await Promise.all([
+    sessionPromise,
+    availableYearsPromise,
+  ]);
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -58,9 +61,9 @@ export default async function SOPPage() {
 
           {/* Navigasi Tabs */}
           <Tabs defaultValue={BIDANG_LIST[0].id} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 bg-muted/50 p-1 mb-6">
+            <TabsList className="flex w-full bg-muted/50 p-1 mb-6">
               {BIDANG_LIST.map((bidang) => (
-                <TabsTrigger key={bidang.id} value={bidang.id} className="text-label-lg">
+                <TabsTrigger key={bidang.id} value={bidang.id} className="flex-1 text-label-lg">
                   {bidang.nama}
                 </TabsTrigger>
               ))}
