@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { sopDocuments, users } from "@/lib/db/schema";
 import type { SopBidang } from "./sop-types";
@@ -36,3 +36,15 @@ export async function getSopDocuments(bidang?: SopBidang, year?: number) {
 export type SopDocumentRow = Awaited<
   ReturnType<typeof getSopDocuments>
 >[number];
+
+export async function getAvailableSopYears() {
+  return db
+    .select({
+      bidang: sopDocuments.bidang,
+      year: sopDocuments.year,
+      count: sql<number>`count(*)`,
+    })
+    .from(sopDocuments)
+    .groupBy(sopDocuments.bidang, sopDocuments.year)
+    .orderBy(desc(sopDocuments.year));
+}
