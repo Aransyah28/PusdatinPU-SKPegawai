@@ -4,11 +4,11 @@ import { useState, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import type { ReportDocumentRow } from "@/lib/reports/report-queries";
+import type { SopDocumentRow } from "@/lib/sops/sop-queries";
 
 export type SortOrder = "title-asc" | "title-desc" | "date-desc" | "date-asc";
 
-export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage = 10) {
+export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +32,7 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
       });
   }, [documents, searchQuery, sortOrder]);
 
-  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage) || 1;
   
   const paginatedDocuments = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -41,7 +41,7 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/sops/${id}`, { method: "DELETE" });
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.error || "Gagal menghapus dokumen.");
@@ -52,7 +52,7 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
       setDeletingId(null);
       setDeleteConfirmOpen(false);
       setDocumentToDelete(null);
-      router.refresh(); // Fetch new server side data
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message || "Gagal menghapus dokumen.");
@@ -79,7 +79,7 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
     setDocumentToDelete(null);
   };
 
-  const handleDownload = async (doc: ReportDocumentRow) => {
+  const handleDownload = async (doc: { id: string; fileUrl: string; fileName: string }) => {
     setDownloadingId(doc.id);
     try {
       const res = await fetch(doc.fileUrl);

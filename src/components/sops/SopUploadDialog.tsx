@@ -5,41 +5,41 @@ import { Loader2, X } from "lucide-react";
 import { FormTextField } from "@/components/shared/FormTextField";
 import { FormSelectField } from "@/components/shared/FormSelectField";
 import { FileUploadDropzone } from "@/components/shared/FileUploadDropzone";
-import { useReportUploadForm } from "@/hooks/use-report-upload-form";
+import { useSopUploadForm } from "@/hooks/use-sop-upload-form";
 import { MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
-import type { ReportType } from "@/lib/reports/report-types";
+import type { SopBidang } from "@/lib/sops/sop-types";
 
-interface ReportUploadDialogProps {
+interface SopUploadDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  defaultReportType: ReportType;
+  defaultBidang: SopBidang;
   defaultYear?: number;
   onSuccess: () => void;
 }
 
-export function ReportUploadDialog({
+export function SopUploadDialog({
   open,
   onOpenChange,
-  defaultReportType,
+  defaultBidang,
   defaultYear,
   onSuccess,
-}: ReportUploadDialogProps) {
+}: SopUploadDialogProps) {
   const {
     description,
     file,
     handleFileChange,
-    reportType,
-    reportTypeOptions,
+    bidang,
+    bidangOptions,
     resetForm,
     setDescription,
-    setReportType,
+    setBidang,
     setTitle,
     setYear,
     title,
     uploadMutation,
     year,
     years,
-  } = useReportUploadForm(defaultReportType, { defaultYear });
+  } = useSopUploadForm(defaultBidang, { defaultYear });
 
   useEffect(() => {
     if (open) {
@@ -80,9 +80,9 @@ export function ReportUploadDialog({
       >
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h2 className="text-title-lg text-heading">Unggah Laporan</h2>
+            <h2 className="text-title-lg text-heading">Unggah SOP</h2>
             <p className="mt-1 text-body-sm text-body/60">
-              Tambahkan file laporan baru ke sistem.
+              Tambahkan file SOP baru ke sistem.
             </p>
           </div>
           <button
@@ -97,7 +97,7 @@ export function ReportUploadDialog({
           <FileUploadDropzone
             file={file}
             onFileChange={handleFileChange}
-            helperText={`Jenis laporan dan tahun akan terdeteksi otomatis (Maks. ${MAX_UPLOAD_FILE_SIZE_MB} MB)`}
+            helperText={`SOP akan diunggah sesuai bidang (Maks. ${MAX_UPLOAD_FILE_SIZE_MB} MB)`}
           />
 
           <FormTextField
@@ -105,16 +105,16 @@ export function ReportUploadDialog({
             required
             value={title}
             onChange={(event) => setTitle(event.target.value)}
-            placeholder="Contoh: Laporan Kinerja 2025"
+            placeholder="Contoh: SOP Keamanan Jaringan"
           />
 
           <FormSelectField
-            label="Jenis Laporan"
+            label="Bidang"
             required
-            value={reportType}
-            onChange={(event) => setReportType(event.target.value as ReportType)}
-            options={reportTypeOptions}
-            placeholder="Pilih jenis laporan"
+            value={bidang}
+            onChange={(event) => setBidang(event.target.value as SopBidang)}
+            options={bidangOptions}
+            placeholder="Pilih bidang"
           />
 
           <FormSelectField
@@ -131,7 +131,7 @@ export function ReportUploadDialog({
             multiline
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="Keterangan tambahan mengenai laporan ini..."
+            placeholder="Keterangan tambahan mengenai SOP ini..."
           />
         </div>
 
@@ -144,11 +144,11 @@ export function ReportUploadDialog({
           </button>
           <button
             onClick={handleSave}
-            disabled={!file || !title || !year || !reportType || uploadMutation.isPending}
+            disabled={!file || !title || !year || !bidang || uploadMutation.isPending}
             className="flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-body-md font-bold text-white shadow-lg transition-all hover:bg-primary/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {uploadMutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-            Simpan Laporan
+            Simpan SOP
           </button>
         </div>
       </div>

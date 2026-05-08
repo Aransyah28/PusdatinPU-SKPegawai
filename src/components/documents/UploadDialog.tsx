@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2, UploadCloud, X, FileText } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { FormTextField } from "@/components/shared/FormTextField";
+import { FormSelectField } from "@/components/shared/FormSelectField";
+import { FileUploadDropzone } from "@/components/shared/FileUploadDropzone";
 import { MAX_UPLOAD_FILE_SIZE, MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 
 interface UploadDialogProps {
@@ -18,7 +20,6 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
   const [year, setYear] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
@@ -133,54 +134,11 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
         {/* Form */}
         <div className="space-y-4">
           {/* File upload */}
-          <div className="space-y-2">
-            <label className="text-body-sm font-semibold text-heading/80 ml-1">
-              File PDF <span className="text-destructive">*</span>
-            </label>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="application/pdf"
-              className="hidden"
-              onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)}
-            />
-            {file ? (
-              <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 transition-all">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <FileText className="h-6 w-6" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-body-md font-bold text-heading">
-                    {file.name}
-                  </p>
-                  <p className="text-label-md text-body/60">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleFileChange(null)}
-                  className="touch-target rounded-full text-body/40 hover:bg-muted hover:text-destructive transition-all"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="group flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border py-6 transition-all hover:border-primary/50 hover:bg-primary/5"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all group-hover:bg-primary/10 group-hover:text-primary">
-                  <UploadCloud className="h-7 w-7" />
-                </div>
-                <div className="text-center">
-                  <p className="text-body-md font-bold text-heading">Klik untuk memilih file PDF</p>
-                  <p className="mt-1 text-label-md text-body/60">
-                    Judul dan tahun akan terisi otomatis (Maks. {MAX_UPLOAD_FILE_SIZE_MB} MB)
-                  </p>
-                </div>
-              </button>
-            )}
-          </div>
+          <FileUploadDropzone
+            file={file}
+            onFileChange={handleFileChange}
+            helperText={`Judul dan tahun akan terisi otomatis (Maks. ${MAX_UPLOAD_FILE_SIZE_MB} MB)`}
+          />
 
           <FormTextField
             label="Judul Dokumen"
@@ -190,25 +148,14 @@ export function UploadDialog({ open, onOpenChange, onSuccess }: UploadDialogProp
             placeholder="Contoh: SK Kepegawaian 2025"
           />
 
-          <div className="space-y-1.5">
-            <label className="text-body-sm font-semibold text-heading/80 ml-1">
-              Tahun <span className="text-destructive">*</span>
-            </label>
-            <select
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-body-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-            >
-              <option value="" disabled>
-                {file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
-              </option>
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </div>
+          <FormSelectField
+            label="Tahun"
+            required
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            options={years.map((y) => ({ value: y, label: String(y) }))}
+            placeholder={file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
+          />
 
           <FormTextField
             label="Deskripsi (opsional)"

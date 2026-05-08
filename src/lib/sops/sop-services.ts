@@ -1,7 +1,9 @@
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { db } from "@/lib/db/client";
 import { sopDocuments } from "@/lib/db/schema";
 import type { SopBidang } from "./sop-types";
+
+import { sanitizeFileName } from "@/lib/utils/formatters";
 
 interface UploadSopDocumentParams {
   file: File;
@@ -23,7 +25,7 @@ export async function uploadSopDocument({
   description,
   uploadedBy,
 }: UploadSopDocumentParams) {
-  const safeFileName = file.name.replace(/\s+/g, "-");
+  const safeFileName = sanitizeFileName(file.name);
   const blobPath = `SOP/${bidang}/${year}/${Date.now()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
@@ -31,19 +33,24 @@ export async function uploadSopDocument({
     contentType: "application/pdf",
   });
 
-  const [doc] = await db
-    .insert(sopDocuments)
-    .values({
-      title: title.trim(),
-      year: year,
-      bidang: bidang,
-      description: description?.trim() ?? null,
-      fileUrl: blob.url,
-      fileName: file.name,
-      fileSize: file.size,
-      uploadedBy: uploadedBy,
-    })
-    .returning();
+  try {
+    const [doc] = await db
+      .insert(sopDocuments)
+      .values({
+        title: title.trim(),
+        year: year,
+        bidang: bidang,
+        description: description?.trim() ?? null,
+        fileUrl: blob.url,
+        fileName: file.name,
+        fileSize: file.size,
+        uploadedBy: uploadedBy,
+      })
+      .returning();
 
-  return doc;
+    return doc;
+  } catch (error) {
+    await del(blob.url);
+    throw error;
+  }
 }

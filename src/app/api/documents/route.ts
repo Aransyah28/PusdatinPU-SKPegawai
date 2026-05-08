@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
     const doc = await uploadSkPegawaiDocument({
       file,
       title: title,
-      year: parseInt(year, 10),
+      year: Number.parseInt(year, 10),
       description: description,
       uploadedBy: session.user.id,
     });
