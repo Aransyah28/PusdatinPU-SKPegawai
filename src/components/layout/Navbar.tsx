@@ -18,8 +18,8 @@ function getInitial(name: string): string {
 }
 
 function getTitleFromPathname(pathname: string): string {
-  // Handle dynamic routes like /laporanbulanan/2026
-  const yearMatch = pathname.match(/^\/(laporan\w+)\/(\d+)$/);
+  // Handle dynamic routes like /laporanbulanan/2026 or /rkakl/2025
+  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl)\/(\d+)$/);
   if (yearMatch) {
     const [, reportType, year] = yearMatch;
     const typeMap: Record<string, string> = {
@@ -27,6 +27,7 @@ function getTitleFromPathname(pathname: string): string {
       laporankinerja: "Laporan Kinerja",
       laporanmingguan: "Laporan Mingguan",
       laporantriwulan: "Laporan Triwulan",
+      rkakl: "Dokumen RKAKL",
     };
     const title = typeMap[reportType] || "Laporan";
     return `${title} ${year}`;
@@ -35,7 +36,7 @@ function getTitleFromPathname(pathname: string): string {
   // Handle dynamic SOP route like /sop/mti/2026
   const sopMatch = pathname.match(/^\/sop\/([^\/]+)\/(\d+)$/);
   if (sopMatch) {
-    const [, bidang, year] = sopMatch;
+    const [bidang, year] = sopMatch;
     return `SOP ${bidang.toUpperCase()} ${year}`;
   }
 
@@ -47,6 +48,7 @@ function getTitleFromPathname(pathname: string): string {
     "/laporanmingguan": "Laporan Mingguan",
     "/laporantriwulan": "Laporan Triwulan",
     "/sop": "Standar Operasional Prosedur",
+    "/rkakl": "Dokumen RKAKL",
   };
 
   return pathMap[pathname] || "Surat Keterangan Kepegawaian";
@@ -92,7 +94,7 @@ export function Navbar({ user }: NavbarProps) {
 
           {/* Kiri: back arrow + logo + judul */}
           <div className="flex items-center gap-4">
-            {pathname.match(/^\/(laporan\w+)\/(\d+)$/) || pathname.match(/^\/sop\/([^\/]+)\/(\d+)$/) ? (
+            {pathname.match(/^\/(laporan\w+|rkakl)\/(\d+)$/) || pathname.match(/^\/sop\/([^\/]+)\/(\d+)$/) ? (
               <Link
                 href={`/${pathname.split(`/`)[1]}`}
                 className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
