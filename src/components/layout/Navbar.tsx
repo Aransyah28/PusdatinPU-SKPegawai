@@ -36,7 +36,7 @@ function getTitleFromPathname(pathname: string): string {
   // Handle dynamic SOP route like /sop/mti/2026
   const sopMatch = pathname.match(/^\/sop\/([^\/]+)\/(\d+)$/);
   if (sopMatch) {
-    const [, type, bidang, year] = sopMatch;
+    const [bidang, year] = sopMatch;
     return `SOP ${bidang.toUpperCase()} ${year}`;
   }
 
