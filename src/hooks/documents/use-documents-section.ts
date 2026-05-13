@@ -124,6 +124,10 @@ export function useDocumentsSection(itemsPerPage = 10) {
     setDownloadingId(null);
   };
 
+  const handleUploadSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["documents"] });
+  };
+
   return {
     uploadOpen, setUploadOpen,
     deletingId, setDeletingId,
@@ -143,6 +147,7 @@ export function useDocumentsSection(itemsPerPage = 10) {
     confirmDelete,
     cancelDelete,
     handleDownload,
+    handleUploadSuccess,
     itemsPerPage
   };
 }

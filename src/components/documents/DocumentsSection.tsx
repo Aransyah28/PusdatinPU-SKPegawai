@@ -48,6 +48,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
     confirmDelete,
     cancelDelete,
     handleDownload,
+    handleUploadSuccess,
     itemsPerPage
   } = useDocumentsSection();
 
@@ -224,7 +225,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
           <UploadDialog
             open={uploadOpen}
             onOpenChange={setUploadOpen}
-            onSuccess={() => {}}
+            onSuccess={handleUploadSuccess}
           />
 
           <DeleteConfirmDialog
