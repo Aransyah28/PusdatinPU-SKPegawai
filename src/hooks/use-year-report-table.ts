@@ -79,7 +79,7 @@ export function useYearReportTable(documents: ReportDocumentRow[], itemsPerPage 
     setDocumentToDelete(null);
   };
 
-  const handleDownload = async (doc: ReportDocumentRow) => {
+  const handleDownload = async (doc: { id: string; fileUrl: string; fileName: string }) => {
     setDownloadingId(doc.id);
     try {
       const res = await fetch(doc.fileUrl);
