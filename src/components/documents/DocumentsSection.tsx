@@ -1,12 +1,9 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
-import { toast } from "sonner";
 import { UploadDialog } from "./UploadDialog";
-import { useState, useMemo, useEffect, useRef } from "react";
 import { CommonPagination } from "@/components/shared/CommonPagination";
-import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
+import { DocumentsToolbar } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
 import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DocumentsDesktopList } from "./DocumentsDesktopList";
 import { DocumentsMobileList } from "./DocumentsMobileList";
+import { useDocumentsSection } from "@/hooks/documents/use-documents-section";
 
 export interface Document {
   id: string;
@@ -39,140 +37,28 @@ interface DocumentsSectionProps {
   isAdmin: boolean;
 }
 
-async function forceDownload(fileUrl: string, fileName: string) {
-  try {
-    const res = await fetch(fileUrl);
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } catch {
-    toast.error("Gagal mengunduh file.");
-  }
-}
-
 export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
-  const queryClient = useQueryClient();
-  const [uploadOpen, setUploadOpen] = useState(false);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState<string>("all");
-  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<SortOrder>("date-desc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const yearDropdownRef = useRef<HTMLDivElement>(null);
-
-  const { data: documents = [], isLoading, isError } = useQuery<Document[]>({
-    queryKey: ["documents"],
-    queryFn: async () => {
-      const res = await fetch("/api/documents");
-      if (!res.ok) throw new Error("Gagal memuat data.");
-      return res.json() as Promise<Document[]>;
-    },
-  });
-
-  const uniqueYears = useMemo(() => {
-    const years = documents.map((doc) => doc.year);
-    return Array.from(new Set(years)).sort((a, b) => b - a);
-  }, [documents]);
-
-  const filteredDocuments = useMemo(() => {
-    return documents
-      .filter((doc) => {
-        const matchesSearch = doc.title.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesYear = selectedYear === "all" || doc.year.toString() === selectedYear;
-        return matchesSearch && matchesYear;
-      })
-      .sort((a, b) => {
-        if (sortOrder === "title-asc") {
-          return a.title.localeCompare(b.title);
-        }
-        if (sortOrder === "title-desc") {
-          return b.title.localeCompare(a.title);
-        }
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        if (sortOrder === "date-desc") {
-          return dateB - dateA;
-        }
-        if (sortOrder === "date-asc") {
-          return dateA - dateB;
-        }
-        return 0;
-      });
-  }, [documents, searchQuery, selectedYear, sortOrder]);
-
-  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
-  const paginatedDocuments = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredDocuments.slice(start, start + itemsPerPage);
-  }, [filteredDocuments, currentPage]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        yearDropdownRef.current &&
-        !yearDropdownRef.current.contains(event.target as Node)
-      ) {
-        setYearDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Gagal menghapus dokumen.");
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-      toast.success("Dokumen berhasil dihapus.");
-      setDeletingId(null);
-      setDeleteConfirmOpen(false);
-      setDocumentToDelete(null);
-    },
-    onError: () => {
-      toast.error("Gagal menghapus dokumen.");
-      setDeletingId(null);
-      setDeleteConfirmOpen(false);
-      setDocumentToDelete(null);
-    },
-  });
-
-  const handleDeleteClick = (id: string) => {
-    setDocumentToDelete(id);
-    setDeleteConfirmOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (documentToDelete) {
-      setDeletingId(documentToDelete);
-      deleteMutation.mutate(documentToDelete);
-    }
-  };
-
-  const cancelDelete = () => {
-    setDeleteConfirmOpen(false);
-    setDocumentToDelete(null);
-  };
-
-  const handleDownload = async (doc: Document) => {
-    setDownloadingId(doc.id);
-    await forceDownload(doc.fileUrl, doc.fileName);
-    setDownloadingId(null);
-  };
+  const {
+    uploadOpen, setUploadOpen,
+    deletingId, setDeletingId,
+    downloadingId, setDownloadingId,
+    deleteConfirmOpen, setDeleteConfirmOpen,
+    searchQuery, setSearchQuery,
+    selectedYear, setSelectedYear,
+    yearDropdownOpen, setYearDropdownOpen,
+    sortOrder, setSortOrder,
+    currentPage, setCurrentPage,
+    isLoading, isError,
+    uniqueYears,
+    filteredDocuments,
+    paginatedDocuments,
+    totalPages,
+    handleDeleteClick,
+    confirmDelete,
+    cancelDelete,
+    handleDownload,
+    itemsPerPage
+  } = useDocumentsSection();
 
   if (isError) {
     return (
@@ -196,7 +82,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         sortOrder={sortOrder}
         onSortChange={(order) => setSortOrder(order as any)}
         extraFilters={
-          <div className="relative" ref={yearDropdownRef}>
+          <div className="relative">
             <button
               type="button"
               onClick={() => setYearDropdownOpen((open) => !open)}
@@ -347,9 +233,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
           <UploadDialog
             open={uploadOpen}
             onOpenChange={setUploadOpen}
-            onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ["documents"] });
-            }}
+            onSuccess={() => {}}
           />
 
           <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>

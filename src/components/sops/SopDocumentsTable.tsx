@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, ChevronDown, FileText } from "lucide-react";
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { SopUploadDialog } from "./SopUploadDialog";
 import { useSopTable } from "@/hooks/use-sop-table";
@@ -83,7 +82,7 @@ export function SopDocumentsTable({
         onSearchChange={handleSearchChange}
         searchPlaceholder="Cari judul SOP..."
         sortOrder={sortOrder as SortOrder}
-        onSortChange={(order) => setSortOrder(order as any)}
+        onSortChange={(order) => setSortOrder(order as SortOrder)}
         actionButton={
           isAdmin ? (
             <DocumentsAddButton
