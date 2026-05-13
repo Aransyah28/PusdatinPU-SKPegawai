@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link"
+import { getAvailableRkaklYears } from "@/lib/rkakl/rkakl-queries";
 
 export const metadata = {
   title: "RKAKL - Pusdatin PU",
@@ -17,13 +18,7 @@ export default async function RKAKLPage() {
     return null;
   });
 
-  // TODO: Replace with actual db query later
-  // Mock data for RKAKL available years
-  const availableYearsData = [
-    { year: 2025, count: 5 },
-    { year: 2024, count: 12 },
-    { year: 2023, count: 8 },
-  ];
+  const availableYearsData = await getAvailableRkaklYears();
 
   return (
     <div className="min-h-screen bg-background pt-20">
