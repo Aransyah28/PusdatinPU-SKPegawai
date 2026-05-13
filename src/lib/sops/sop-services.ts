@@ -26,7 +26,7 @@ export async function uploadSopDocument({
   uploadedBy,
 }: UploadSopDocumentParams) {
   const safeFileName = sanitizeFileName(file.name);
-  const blobPath = `SOP/${bidang}/${year}/${Date.now()}-${safeFileName}`;
+  const blobPath = `SOP/${bidang}/${year}/${crypto.randomUUID()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
     access: "public",

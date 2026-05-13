@@ -23,7 +23,7 @@ export async function uploadSkPegawaiDocument({
   uploadedBy,
 }: UploadSkPegawaiParams) {
   const safeFileName = sanitizeFileName(file.name);
-  const blobPath = `SKPegawai/${year}/${Date.now()}-${safeFileName}`;
+  const blobPath = `SKPegawai/${year}/${crypto.randomUUID()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
     access: "public",

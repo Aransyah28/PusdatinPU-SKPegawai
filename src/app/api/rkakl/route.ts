@@ -91,10 +91,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const yearInt = parseInt(year, 10);
+    if (isNaN(yearInt)) {
+      return NextResponse.json(
+        { error: "Tahun yang dimasukkan tidak valid." },
+        { status: 400 },
+      );
+    }
+
     const doc = await uploadRkaklDocument({
       file,
       title,
-      year: parseInt(year, 10),
+      year: yearInt,
       description,
       uploadedBy: session.user.id,
     });

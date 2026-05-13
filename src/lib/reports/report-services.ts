@@ -27,7 +27,7 @@ export async function uploadReportDocument({
 }: UploadReportParams) {
   const config = reportTypeMap[reportType];
   const safeFileName = sanitizeFileName(file.name);
-  const blobPath = `${config.blobDirectory}/${year}/${Date.now()}-${safeFileName}`;
+  const blobPath = `${config.blobDirectory}/${year}/${crypto.randomUUID()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
     access: "public",
