@@ -134,3 +134,24 @@ export const sopDocuments = sqliteTable("sop_document", {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+/**
+ * Tabel Dokumen RKAKL (Rencana Kerja dan Anggaran Kementerian/Lembaga).
+ */
+export const rkaklDocuments = sqliteTable("rkakl_document", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  title: text("title").notNull(),
+  year: integer("year").notNull(),
+  description: text("description"),
+  fileUrl: text("file_url").notNull(),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size"),
+  uploadedBy: text("uploaded_by").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
