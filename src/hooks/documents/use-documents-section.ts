@@ -106,6 +106,11 @@ export function useDocumentsSection(itemsPerPage = 10) {
     setDeleteConfirmOpen(true);
   };
 
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
   const confirmDelete = () => {
     if (documentToDelete) {
       setDeletingId(documentToDelete);
@@ -124,6 +129,10 @@ export function useDocumentsSection(itemsPerPage = 10) {
     setDownloadingId(null);
   };
 
+  const handleUploadSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["documents"] });
+  };
+
   return {
     uploadOpen, setUploadOpen,
     deletingId, setDeletingId,
@@ -139,10 +148,12 @@ export function useDocumentsSection(itemsPerPage = 10) {
     filteredDocuments,
     paginatedDocuments,
     totalPages,
-    handleDeleteClick,
+    handleDelete: handleDeleteClick,
     confirmDelete,
     cancelDelete,
     handleDownload,
+    handleSearchChange,
+    handleUploadSuccess,
     itemsPerPage
   };
 }

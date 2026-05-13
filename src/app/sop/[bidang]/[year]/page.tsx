@@ -4,10 +4,17 @@ import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SopDocumentsTable } from "@/components/sops/SopDocumentsTable";
-import { getSopDocuments } from "@/lib/sops/sop-queries";
 import { isSopBidang } from "@/lib/sops/sop-types";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: SopYearPageProps) {
+  const { bidang, year } = await params;
+  return {
+    title: `SOP ${bidang.toUpperCase()} ${year} - Pusdatin PU`,
+    description: `Daftar Standar Operasional Prosedur (SOP) Bidang ${bidang.toUpperCase()} untuk tahun ${year}.`,
+  };
+}
 
 interface SopYearPageProps {
   params: Promise<{ bidang: string; year: string }>;
@@ -24,19 +31,11 @@ export default async function SopYearPage({
     notFound();
   }
 
-  let fetchError = false;
-  const [session, sopDocuments] = await Promise.all([
-    headers().then((h) => auth.api.getSession({ headers: h })).catch((error) => {
-      console.error("Failed to fetch session:", error);
-      return null;
-    }),
-    getSopDocuments(upperBidang, yearNumber).catch((error) => {
-      console.error("Failed to fetch SOP:", error);
-      fetchError = true;
-      return [];
-    }),
-  ]);
+  const session = await headers()
+    .then((h) => auth.api.getSession({ headers: h }))
+    .catch(() => null);
 
+  const isAdmin = session?.user?.role === "admin";
   const bidangName = upperBidang;
 
   return (
@@ -71,20 +70,11 @@ export default async function SopYearPage({
           </p>
         </div>
 
-        {fetchError ? (
-          <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-            <p className="text-label-lg text-destructive">
-              Gagal memuat data SOP. Silakan muat ulang halaman.
-            </p>
-          </div>
-        ) : (
-          <SopDocumentsTable 
-            documents={sopDocuments}
-            isAdmin={session?.user?.role === "admin"}
-            bidang={upperBidang}
-            year={yearNumber}
-          />
-        )}
+        <SopDocumentsTable 
+          isAdmin={isAdmin}
+          bidang={upperBidang}
+          year={yearNumber}
+        />
       </main>
     </div>
   );

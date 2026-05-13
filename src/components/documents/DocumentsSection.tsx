@@ -3,7 +3,7 @@
 import { ChevronDown } from "lucide-react";
 import { UploadDialog } from "./UploadDialog";
 import { CommonPagination } from "@/components/shared/CommonPagination";
-import { DocumentsToolbar } from "@/components/shared/DocumentsToolbar";
+import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
 import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,10 +31,8 @@ interface DocumentsSectionProps {
 export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   const {
     uploadOpen, setUploadOpen,
-    deletingId, setDeletingId,
-    downloadingId, setDownloadingId,
     deleteConfirmOpen, setDeleteConfirmOpen,
-    searchQuery, setSearchQuery,
+    searchQuery,
     selectedYear, setSelectedYear,
     yearDropdownOpen, setYearDropdownOpen,
     sortOrder, setSortOrder,
@@ -44,10 +42,14 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
     filteredDocuments,
     paginatedDocuments,
     totalPages,
-    handleDeleteClick,
+    downloadingId,
+    deletingId,
+    handleDelete,
     confirmDelete,
     cancelDelete,
     handleDownload,
+    handleSearchChange,
+    handleUploadSuccess,
     itemsPerPage
   } = useDocumentsSection();
 
@@ -65,13 +67,10 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
     <div className="space-y-4">
       <DocumentsToolbar
         searchQuery={searchQuery}
-        onSearchChange={(query) => {
-          setSearchQuery(query);
-          setCurrentPage(1);
-        }}
+        onSearchChange={handleSearchChange}
         searchPlaceholder="Cari nama SK..."
-        sortOrder={sortOrder}
-        onSortChange={(order) => setSortOrder(order as any)}
+        sortOrder={sortOrder as SortOrder}
+        onSortChange={(order) => setSortOrder(order as SortOrder)}
         extraFilters={
           <div className="relative">
             <button
@@ -199,7 +198,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             downloadingId={downloadingId}
             deletingId={deletingId}
             onDownload={handleDownload}
-            onDelete={handleDeleteClick}
+            onDelete={handleDelete}
           />
 
           <DocumentsMobileList
@@ -208,7 +207,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
             downloadingId={downloadingId}
             deletingId={deletingId}
             onDownload={handleDownload}
-            onDelete={handleDeleteClick}
+            onDelete={handleDelete}
           />
 
           <CommonPagination
@@ -224,7 +223,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
           <UploadDialog
             open={uploadOpen}
             onOpenChange={setUploadOpen}
-            onSuccess={() => {}}
+            onSuccess={handleUploadSuccess}
           />
 
           <DeleteConfirmDialog

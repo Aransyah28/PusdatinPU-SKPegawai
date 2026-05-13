@@ -1,8 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/auth";
-import { isReportType } from "@/lib/reports/report-types";
+import { isReportType, type ReportType } from "@/lib/reports/report-types";
 import { uploadReportDocument } from "@/lib/reports/report-services";
+import { getReportDocumentsByYear } from "@/lib/reports/report-queries";
+
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const reportType = searchParams.get("reportType");
+  const year = searchParams.get("year");
+
+  if (!reportType || !isReportType(reportType)) {
+    return NextResponse.json({ error: "Jenis laporan tidak valid." }, { status: 400 });
+  }
+
+  if (!year) {
+    return NextResponse.json({ error: "Tahun wajib diisi." }, { status: 400 });
+  }
+
+  const yearNumber = Number.parseInt(year, 10);
+  if (Number.isNaN(yearNumber)) {
+    return NextResponse.json({ error: "Tahun tidak valid." }, { status: 400 });
+  }
+
+  try {
+    const docs = await getReportDocumentsByYear(reportType as ReportType, yearNumber);
+    return NextResponse.json(docs);
+  } catch (error) {
+    console.error("[GET /api/reports] Fetch error:", error);
+    return NextResponse.json(
+      { error: "Gagal mengambil data laporan." },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   const session = await auth.api.getSession({ headers: await headers() });

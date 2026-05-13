@@ -4,9 +4,16 @@ import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumentsTable";
-import { getReportDocumentsByYear } from "@/lib/reports/report-queries";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: LaporanBulananYearPageProps) {
+  const { year } = await params;
+  return {
+    title: `Laporan Bulanan ${year} - Pusdatin PU`,
+    description: `Daftar laporan bulanan Pusdatin PU untuk tahun ${year}.`,
+  };
+}
 
 interface LaporanBulananYearPageProps {
   params: Promise<{ year: string }>;
@@ -22,18 +29,11 @@ export default async function LaporanBulananYearPage({
     notFound();
   }
 
-  let fetchError = false;
-  const [session, reportDocuments] = await Promise.all([
-    headers().then((h) => auth.api.getSession({ headers: h })).catch((error) => {
-      console.error("Failed to fetch session:", error);
-      return null;
-    }),
-    getReportDocumentsByYear("bulanan", yearNumber).catch((error) => {
-      console.error("Failed to fetch laporan bulanan:", error);
-      fetchError = true;
-      return [];
-    }),
-  ]);
+  const session = await headers()
+    .then((h) => auth.api.getSession({ headers: h }))
+    .catch(() => null);
+
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -46,16 +46,16 @@ export default async function LaporanBulananYearPage({
               href="https://htupusdatin.vercel.app/"
               className="transition-colors hover:text-primary"
             >
-              Home
+              Beranda
             </a>
-            <span className="text-slate-300;">&gt;</span>
+            <span className="text-slate-300">&gt;</span>
             <Link
               href="/laporanbulanan"
               className="transition-colors hover:text-primary"
             >
               Laporan Bulanan
             </Link>
-            <span className="text-slate-300;">&gt;</span>
+            <span className="text-slate-300">&gt;</span>
             <span className="font-black tracking-tight text-primary">{year}</span>
           </nav>
         </div>
@@ -67,20 +67,11 @@ export default async function LaporanBulananYearPage({
           </p>
         </div>
 
-        {fetchError ? (
-          <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-            <p className="text-label-lg text-destructive">
-              Gagal memuat data laporan. Silakan muat ulang halaman.
-            </p>
-          </div>
-        ) : (
-          <YearReportDocumentsTable 
-            documents={reportDocuments}
-            isAdmin={session?.user?.role === "admin"}
-            reportType="bulanan"
-            year={yearNumber}
-          />
-        )}
+        <YearReportDocumentsTable 
+          isAdmin={isAdmin}
+          reportType="bulanan"
+          year={yearNumber}
+        />
       </main>
     </div>
   );
