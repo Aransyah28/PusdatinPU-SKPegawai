@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import type { SopDocumentRow } from "@/lib/sops/sop-queries";
+import type { SopBidang } from "@/lib/sops/sop-types";
 
 export type SortOrder = "title-asc" | "title-desc" | "date-desc" | "date-asc";
 
-export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
-  const router = useRouter();
+export function useSopTable(bidang: SopBidang, year: number, itemsPerPage = 10) {
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -20,14 +20,25 @@ export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("title-asc");
 
+  const { data: documents = [], isLoading, isError } = useQuery<SopDocumentRow[]>({
+    queryKey: ["sops", bidang, year],
+    queryFn: async () => {
+      const res = await fetch(`/api/sops?bidang=${bidang}&year=${year}`);
+      if (!res.ok) throw new Error("Gagal mengambil data SOP.");
+      return res.json();
+    }
+  });
+
   const filteredDocuments = useMemo(() => {
     return documents
       .filter((doc) => doc.title.toLowerCase().includes(searchQuery.toLowerCase()))
       .sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
         if (sortOrder === "title-asc") return a.title.localeCompare(b.title);
         if (sortOrder === "title-desc") return b.title.localeCompare(a.title);
-        if (sortOrder === "date-desc") return b.createdAt.getTime() - a.createdAt.getTime();
-        if (sortOrder === "date-asc") return a.createdAt.getTime() - b.createdAt.getTime();
+        if (sortOrder === "date-desc") return dateB - dateA;
+        if (sortOrder === "date-asc") return dateA - dateB;
         return 0;
       });
   }, [documents, searchQuery, sortOrder]);
@@ -49,10 +60,10 @@ export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
     },
     onSuccess: () => {
       toast.success("Dokumen berhasil dihapus.");
+      queryClient.invalidateQueries({ queryKey: ["sops", bidang, year] });
       setDeletingId(null);
       setDeleteConfirmOpen(false);
       setDocumentToDelete(null);
-      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message || "Gagal menghapus dokumen.");
@@ -105,7 +116,7 @@ export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
   };
 
   const handleUploadSuccess = () => {
-    router.refresh();
+    queryClient.invalidateQueries({ queryKey: ["sops", bidang, year] });
   };
 
   return {
@@ -120,6 +131,8 @@ export function useSopTable(documents: SopDocumentRow[], itemsPerPage = 10) {
     filteredDocuments,
     paginatedDocuments,
     totalPages,
+    isLoading,
+    isError,
     handleDelete: handleDeleteClick,
     confirmDelete,
     cancelDelete,
