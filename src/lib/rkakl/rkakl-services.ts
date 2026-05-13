@@ -22,7 +22,7 @@ export async function uploadRkaklDocument({
   uploadedBy,
 }: UploadRkaklParams) {
   const safeFileName = sanitizeFileName(file.name);
-  const blobPath = `RKAKL/${year}/${Date.now()}-${safeFileName}`;
+  const blobPath = `RKAKL/${year}/${crypto.randomUUID()}-${safeFileName}`;
 
   const blob = await put(blobPath, file, {
     access: "public",

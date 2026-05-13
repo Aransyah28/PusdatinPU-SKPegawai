@@ -3,14 +3,14 @@ import { toast } from "sonner";
 import { useUploadRkakl } from "@/hooks/rkakl/use-rkakl-documents";
 import { MAX_UPLOAD_FILE_SIZE, MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 
+const CURRENT_YEAR = new Date().getFullYear();
+const AVAILABLE_YEARS = Array.from({ length: 10 }, (_, i) => CURRENT_YEAR - i);
+
 export function useRkaklUploadForm(defaultYear?: string) {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(defaultYear || "");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
   const uploadMutation = useUploadRkakl();
 
@@ -54,7 +54,7 @@ export function useRkaklUploadForm(defaultYear?: string) {
     year, setYear,
     description, setDescription,
     file, handleFileChange,
-    years,
+    years: AVAILABLE_YEARS,
     resetForm,
     uploadMutation
   };
