@@ -7,6 +7,14 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata({ params }: PageProps) {
+  const { year } = await params;
+  return {
+    title: `RKAKL ${year} - Pusdatin PU`,
+    description: `Daftar Rencana Kerja dan Anggaran (RKAKL) Pusdatin PU untuk tahun ${year}.`,
+  };
+}
+
 interface PageProps {
   params: Promise<{ year: string }>;
 }
@@ -37,7 +45,7 @@ export default async function RkaklYearPage({ params }: PageProps) {
               href="https://htupusdatin.vercel.app/"
               className="transition-colors hover:text-primary"
             >
-              Home
+              Beranda
             </a>
             <span className="text-slate-300">&gt;</span>
             <Link href="/rkakl" className="transition-colors hover:text-primary">

@@ -3,6 +3,11 @@ import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import { ReportLandingSection } from "@/components/reports/ReportLandingSection";
 
+export const metadata = {
+  title: "Laporan Kinerja - Pusdatin PU",
+  description: "Daftar laporan kinerja Pusdatin PU berdasarkan tahun.",
+};
+
 export const dynamic = "force-dynamic";
 
 export default async function LaporanKinerjaPage() {
@@ -26,7 +31,7 @@ export default async function LaporanKinerjaPage() {
             href="https://htupusdatin.vercel.app/"
             className="transition-colors hover:text-primary"
           >
-            Home
+            Beranda
           </a>
           <span className="text-slate-300;">&gt;</span>
           <span className="font-black tracking-tight text-primary">Laporan Kinerja</span>

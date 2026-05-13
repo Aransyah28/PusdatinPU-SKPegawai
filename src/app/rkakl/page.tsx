@@ -6,8 +6,8 @@ import { getAvailableRkaklYears } from "@/lib/rkakl/rkakl-queries";
 
 export const metadata = {
   title: "RKAKL - Pusdatin PU",
-  description: "Dokumen Rencana Kerja dan Anggaran (RKAKL) Pusdatin PU",
-}
+  description: "Daftar Rencana Kerja dan Anggaran (RKAKL) Pusdatin PU berdasarkan tahun.",
+};
 
 export const dynamic = "force-dynamic";
 

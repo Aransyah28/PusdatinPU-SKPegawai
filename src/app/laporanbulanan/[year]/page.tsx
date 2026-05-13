@@ -7,6 +7,14 @@ import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumen
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata({ params }: LaporanBulananYearPageProps) {
+  const { year } = await params;
+  return {
+    title: `Laporan Bulanan ${year} - Pusdatin PU`,
+    description: `Daftar laporan bulanan Pusdatin PU untuk tahun ${year}.`,
+  };
+}
+
 interface LaporanBulananYearPageProps {
   params: Promise<{ year: string }>;
 }
@@ -38,7 +46,7 @@ export default async function LaporanBulananYearPage({
               href="https://htupusdatin.vercel.app/"
               className="transition-colors hover:text-primary"
             >
-              Home
+              Beranda
             </a>
             <span className="text-slate-300">&gt;</span>
             <Link

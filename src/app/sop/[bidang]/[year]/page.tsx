@@ -8,6 +8,14 @@ import { isSopBidang } from "@/lib/sops/sop-types";
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata({ params }: SopYearPageProps) {
+  const { bidang, year } = await params;
+  return {
+    title: `SOP ${bidang.toUpperCase()} ${year} - Pusdatin PU`,
+    description: `Daftar Standar Operasional Prosedur (SOP) Bidang ${bidang.toUpperCase()} untuk tahun ${year}.`,
+  };
+}
+
 interface SopYearPageProps {
   params: Promise<{ bidang: string; year: string }>;
 }

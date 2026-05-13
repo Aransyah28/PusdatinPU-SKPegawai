@@ -5,6 +5,11 @@ import { db } from "@/lib/db/client";
 import { users } from "@/lib/db/schema";
 import { AdminUsersTable } from "@/components/admin/AdminUsersTable";
 
+export const metadata = {
+  title: "Kelola Pengguna - Pusdatin PU",
+  description: "Dashboard manajemen role dan akun pengguna.",
+};
+
 export default async function AdminUsersPage() {
   const session = await auth.api.getSession({ headers: await headers() });
 

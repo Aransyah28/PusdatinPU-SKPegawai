@@ -3,9 +3,14 @@ import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import { DocumentsSection } from "@/components/documents/DocumentsSection";
 
+export const metadata = {
+  title: "SK Kepegawaian - Pusdatin PU",
+  description: "Portal Surat Keterangan Kepegawaian Pusdatin PU.",
+};
+
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
+export default async function BerandaPage() {
   let session = null;
   try {
     session = await auth.api.getSession({ headers: await headers() });
@@ -25,7 +30,7 @@ export default async function HomePage() {
             href="https://htupusdatin.vercel.app/"
             className="transition-colors hover:text-primary"
           >
-            Home
+            Beranda
           </a>
           <span className="text-slate-300;">&gt;</span>
           <a
