@@ -9,16 +9,7 @@ import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList"
 import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
 import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 
 import type { SopDocumentRow } from "@/lib/sops/sop-queries";
 import type { SopBidang } from "@/lib/sops/sop-types";
@@ -138,22 +129,13 @@ export function SopDocumentsTable({
             onSuccess={handleUploadSuccess}
           />
           
-          <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Hapus Dokumen</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Apakah Anda yakin ingin menghapus SOP ini? Tindakan ini tidak dapat dibatalkan dan file akan dihapus secara permanen.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel onClick={cancelDelete}>Batal</AlertDialogCancel>
-                <AlertDialogAction onClick={confirmDelete} className="bg-destructive font-semibold text-destructive-foreground hover:bg-destructive/90">
-                  Hapus
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <DeleteConfirmDialog
+            open={deleteConfirmOpen}
+            onOpenChange={setDeleteConfirmOpen}
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+            documentLabel="SOP"
+          />
         </>
       )}
     </div>
