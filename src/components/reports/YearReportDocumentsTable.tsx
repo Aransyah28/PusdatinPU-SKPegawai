@@ -71,7 +71,7 @@ export function YearReportDocumentsTable({
     fileName: doc.fileName,
     fileSize: doc.fileSize,
     uploaderName: doc.uploaderName,
-    createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt),
+    createdAt: doc.createdAt ? (doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt)) : "",
   }));
 
   return (

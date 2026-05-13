@@ -28,7 +28,7 @@ export function NavbarMobileSidebar({
       <button
         type="button"
         aria-label="Tutup sidebar"
-        className="fixed inset-0 z-50 h-full w-full cursor-default border-none bg-black/20 outline-none backdrop-blur-sm animate-in fade-in"
+        className="fixed inset-0 z-50 h-full w-full cursor-default border-none bg-black/20 backdrop-blur-sm animate-in fade-in"
         onClick={onClose}
         tabIndex={-1}
       />
