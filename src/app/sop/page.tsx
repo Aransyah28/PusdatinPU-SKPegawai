@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { getAvailableSopYears } from "@/lib/sops/sop-queries";
+import { YearCard } from "@/components/documents/YearCard";
 
 const BIDANG_LIST = [
   { id: "mti", nama: "MTI" },
@@ -82,19 +83,12 @@ export default async function SOPPage() {
                   ) : (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                       {yearsForBidang.map((item) => (
-                        <Link
+                        <YearCard 
                           key={item.year}
                           href={`/sop/${bidang.id}/${item.year}`}
-                          className="group relative overflow-hidden rounded-4xl border border-border bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:border-primary hover:shadow-2xl hover:shadow-primary/20 active:scale-95"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                          <div className="relative flex flex-col items-center justify-center p-8 sm:p-12 text-center">
-                            <span className="text-title-lg font-bold text-primary">{item.year}</span>
-                            <p className="mt-4 inline-flex items-center justify-center rounded-full bg-primary/5 px-4 py-1.5 text-sm font-semibold tracking-wide text-primary/80 sm:text-base">
-                              {item.count} Dokumen
-                            </p>
-                          </div>
-                        </Link>
+                          year={item.year}
+                          count={item.count}
+                        />
                       ))}
                     </div>
                   )}

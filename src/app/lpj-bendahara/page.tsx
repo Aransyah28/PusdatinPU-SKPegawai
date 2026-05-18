@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { getAvailableLpjBendaharaYears } from "@/lib/lpj-bendahara/lpj-bendahara-queries";
+import { YearCard } from "@/components/documents/YearCard";
 
 export const metadata = {
   title: "LPJ Bendahara - Pusdatin PU",
@@ -52,21 +53,14 @@ export default async function LpjBendaharaPage() {
               <p className="text-body-md text-body/60">Belum ada dokumen LPJ Bendahara yang tersedia.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
               {availableYearsData.map((item) => (
-                <Link
+                <YearCard 
                   key={item.year}
                   href={`/lpj-bendahara/${item.year}`}
-                  className="group relative overflow-hidden rounded-4xl border border-border bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:border-primary hover:shadow-2xl hover:shadow-primary/20 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <div className="relative flex flex-col items-center justify-center p-8 sm:p-12 text-center">
-                    <span className="text-title-lg font-bold text-primary">{item.year}</span>
-                    <p className="mt-4 inline-flex items-center justify-center rounded-full bg-primary/5 px-4 py-1.5 text-sm font-semibold tracking-wide text-primary/80 sm:text-base">
-                      {item.count} Dokumen
-                    </p>
-                  </div>
-                </Link>
+                  year={item.year}
+                  count={item.count}
+                />
               ))}
             </div>
           )}
