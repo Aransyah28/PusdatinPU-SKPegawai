@@ -4,6 +4,7 @@ import { CommonPagination } from "@/components/shared/CommonPagination";
 import { DocumentsToolbar } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
 import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
+import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
@@ -42,11 +43,7 @@ export function LaporanKeuanganDocumentsTable({ year, isAdmin = false }: Laporan
   } = useLaporanKeuanganTable(year);
 
   if (isError) {
-    return (
-      <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-6 text-center text-destructive">
-        Gagal memuat data dokumen Laporan Keuangan.
-      </div>
-    );
+    return <TableErrorState message="Gagal memuat data dokumen Laporan Keuangan." />;
   }
 
   return (

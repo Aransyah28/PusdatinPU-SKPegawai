@@ -6,8 +6,8 @@ import { CommonPagination } from "@/components/shared/CommonPagination";
 import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
 import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
-import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
+import { TableErrorState } from "@/components/shared/TableErrorState";
 import { DocumentsDesktopList } from "./DocumentsDesktopList";
 import { DocumentsMobileList } from "./DocumentsMobileList";
 import { useDocumentsSection } from "@/hooks/documents/use-documents-section";
@@ -54,13 +54,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
   } = useDocumentsSection();
 
   if (isError) {
-    return (
-      <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-        <p className="text-label-lg text-destructive">
-          Gagal memuat data. Silakan muat ulang halaman.
-        </p>
-      </div>
-    );
+    return <TableErrorState message="Gagal memuat data. Silakan muat ulang halaman." />;
   }
 
   return (

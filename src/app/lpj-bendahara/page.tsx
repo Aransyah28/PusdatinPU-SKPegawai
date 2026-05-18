@@ -4,6 +4,9 @@ import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { getAvailableLpjBendaharaYears } from "@/lib/lpj-bendahara/lpj-bendahara-queries";
 import { YearCard } from "@/components/documents/YearCard";
+import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 
 export const metadata = {
   title: "LPJ Bendahara - Pusdatin PU",
@@ -27,31 +30,18 @@ export default async function LpjBendaharaPage() {
 
       <main className="section-padding mx-auto max-w-[1600px]">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
-          <a
-            href="https://htupusdatin.vercel.app/"
-            className="transition-colors hover:text-primary"
-          >
-            Beranda
-          </a>
-          <span className="text-slate-300">&gt;</span>
-          <span className="font-black tracking-tight text-primary">LPJ Bendahara</span>
-        </nav>
+        <PageBreadcrumbs current="LPJ Bendahara" />
 
         <div className="space-y-8">
           {/* Header */}
-          <div>
-            <h1 className="text-headline-lg mb-1">Dokumen LPJ Bendahara</h1>
-            <p className="text-title-md mt-2 max-w-2xl text-body/80">
-              Kelola dan lihat dokumen LPJ Bendahara Pusdatin PU berdasarkan tahun.
-            </p>
-          </div>
+          <PageHeader 
+            title="Dokumen LPJ Bendahara"
+            description="Kelola dan lihat dokumen LPJ Bendahara Pusdatin PU berdasarkan tahun."
+          />
 
           {/* Konten Card Tahun */}
           {availableYearsData.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 py-12 text-center">
-              <p className="text-body-md text-body/60">Belum ada dokumen LPJ Bendahara yang tersedia.</p>
-            </div>
+            <YearCardEmptyState message="Belum ada dokumen LPJ Bendahara yang tersedia." />
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
               {availableYearsData.map((item) => (

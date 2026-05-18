@@ -10,6 +10,7 @@ import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsT
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
 import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
+import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 
 import type { SopBidang } from "@/lib/sops/sop-types";
@@ -54,13 +55,7 @@ export function SopDocumentsTable({
   } = useSopTable(bidang, year, 10);
 
   if (isError) {
-    return (
-      <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-        <p className="text-label-lg text-destructive">
-          Gagal memuat data SOP. Silakan muat ulang halaman.
-        </p>
-      </div>
-    );
+    return <TableErrorState message="Gagal memuat data SOP. Silakan muat ulang halaman." />;
   }
 
   // Map SopDocumentRow to Document for the generic list components

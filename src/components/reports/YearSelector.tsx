@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { useAvailableYears } from "@/hooks/use-available-years";
 import { Skeleton } from "@/components/ui/skeleton";
+import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 
 interface YearSelectorProps {
   reportType: string;
@@ -24,11 +25,7 @@ export function YearSelector({ reportType, baseUrl }: YearSelectorProps) {
   }
 
   if (isError || years.length === 0) {
-    return (
-      <div className="rounded-lg border border-dashed border-border bg-muted/30 py-12 text-center">
-        <p className="text-body-md text-body/60">Belum ada laporan yang tersedia.</p>
-      </div>
-    );
+    return <YearCardEmptyState message="Belum ada laporan yang tersedia." />;
   }
 
   return (

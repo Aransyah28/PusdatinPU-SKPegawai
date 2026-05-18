@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import { ReportLandingSection } from "@/components/reports/ReportLandingSection";
+import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 
 export const metadata = {
   title: "Laporan Mingguan - Pusdatin PU",
@@ -26,16 +27,7 @@ export default async function LaporanMingguanPage() {
       <Navbar user={session?.user ?? null} />
 
       <main className="section-padding mx-auto max-w-[1600px]">
-        <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
-          <a
-            href="https://htupusdatin.vercel.app/"
-            className="transition-colors hover:text-primary"
-          >
-            Beranda
-          </a>
-          <span className="text-slate-300;">&gt;</span>
-          <span className="font-black tracking-tight text-primary">Laporan Mingguan</span>
-        </nav>
+        <PageBreadcrumbs current="Laporan Mingguan" />
 
         <ReportLandingSection
           title="Laporan Mingguan"

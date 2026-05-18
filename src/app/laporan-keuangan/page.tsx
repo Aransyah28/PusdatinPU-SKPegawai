@@ -4,6 +4,9 @@ import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { getAvailableLaporanKeuanganYears } from "@/lib/laporan-keuangan/laporan-keuangan-queries";
 import { YearCard } from "@/components/documents/YearCard";
+import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 
 export const metadata = {
   title: "Laporan Keuangan - Pusdatin PU",
@@ -27,31 +30,18 @@ export default async function LaporanKeuanganPage() {
 
       <main className="section-padding mx-auto max-w-[1600px]">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
-          <a
-            href="https://htupusdatin.vercel.app/"
-            className="transition-colors hover:text-primary"
-          >
-            Beranda
-          </a>
-          <span className="text-slate-300">&gt;</span>
-          <span className="font-black tracking-tight text-primary">Laporan Keuangan</span>
-        </nav>
+        <PageBreadcrumbs current="Laporan Keuangan" />
 
         <div className="space-y-8">
           {/* Header */}
-          <div>
-            <h1 className="text-headline-lg mb-1">Dokumen Laporan Keuangan</h1>
-            <p className="text-title-md mt-2 max-w-2xl text-body/80">
-              Kelola dan lihat dokumen Laporan Keuangan Pusdatin PU berdasarkan tahun.
-            </p>
-          </div>
+          <PageHeader 
+            title="Dokumen Laporan Keuangan"
+            description="Kelola dan lihat dokumen Laporan Keuangan Pusdatin PU berdasarkan tahun."
+          />
 
           {/* Konten Card Tahun */}
           {availableYearsData.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-border bg-muted/30 py-12 text-center">
-              <p className="text-body-md text-body/60">Belum ada dokumen Laporan Keuangan yang tersedia.</p>
-            </div>
+            <YearCardEmptyState message="Belum ada dokumen Laporan Keuangan yang tersedia." />
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
               {availableYearsData.map((item) => (

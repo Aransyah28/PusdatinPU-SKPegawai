@@ -9,6 +9,7 @@ import { useYearReportTable } from "@/hooks/use-year-report-table";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
+import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 
 import type { ReportType } from "@/lib/reports/report-types";
@@ -53,13 +54,7 @@ export function YearReportDocumentsTable({
   } = useYearReportTable(reportType, year, 10);
 
   if (isError) {
-    return (
-      <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-        <p className="text-label-lg text-destructive">
-          Gagal memuat data laporan. Silakan muat ulang halaman.
-        </p>
-      </div>
-    );
+    return <TableErrorState message="Gagal memuat data laporan. Silakan muat ulang halaman." />;
   }
 
   const desktopDocs: Document[] = paginatedDocuments.map((doc) => ({
