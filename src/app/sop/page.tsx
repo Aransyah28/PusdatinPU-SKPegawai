@@ -3,11 +3,13 @@ import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
+import { Suspense } from "react";
 import { getAvailableSopYears } from "@/lib/sops/sop-queries";
 import { YearCard } from "@/components/documents/YearCard";
 import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
+import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
 
 const BIDANG_LIST = [
   { id: "mti", nama: "MTI" },
@@ -30,12 +32,7 @@ export default async function SOPPage() {
     return null;
   });
 
-  const availableYearsPromise = getAvailableSopYears();
-
-  const [session, availableYearsData] = await Promise.all([
-    sessionPromise,
-    availableYearsPromise,
-  ]);
+  const session = await sessionPromise;
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -63,31 +60,38 @@ export default async function SOPPage() {
             </TabsList>
 
             {/* Konten Card Tahun untuk masing-masing Bidang */}
-            {BIDANG_LIST.map((bidang) => {
-              const yearsForBidang = availableYearsData.filter(d => d.bidang.toLowerCase() === bidang.id.toLowerCase());
-
-              return (
-                <TabsContent key={bidang.id} value={bidang.id} className="mt-0">
-                  {yearsForBidang.length === 0 ? (
-                    <YearCardEmptyState message="Belum ada dokumen SOP yang tersedia untuk bidang ini." />
-                  ) : (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {yearsForBidang.map((item) => (
-                        <YearCard 
-                          key={item.year}
-                          href={`/sop/${bidang.id}/${item.year}`}
-                          year={item.year}
-                          count={item.count}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </TabsContent>
-              );
-            })}
+            {BIDANG_LIST.map((bidang) => (
+              <TabsContent key={bidang.id} value={bidang.id} className="mt-0">
+                <Suspense fallback={<YearCardSkeleton />}>
+                  <SopYearList bidangId={bidang.id} />
+                </Suspense>
+              </TabsContent>
+            ))}
           </Tabs>
         </div>
       </main>
     </div>
-  )
+  );
+}
+
+async function SopYearList({ bidangId }: { bidangId: string }) {
+  const availableYearsData = await getAvailableSopYears();
+  const yearsForBidang = availableYearsData.filter(d => d.bidang.toLowerCase() === bidangId.toLowerCase());
+
+  if (yearsForBidang.length === 0) {
+    return <YearCardEmptyState message="Belum ada dokumen SOP yang tersedia untuk bidang ini." />;
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
+      {yearsForBidang.map((item) => (
+        <YearCard 
+          key={item.year}
+          href={`/sop/${bidangId}/${item.year}`}
+          year={item.year}
+          count={item.count}
+        />
+      ))}
+    </div>
+  );
 }

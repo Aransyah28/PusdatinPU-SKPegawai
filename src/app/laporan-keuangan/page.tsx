@@ -2,11 +2,13 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getAvailableLaporanKeuanganYears } from "@/lib/laporan-keuangan/laporan-keuangan-queries";
 import { YearCard } from "@/components/documents/YearCard";
 import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
+import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
 
 export const metadata = {
   title: "Laporan Keuangan - Pusdatin PU",
@@ -21,8 +23,6 @@ export default async function LaporanKeuanganPage() {
     console.error("Failed to fetch session:", error);
     return null;
   });
-
-  const availableYearsData = await getAvailableLaporanKeuanganYears();
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -40,22 +40,32 @@ export default async function LaporanKeuanganPage() {
           />
 
           {/* Konten Card Tahun */}
-          {availableYearsData.length === 0 ? (
-            <YearCardEmptyState message="Belum ada dokumen Laporan Keuangan yang tersedia." />
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-              {availableYearsData.map((item) => (
-                <YearCard 
-                  key={item.year}
-                  href={`/laporan-keuangan/${item.year}`}
-                  year={item.year}
-                  count={item.count}
-                />
-              ))}
-            </div>
-          )}
+          <Suspense fallback={<YearCardSkeleton />}>
+            <LaporanKeuanganYearList />
+          </Suspense>
         </div>
       </main>
     </div>
   )
+}
+
+async function LaporanKeuanganYearList() {
+  const availableYearsData = await getAvailableLaporanKeuanganYears();
+
+  if (availableYearsData.length === 0) {
+    return <YearCardEmptyState message="Belum ada dokumen Laporan Keuangan yang tersedia." />;
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
+      {availableYearsData.map((item) => (
+        <YearCard 
+          key={item.year}
+          href={`/laporan-keuangan/${item.year}`}
+          year={item.year}
+          count={item.count}
+        />
+      ))}
+    </div>
+  );
 }

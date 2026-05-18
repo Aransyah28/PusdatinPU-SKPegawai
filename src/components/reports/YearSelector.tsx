@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { useAvailableYears } from "@/hooks/use-available-years";
-import { Skeleton } from "@/components/ui/skeleton";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
+import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
 
 interface YearSelectorProps {
   reportType: string;
@@ -15,13 +15,7 @@ export function YearSelector({ reportType, baseUrl }: YearSelectorProps) {
   const { data: years = [], isLoading, isError } = useAvailableYears(reportType);
 
   if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {[...Array(6)].map((_, i) => (
-          <Skeleton key={i} className="h-40 rounded-2xl" />
-        ))}
-      </div>
-    );
+    return <YearCardSkeleton />;
   }
 
   if (isError || years.length === 0) {
