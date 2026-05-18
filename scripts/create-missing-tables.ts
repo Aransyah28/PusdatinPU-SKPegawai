@@ -63,6 +63,36 @@ CREATE TABLE IF NOT EXISTS \`sop_document\` (
 )
 `.trim();
 
+const CREATE_LAPORAN_KEUANGAN = `
+CREATE TABLE IF NOT EXISTS \`laporan_keuangan_document\` (
+  \`id\` text PRIMARY KEY NOT NULL,
+  \`title\` text NOT NULL,
+  \`year\` integer NOT NULL,
+  \`description\` text,
+  \`file_url\` text NOT NULL,
+  \`file_name\` text NOT NULL,
+  \`file_size\` integer,
+  \`uploaded_by\` text,
+  \`created_at\` integer DEFAULT (unixepoch()) NOT NULL,
+  FOREIGN KEY (\`uploaded_by\`) REFERENCES \`user\`(\`id\`) ON UPDATE no action ON DELETE set null
+)
+`.trim();
+
+const CREATE_LPJ_BENDAHARA = `
+CREATE TABLE IF NOT EXISTS \`lpj_bendahara_document\` (
+  \`id\` text PRIMARY KEY NOT NULL,
+  \`title\` text NOT NULL,
+  \`year\` integer NOT NULL,
+  \`description\` text,
+  \`file_url\` text NOT NULL,
+  \`file_name\` text NOT NULL,
+  \`file_size\` integer,
+  \`uploaded_by\` text,
+  \`created_at\` integer DEFAULT (unixepoch()) NOT NULL,
+  FOREIGN KEY (\`uploaded_by\`) REFERENCES \`user\`(\`id\`) ON UPDATE no action ON DELETE set null
+)
+`.trim();
+
 async function createMissingTables() {
   await loadEnvFiles();
 
@@ -79,6 +109,8 @@ async function createMissingTables() {
   const tables = [
     { name: "rkakl_document", statement: sql.raw(CREATE_RKAKL) },
     { name: "sop_document", statement: sql.raw(CREATE_SOP) },
+    { name: "laporan_keuangan_document", statement: sql.raw(CREATE_LAPORAN_KEUANGAN) },
+    { name: "lpj_bendahara_document", statement: sql.raw(CREATE_LPJ_BENDAHARA) },
   ];
 
   for (const { name, statement } of tables) {
