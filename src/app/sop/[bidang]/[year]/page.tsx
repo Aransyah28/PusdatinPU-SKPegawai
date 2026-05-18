@@ -8,7 +8,7 @@ import { isSopBidang } from "@/lib/sops/sop-types";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: SopYearPageProps) {
+export async function generateMetadata({ params }: PageProps) {
   const { bidang, year } = await params;
   return {
     title: `SOP ${bidang.toUpperCase()} ${year} - Pusdatin PU`,
@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: SopYearPageProps) {
   };
 }
 
-interface SopYearPageProps {
+interface PageProps {
   params: Promise<{ bidang: string; year: string }>;
 }
 
 export default async function SopYearPage({
   params,
-}: SopYearPageProps) {
+}: PageProps) {
   const { bidang, year } = await params;
   const upperBidang = bidang.toUpperCase();
   const yearNumber = Number.parseInt(year, 10);

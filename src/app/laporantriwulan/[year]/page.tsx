@@ -7,7 +7,7 @@ import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumen
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: LaporanTriwulanYearPageProps) {
+export async function generateMetadata({ params }: PageProps) {
   const { year } = await params;
   return {
     title: `Laporan Triwulan ${year} - Pusdatin PU`,
@@ -15,13 +15,13 @@ export async function generateMetadata({ params }: LaporanTriwulanYearPageProps)
   };
 }
 
-interface LaporanTriwulanYearPageProps {
+interface PageProps {
   params: Promise<{ year: string }>;
 }
 
 export default async function LaporanTriwulanYearPage({
   params,
-}: LaporanTriwulanYearPageProps) {
+}: PageProps) {
   const { year } = await params;
   const yearNumber = Number.parseInt(year, 10);
 
