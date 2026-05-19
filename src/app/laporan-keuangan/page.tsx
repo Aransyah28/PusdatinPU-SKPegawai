@@ -55,7 +55,7 @@ export default async function LaporanKeuanganPage() {
   )
 }
 
-async function LaporanKeuanganYearList({ promise }: { promise: Promise<Array<{ year: string; count: number }>> }) {
+async function LaporanKeuanganYearList({ promise }: { promise: Promise<Array<{ year: number; count: number }>> }) {
   const availableYearsData = await promise;
 
   if (availableYearsData.length === 0) {
