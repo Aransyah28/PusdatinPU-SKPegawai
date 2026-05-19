@@ -19,10 +19,16 @@ export const dynamic = "force-dynamic";
 
 export default async function LpjBendaharaPage() {
   const headersList = await headers();
-  const session = await auth.api.getSession({ headers: headersList }).catch((error) => {
+  
+  // Initiate fetching in parallel to avoid waterfall
+  const sessionPromise = auth.api.getSession({ headers: headersList }).catch((error) => {
     console.error("Failed to fetch session:", error);
     return null;
   });
+  
+  const availableYearsPromise = getAvailableLpjBendaharaYears();
+
+  const session = await sessionPromise;
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -41,7 +47,7 @@ export default async function LpjBendaharaPage() {
 
           {/* Konten Card Tahun */}
           <Suspense fallback={<YearCardSkeleton />}>
-            <LpjBendaharaYearList />
+            <LpjBendaharaYearList promise={availableYearsPromise} />
           </Suspense>
         </div>
       </main>
@@ -49,8 +55,8 @@ export default async function LpjBendaharaPage() {
   );
 }
 
-async function LpjBendaharaYearList() {
-  const availableYearsData = await getAvailableLpjBendaharaYears();
+async function LpjBendaharaYearList({ promise }: { promise: Promise<Array<{ year: number; count: number }>> }) {
+  const availableYearsData = await promise;
 
   if (availableYearsData.length === 0) {
     return <YearCardEmptyState message="Belum ada dokumen LPJ Bendahara yang tersedia." />;
