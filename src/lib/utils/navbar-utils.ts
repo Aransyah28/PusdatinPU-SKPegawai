@@ -9,7 +9,7 @@ export function getInitial(name: string): string {
 
 export function getTitleFromPathname(pathname: string): string {
   // Handle dynamic routes like /laporanbulanan/2026 or /rkakl/2025
-  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl)\/(\d+)$/);
+  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara)\/(\d+)$/);
   if (yearMatch) {
     const [, reportType, year] = yearMatch;
     const typeMap: Record<string, string> = {
@@ -18,6 +18,8 @@ export function getTitleFromPathname(pathname: string): string {
       laporanmingguan: "Laporan Mingguan",
       laporantriwulan: "Laporan Triwulan",
       rkakl: "Dokumen RKAKL",
+      "laporan-keuangan": "Laporan Keuangan",
+      "lpj-bendahara": "LPJ Bendahara",
     };
     const title = typeMap[reportType] || "Laporan";
     return `${title} ${year}`;
@@ -39,6 +41,8 @@ export function getTitleFromPathname(pathname: string): string {
     "/laporantriwulan": "Laporan Triwulan",
     "/sop": "Standar Operasional Prosedur",
     "/rkakl": "Dokumen RKAKL",
+    "/laporan-keuangan": "Laporan Keuangan",
+    "/lpj-bendahara": "LPJ Bendahara",
   };
 
   return pathMap[pathname] || "Surat Keterangan Kepegawaian";

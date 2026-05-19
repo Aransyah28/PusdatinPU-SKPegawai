@@ -9,15 +9,15 @@ import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
-import { RkaklUploadDialog } from "./RkaklUploadDialog";
-import { useRkaklTable } from "@/hooks/rkakl/use-rkakl-table";
+import { LpjBendaharaUploadDialog } from "./LpjBendaharaUploadDialog";
+import { useLpjBendaharaTable } from "@/hooks/lpj-bendahara/use-lpj-bendahara-table";
 
-interface RkaklDocumentsTableProps {
+interface LpjBendaharaDocumentsTableProps {
   year: string;
   isAdmin?: boolean;
 }
 
-export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTableProps) {
+export function LpjBendaharaDocumentsTable({ year, isAdmin = false }: LpjBendaharaDocumentsTableProps) {
   const {
     searchQuery,
     sortOrder,
@@ -40,10 +40,10 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
     cancelDelete,
     handleDownload,
     setDeleteConfirmOpen,
-  } = useRkaklTable(year);
+  } = useLpjBendaharaTable(year);
 
   if (isError) {
-    return <TableErrorState message="Gagal memuat data dokumen RKAKL." />;
+    return <TableErrorState message="Gagal memuat data dokumen LPJ Bendahara." />;
   }
 
   return (
@@ -51,7 +51,7 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
       <DocumentsToolbar
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
-        searchPlaceholder="Cari judul dokumen RKAKL..."
+        searchPlaceholder="Cari judul dokumen..."
         sortOrder={sortOrder}
         onSortChange={handleSortChange}
         actionButton={
@@ -69,7 +69,7 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
       ) : filteredDocuments.length === 0 ? (
         <DocumentsEmptyState
           searchQuery={searchQuery}
-          emptyMessage={`Belum ada dokumen RKAKL untuk tahun ${year}.`}
+          emptyMessage={`Belum ada dokumen LPJ Bendahara untuk tahun ${year}.`}
         />
       ) : (
         <div className="space-y-4">
@@ -102,7 +102,7 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
 
       {isAdmin && (
         <>
-          <RkaklUploadDialog
+          <LpjBendaharaUploadDialog
             open={uploadOpen}
             onOpenChange={setUploadOpen}
             defaultYear={year}
@@ -119,4 +119,3 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
     </div>
   );
 }
-

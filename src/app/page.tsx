@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { Navbar } from "@/components/layout/Navbar";
 import { DocumentsSection } from "@/components/documents/DocumentsSection";
+import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export const metadata = {
   title: "SK Kepegawaian - Pusdatin PU",
@@ -32,27 +34,25 @@ export default async function BerandaPage() {
           >
             Beranda
           </a>
-          <span className="text-slate-300;">&gt;</span>
+          <span className="text-slate-300">&gt;</span>
           <a
             href="https://htupusdatin.vercel.app/kepegawaian"
             className="transition-colors hover:text-primary"
           >
             Kepegawaian
           </a>
-          <span className="text-slate-300;">&gt;</span>
+          <span className="text-slate-300">&gt;</span>
           <span className="font-black tracking-tight text-primary">SK Kepegawaian</span>
         </nav>
 
         {/* Header halaman */}
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg mb-1">
-            Surat Keterangan Kepegawaian
-          </h1>
-          <p className="text-title-md mt-2 max-w-2xl text-body/80">
-            {isAdmin
+          <PageHeader 
+            title="Surat Keterangan Kepegawaian"
+            description={isAdmin
               ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU"
               : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU melalui portal satu pintu."}
-          </p>
+          />
         </div>
 
         {/* Komponen tabel */}
