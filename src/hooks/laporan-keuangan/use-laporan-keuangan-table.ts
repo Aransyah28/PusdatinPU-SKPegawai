@@ -90,6 +90,7 @@ export function useLaporanKeuanganTable(year: string, itemsPerPage = 10) {
     setDownloadingId(doc.id);
     try {
       const res = await fetch(doc.fileUrl);
+      if (!res.ok) throw new Error("Gagal mengunduh file");
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

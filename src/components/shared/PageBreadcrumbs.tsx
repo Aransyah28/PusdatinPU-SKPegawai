@@ -8,7 +8,7 @@ export function PageBreadcrumbs({ current }: PageBreadcrumbsProps) {
   return (
     <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
       <a
-        href="https://htupusdatin.vercel.app/"
+        href="/"
         className="transition-colors hover:text-primary"
       >
         Beranda
