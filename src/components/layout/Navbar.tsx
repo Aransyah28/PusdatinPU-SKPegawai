@@ -7,7 +7,7 @@ import { signOut } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useState } from "react";
 import type { User } from "@/lib/auth/auth";
-import { getTitleFromPathname } from "@/lib/utils/navbar-utils";
+import { getTitleFromPathname, getBackUrlFromPathname } from "@/lib/utils/navbar-utils";
 import { NavbarUserDropdown } from "./NavbarUserDropdown";
 import { NavbarMobileSidebar } from "./NavbarMobileSidebar";
 
@@ -52,9 +52,9 @@ export function Navbar({ user }: NavbarProps) {
                 </Link>
               ) : (
                 <a
-                  href="https://htupusdatin.vercel.app/kepegawaian"
+                  href={getBackUrlFromPathname(pathname)}
                   className="touch-target rounded-full text-body/40 transition-all hover:bg-muted hover:text-body"
-                  title="Kembali ke portal kepegawaian"
+                  title="Kembali ke menu sebelumnya"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </a>
