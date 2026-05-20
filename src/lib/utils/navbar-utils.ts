@@ -47,3 +47,25 @@ export function getTitleFromPathname(pathname: string): string {
 
   return pathMap[pathname] || "Surat Keterangan Kepegawaian";
 }
+
+export function getBackUrlFromPathname(pathname: string): string {
+  const BASE_URL = "https://htupusdatin.vercel.app";
+  const URL_SURAT_KEPUTUSAN = BASE_URL + "/surat-keputusan";
+  const URL_PELAPORAN = BASE_URL + "/pelaporan";
+  const URL_KEUANGAN = BASE_URL + "/keuangan";
+
+  const urlMap: Record<string, string> = {
+    "/": URL_SURAT_KEPUTUSAN,
+    "/admin/users": URL_SURAT_KEPUTUSAN,
+    "/laporanbulanan": URL_PELAPORAN,
+    "/laporankinerja": URL_PELAPORAN,
+    "/laporanmingguan": URL_PELAPORAN,
+    "/laporantriwulan": URL_PELAPORAN,
+    "/sop": URL_PELAPORAN,
+    "/rkakl": URL_KEUANGAN,
+    "/laporan-keuangan": URL_KEUANGAN,
+    "/lpj-bendahara": URL_KEUANGAN,
+  };
+
+  return urlMap[pathname] || BASE_URL;
+}
