@@ -49,18 +49,23 @@ export function getTitleFromPathname(pathname: string): string {
 }
 
 export function getBackUrlFromPathname(pathname: string): string {
+  const BASE_URL = "https://htupusdatin.vercel.app";
+  const URL_SURAT_KEPUTUSAN = BASE_URL + "/surat-keputusan";
+  const URL_PELAPORAN = BASE_URL + "/pelaporan";
+  const URL_KEUANGAN = BASE_URL + "/keuangan";
+
   const urlMap: Record<string, string> = {
-    "/": "https://htupusdatin.vercel.app/surat-keputusan",
-    "/admin/users": "https://htupusdatin.vercel.app/surat-keputusan",
-    "/laporanbulanan": "https://htupusdatin.vercel.app/pelaporan",
-    "/laporankinerja": "https://htupusdatin.vercel.app/pelaporan",
-    "/laporanmingguan": "https://htupusdatin.vercel.app/pelaporan",
-    "/laporantriwulan": "https://htupusdatin.vercel.app/pelaporan",
-    "/sop": "https://htupusdatin.vercel.app/pelaporan",
-    "/rkakl": "https://htupusdatin.vercel.app/keuangan",
-    "/laporan-keuangan": "https://htupusdatin.vercel.app/keuangan",
-    "/lpj-bendahara": "https://htupusdatin.vercel.app/keuangan",
+    "/": URL_SURAT_KEPUTUSAN,
+    "/admin/users": URL_SURAT_KEPUTUSAN,
+    "/laporanbulanan": URL_PELAPORAN,
+    "/laporankinerja": URL_PELAPORAN,
+    "/laporanmingguan": URL_PELAPORAN,
+    "/laporantriwulan": URL_PELAPORAN,
+    "/sop": URL_PELAPORAN,
+    "/rkakl": URL_KEUANGAN,
+    "/laporan-keuangan": URL_KEUANGAN,
+    "/lpj-bendahara": URL_KEUANGAN,
   };
 
-  return urlMap[pathname] || "https://htupusdatin.vercel.app/surat-keputusan";
+  return urlMap[pathname] || BASE_URL;
 }
