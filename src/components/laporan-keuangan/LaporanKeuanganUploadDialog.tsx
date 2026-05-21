@@ -96,6 +96,15 @@ export function LaporanKeuanganUploadDialog({ open, onOpenChange, onSuccess, def
         placeholder="Contoh: Laporan Keuangan 2025"
       />
 
+      <FormTextField
+        label="Tahun"
+        required
+        value={year}
+        onChange={(event) => setYear(event.target.value)}
+        // datalistOptions={years.map((y) => ({ value: String(y), label: String(y) }))}
+        placeholder={file ? "Tidak ada tahun — ketik manual" : "Ketik tahun"}
+      />
+      {/* 
       <FormSelectField
         label="Tahun"
         required
@@ -103,7 +112,8 @@ export function LaporanKeuanganUploadDialog({ open, onOpenChange, onSuccess, def
         onChange={(event) => setYear(event.target.value)}
         options={years.map((y) => ({ value: String(y), label: String(y) }))}
         placeholder={file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
-      />
+      /> 
+      */}
 
       <FormTextField
         label="Deskripsi (opsional)"
