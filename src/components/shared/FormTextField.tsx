@@ -6,13 +6,15 @@ interface FormTextFieldProps
   label?: string;
   error?: string;
   multiline?: boolean;
+  datalistOptions?: { value: string | number; label?: string }[];
 }
 
 export const FormTextField = React.forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
   FormTextFieldProps
->(({ label, error, multiline, className, id, ...props }, ref) => {
+>(({ label, error, multiline, className, id, datalistOptions, ...props }, ref) => {
   const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+  const datalistId = datalistOptions ? `${inputId}-datalist` : undefined;
 
   const inputClasses = cn(
     "w-full rounded-xl border border-border bg-background px-4 py-3 text-body-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 disabled:bg-muted",
@@ -39,12 +41,24 @@ export const FormTextField = React.forwardRef<
           {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
         />
       ) : (
-        <input
-          id={inputId}
-          className={inputClasses}
-          ref={ref as React.Ref<HTMLInputElement>}
-          {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
-        />
+        <>
+          <input
+            id={inputId}
+            list={datalistId}
+            className={inputClasses}
+            ref={ref as React.Ref<HTMLInputElement>}
+            {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+          />
+          {datalistOptions && (
+            <datalist id={datalistId}>
+              {datalistOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label || opt.value}
+                </option>
+              ))}
+            </datalist>
+          )}
+        </>
       )}
 
       {error && (

@@ -55,7 +55,7 @@ export function useReportUploadForm(
 
   const currentYear = new Date().getFullYear();
   const years = useMemo(
-    () => Array.from({ length: 10 }, (_, index) => currentYear - index),
+    () => Array.from({ length: 10 }, (_, index) => currentYear + 2 - index),
     [currentYear],
   );
 

@@ -10,7 +10,7 @@ export function useUploadForm(onSuccessCallback?: () => void) {
   const [file, setFile] = useState<File | null>(null);
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
+  const years = Array.from({ length: 10 }, (_, i) => currentYear + 2 - i);
 
   const resetForm = () => {
     setTitle("");
