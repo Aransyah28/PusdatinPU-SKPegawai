@@ -100,10 +100,9 @@ export function RkaklUploadDialog({ open, onOpenChange, onSuccess, defaultYear }
         label="Tahun"
         required
         value={year}
-        onChange={(e) => setYear(e.target.value)}
+        onChange={(event) => setYear(event.target.value)}
         options={years.map((y) => ({ value: String(y), label: String(y) }))}
-        placeholder="Pilih tahun"
-        disabled={!!defaultYear}
+        placeholder={file ? "Tidak ada tahun — isi manual" : "Pilih tahun"}
       />
 
       <FormTextField
