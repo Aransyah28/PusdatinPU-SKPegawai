@@ -4,7 +4,7 @@ import { useUploadLpjBendahara } from "@/hooks/lpj-bendahara/use-lpj-bendahara-d
 import { MAX_UPLOAD_FILE_SIZE, MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 
 const CURRENT_YEAR = new Date().getFullYear();
-const AVAILABLE_YEARS = Array.from({ length: 10 }, (_, i) => CURRENT_YEAR - i);
+const AVAILABLE_YEARS = Array.from({ length: 10 }, (_, i) => CURRENT_YEAR + 2 - i);
 
 export function useLpjBendaharaUploadForm(defaultYear?: string) {
   const [title, setTitle] = useState("");
