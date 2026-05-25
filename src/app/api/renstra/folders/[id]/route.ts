@@ -33,9 +33,7 @@ export async function DELETE(
     if (docs.length > 0) {
       const urlsToDelete = docs.map((doc) => doc.fileUrl);
       // Optional: Batch delete if Vercel Blob supports it, or loop.
-      for (const url of urlsToDelete) {
-        await del(url);
-      }
+      await del(urlsToDelete);
     }
 
     // Menghapus folder (dokumen akan terhapus jika di-set CASCADE)

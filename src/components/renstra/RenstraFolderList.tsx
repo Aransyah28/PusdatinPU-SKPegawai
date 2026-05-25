@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { FolderCard } from "./FolderCard";
 import { Button } from "@/components/ui/button";
-import { Plus, FolderPlus } from "lucide-react";
+import { FolderPlus } from "lucide-react";
 import { CreateFolderDialog } from "./CreateFolderDialog";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
+import { useRenstraFolders } from "@/hooks/renstra/use-renstra-folders";
 import type { RenstraFolderSummary } from "@/lib/renstra/renstra-types";
 
 interface RenstraFolderListProps {
@@ -18,15 +18,7 @@ interface RenstraFolderListProps {
 export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: folders, isLoading } = useQuery({
-    queryKey: ["renstra-folders"],
-    queryFn: async () => {
-      const res = await fetch("/api/renstra/folders");
-      if (!res.ok) throw new Error("Gagal mengambil data folder");
-      return res.json() as Promise<RenstraFolderSummary[]>;
-    },
-    initialData,
-  });
+  const { data: folders, isLoading } = useRenstraFolders(initialData);
 
   return (
     <div className="space-y-6">

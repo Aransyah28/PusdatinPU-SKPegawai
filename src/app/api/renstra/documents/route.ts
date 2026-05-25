@@ -40,11 +40,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const parsedYear = Number.parseInt(year, 10);
+    if (Number.isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
+      return NextResponse.json(
+        { error: "Tahun tidak valid. Masukkan tahun berupa angka (contoh: 2024)." },
+        { status: 400 },
+      );
+    }
+
     const doc = await uploadRenstraDocument({
       file,
       folderId,
       title,
-      year: Number.parseInt(year, 10),
+      year: parsedYear,
       description,
       uploadedBy: session.user.id,
     });
