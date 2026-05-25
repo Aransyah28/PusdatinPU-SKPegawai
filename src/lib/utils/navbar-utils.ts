@@ -9,9 +9,9 @@ export function getInitial(name: string): string {
 
 export function getTitleFromPathname(pathname: string): string {
   // Handle dynamic routes like /laporanbulanan/2026 or /rkakl/2025
-  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara)\/(\d+)$/);
+  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara|renstra)\/([A-Za-z0-9-]+)$/);
   if (yearMatch) {
-    const [, reportType, year] = yearMatch;
+    const [, reportType, yearOrId] = yearMatch;
     const typeMap: Record<string, string> = {
       laporanbulanan: "Laporan Bulanan",
       laporankinerja: "Laporan Kinerja",
@@ -20,9 +20,13 @@ export function getTitleFromPathname(pathname: string): string {
       rkakl: "Dokumen RKAKL",
       "laporan-keuangan": "Laporan Keuangan",
       "lpj-bendahara": "LPJ Bendahara",
+      renstra: "Renstra",
     };
     const title = typeMap[reportType] || "Laporan";
-    return `${title} ${year}`;
+    // Jika Renstra, tampilkan "Folder Renstra" saja karena kita tidak tahu nama foldernya di sini tanpa fetching
+    // Tapi bisa juga menampilkan ID/Year.
+    if (reportType === "renstra") return "Folder Renstra";
+    return `${title} ${yearOrId}`;
   }
 
   // Handle dynamic SOP route like /sop/mti/2026
@@ -43,6 +47,7 @@ export function getTitleFromPathname(pathname: string): string {
     "/rkakl": "Dokumen RKAKL",
     "/laporan-keuangan": "Laporan Keuangan",
     "/lpj-bendahara": "LPJ Bendahara",
+    "/renstra": "Dokumen Renstra",
   };
 
   return pathMap[pathname] || "Surat Keterangan Kepegawaian";
@@ -65,6 +70,7 @@ export function getBackUrlFromPathname(pathname: string): string {
     "/rkakl": URL_KEUANGAN,
     "/laporan-keuangan": URL_KEUANGAN,
     "/lpj-bendahara": URL_KEUANGAN,
+    "/renstra": URL_KEUANGAN, // Asumsi renstra masuk ke keuangan atau perencanaan
   };
 
   return urlMap[pathname] || BASE_URL;
