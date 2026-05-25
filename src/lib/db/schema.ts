@@ -197,3 +197,40 @@ export const lpjBendaharaDocuments = sqliteTable("lpj_bendahara_document", {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+/**
+ * Tabel Folder Renstra (bisa kosong, dibuat secara eksplisit).
+ */
+export const renstraFolders = sqliteTable("renstra_folder", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull().unique(), // Contoh: "Renstra 2020-2024", "Renstra 2025-2029"
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+/**
+ * Tabel Dokumen Renstra.
+ */
+export const renstraDocuments = sqliteTable("renstra_document", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  folderId: text("folder_id")
+    .notNull()
+    .references(() => renstraFolders.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  year: integer("year").notNull(), // Untuk filter tahun seperti modul lain
+  description: text("description"),
+  fileUrl: text("file_url").notNull(),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size"),
+  uploadedBy: text("uploaded_by").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
