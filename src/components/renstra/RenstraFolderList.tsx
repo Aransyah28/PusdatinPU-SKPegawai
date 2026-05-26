@@ -40,7 +40,7 @@ export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListPro
           {folders.map((folder) => (
             <FolderCard
               key={folder.id}
-              href={`/renstra/${folder.id}`}
+              href={`/renstra/${folder.slug}`}
               name={folder.name}
               count={folder.count}
             />
