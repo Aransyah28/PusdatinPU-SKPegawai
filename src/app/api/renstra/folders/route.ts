@@ -4,7 +4,7 @@ import { db } from "@/lib/db/client";
 import { renstraFolders } from "@/lib/db/schema";
 import { headers } from "next/headers";
 import { getRenstraFolders } from "@/lib/renstra/renstra-queries";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { slugify } from "@/lib/utils/formatters";
 
 export async function GET() {
@@ -46,34 +46,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Periksa duplikasi berdasarkan nama
-    const existingByName = await db
-      .select({ id: renstraFolders.id })
+    // Periksa duplikasi berdasarkan nama atau slug dalam satu query
+    const existingFolder = await db
+      .select({ id: renstraFolders.id, name: renstraFolders.name, slug: renstraFolders.slug })
       .from(renstraFolders)
-      .where(eq(renstraFolders.name, trimmedName))
+      .where(or(eq(renstraFolders.name, trimmedName), eq(renstraFolders.slug, slug)))
       .limit(1);
-
-    if (existingByName.length > 0) {
-      return NextResponse.json(
-        { error: "Folder dengan nama tersebut sudah ada." },
-        { status: 409 },
-      );
-    }
-
-    // Periksa duplikasi berdasarkan slug (mencegah konflik URL)
-    const existingBySlug = await db
-      .select({ id: renstraFolders.id })
-      .from(renstraFolders)
-      .where(eq(renstraFolders.slug, slug))
-      .limit(1);
-
-    if (existingBySlug.length > 0) {
+    if (existingFolder.length > 0) {
+      const folder = existingFolder[0];
+      if (folder.name === trimmedName) {
+        return NextResponse.json(
+          { error: "Folder dengan nama tersebut sudah ada." },
+          { status: 409 },
+        );
+      }
       return NextResponse.json(
         { error: "Folder dengan nama yang mirip sudah ada (slug URL bertabrakan)." },
         { status: 409 },
       );
     }
-
     const [folder] = await db
       .insert(renstraFolders)
       .values({ name: trimmedName, slug })

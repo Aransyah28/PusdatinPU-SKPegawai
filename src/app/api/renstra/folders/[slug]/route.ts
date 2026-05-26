@@ -40,14 +40,14 @@ export async function DELETE(
       .from(renstraDocuments)
       .where(eq(renstraDocuments.folderId, folder.id));
 
-    // Hapus blob dari Vercel Blob
+
+    // Menghapus folder terlebih dahulu (dokumen akan terhapus jika di-set CASCADE)
+    await db.delete(renstraFolders).where(eq(renstraFolders.id, folder.id));
+    // Hapus blob dari Vercel Blob setelah data di database berhasil dihapus
     if (docs.length > 0) {
       const urlsToDelete = docs.map((doc) => doc.fileUrl);
       await del(urlsToDelete);
     }
-
-    // Menghapus folder (dokumen akan terhapus jika di-set CASCADE)
-    await db.delete(renstraFolders).where(eq(renstraFolders.id, folder.id));
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
