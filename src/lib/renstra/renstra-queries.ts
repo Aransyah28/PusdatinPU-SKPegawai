@@ -9,6 +9,7 @@ export async function getRenstraFolders(): Promise<RenstraFolderSummary[]> {
       .select({
         id: renstraFolders.id,
         name: renstraFolders.name,
+        slug: renstraFolders.slug,
         count: sql<number>`count(${renstraDocuments.id})`.mapWith(Number),
       })
       .from(renstraFolders)
@@ -34,6 +35,21 @@ export async function getRenstraFolderById(id: string) {
     return results[0] || null;
   } catch (error) {
     console.error("Error fetching Renstra folder by id:", error);
+    return null;
+  }
+}
+
+export async function getRenstraFolderBySlug(slug: string) {
+  try {
+    const results = await db
+      .select()
+      .from(renstraFolders)
+      .where(eq(renstraFolders.slug, slug))
+      .limit(1);
+
+    return results[0] || null;
+  } catch (error) {
+    console.error("Error fetching Renstra folder by slug:", error);
     return null;
   }
 }

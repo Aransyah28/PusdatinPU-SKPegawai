@@ -206,6 +206,7 @@ export const renstraFolders = sqliteTable("renstra_folder", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull().unique(), // Contoh: "Renstra 2020-2024", "Renstra 2025-2029"
+  slug: text("slug").notNull().unique(), // URL-safe slug, Contoh: "renstra-2020-2024"
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),

@@ -29,3 +29,18 @@ export function formatDate(date: Date | null | undefined): string {
 export function sanitizeFileName(fileName: string): string {
   return fileName.replace(/\s+/g, "-");
 }
+
+/**
+ * Ubah teks menjadi slug URL-safe.
+ * Contoh: "Renstra 2020 - 2024" → "renstra-2020-2024"
+ */
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // hapus diakritik
+    .replace(/[^a-z0-9\s-]/g, "")   // hanya huruf, angka, spasi, dan -
+    .trim()
+    .replace(/[\s_-]+/g, "-")        // spasi/underscore menjadi -
+    .replace(/^-+|-+$/g, "");        // hapus - di awal/akhir
+}

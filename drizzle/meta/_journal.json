@@ -36,6 +36,13 @@
       "when": 1779675663578,
       "tag": "0004_wealthy_ironclad",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1779762787305,
+      "tag": "0005_curvy_lake",
+      "breakpoints": true
     }
   ]
 }
