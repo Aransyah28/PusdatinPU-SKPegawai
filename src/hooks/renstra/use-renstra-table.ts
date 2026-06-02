@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { RenstraDocumentRow } from "@/lib/renstra/renstra-queries";
 import type { Document } from "@/components/documents/DocumentsSection";
 
-export function useRenstraTable(folderId: string, itemsPerPage = 10) {
+export function useRenstraTable(folderSlug: string, itemsPerPage = 10) {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("all");
@@ -16,14 +16,14 @@ export function useRenstraTable(folderId: string, itemsPerPage = 10) {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
-  
+
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
 
   const { data: documents = [], isLoading, isError } = useQuery({
-    queryKey: ["renstra-documents", folderId],
+    queryKey: ["renstra-documents", folderSlug],
     queryFn: async () => {
-      const res = await fetch(`/api/renstra/folders/${folderId}/documents`);
+      const res = await fetch(`/api/renstra/folders/${folderSlug}/documents`);
       if (!res.ok) throw new Error("Gagal mengambil data dokumen");
       return res.json() as Promise<RenstraDocumentRow[]>;
     },
@@ -41,7 +41,7 @@ export function useRenstraTable(folderId: string, itemsPerPage = 10) {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["renstra-documents", folderId] });
+      queryClient.invalidateQueries({ queryKey: ["renstra-documents", folderSlug] });
     },
   });
 

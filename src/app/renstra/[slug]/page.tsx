@@ -44,7 +44,7 @@ export default async function RenstraFolderPage({ params }: { params: Promise<{ 
           />
 
           {/* Table */}
-          <RenstraDocumentsTable folderId={folder.id} folderName={folder.name} isAdmin={isAdmin} />
+          <RenstraDocumentsTable folderSlug={folder.slug} folderName={folder.name} isAdmin={isAdmin} />
         </div>
       </main>
     </div>

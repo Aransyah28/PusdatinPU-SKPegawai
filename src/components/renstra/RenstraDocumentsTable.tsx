@@ -14,12 +14,12 @@ import { useRenstraTable } from "@/hooks/renstra/use-renstra-table";
 import { FormSelectField } from "@/components/shared/FormSelectField";
 
 interface RenstraDocumentsTableProps {
-  folderId: string;
+  folderSlug: string;
   folderName: string;
   isAdmin?: boolean;
 }
 
-export function RenstraDocumentsTable({ folderId, folderName, isAdmin = false }: RenstraDocumentsTableProps) {
+export function RenstraDocumentsTable({ folderSlug, folderName, isAdmin = false }: RenstraDocumentsTableProps) {
   const {
     searchQuery,
     selectedYear,
@@ -45,7 +45,7 @@ export function RenstraDocumentsTable({ folderId, folderName, isAdmin = false }:
     cancelDelete,
     handleDownload,
     setDeleteConfirmOpen,
-  } = useRenstraTable(folderId);
+  } = useRenstraTable(folderSlug);
 
   if (isError) {
     return <TableErrorState message="Gagal memuat data dokumen Renstra." />;
@@ -128,7 +128,7 @@ export function RenstraDocumentsTable({ folderId, folderName, isAdmin = false }:
           <RenstraUploadDialog
             open={uploadOpen}
             onOpenChange={setUploadOpen}
-            folderId={folderId}
+            folderSlug={folderSlug}
           />
 
           <DeleteConfirmDialog
