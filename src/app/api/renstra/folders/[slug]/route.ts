@@ -46,7 +46,11 @@ export async function DELETE(
     // Hapus blob dari Vercel Blob setelah data di database berhasil dihapus
     if (docs.length > 0) {
       const urlsToDelete = docs.map((doc) => doc.fileUrl);
-      await del(urlsToDelete);
+      try {
+        await del(urlsToDelete);
+      } catch (blobErr) {
+        console.error("Gagal menghapus file dari Vercel Blob (Renstra Folders):", blobErr);
+      }
     }
 
     return NextResponse.json({ success: true }, { status: 200 });

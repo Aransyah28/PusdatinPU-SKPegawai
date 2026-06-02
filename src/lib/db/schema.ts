@@ -19,10 +19,10 @@ export const users = sqliteTable("user", {
   banExpires: integer("ban_expires", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -34,10 +34,10 @@ export const sessions = sqliteTable("session", {
   token: text("token").notNull().unique(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id")
@@ -68,10 +68,10 @@ export const accounts = sqliteTable("account", {
   password: text("password"),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
   updatedAt: integer("updated_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -83,10 +83,10 @@ export const verifications = sqliteTable("verification", {
   value: text("value").notNull(),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).default(
-    sql`(unixepoch())`,
+    sql`(unixepoch() * 1000)`,
   ),
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(
-    sql`(unixepoch())`,
+    sql`(unixepoch() * 1000)`,
   ),
 });
 
@@ -109,7 +109,7 @@ export const documents = sqliteTable("document", {
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -132,7 +132,7 @@ export const sopDocuments = sqliteTable("sop_document", {
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -153,7 +153,7 @@ export const rkaklDocuments = sqliteTable("rkakl_document", {
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -174,7 +174,7 @@ export const laporanKeuanganDocuments = sqliteTable("laporan_keuangan_document",
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -195,7 +195,7 @@ export const lpjBendaharaDocuments = sqliteTable("lpj_bendahara_document", {
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -209,7 +209,7 @@ export const renstraFolders = sqliteTable("renstra_folder", {
   slug: text("slug").notNull().unique(), // URL-safe slug, Contoh: "renstra-2020-2024"
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -233,7 +233,7 @@ export const renstraDocuments = sqliteTable("renstra_document", {
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -247,7 +247,7 @@ export const lakipFolders = sqliteTable("lakip_folder", {
   slug: text("slug").notNull().unique(), // URL-safe slug, Contoh: "lakip-2024"
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
 
 /**
@@ -271,5 +271,5 @@ export const lakipDocuments = sqliteTable("lakip_document", {
   }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch() * 1000)`),
 });
