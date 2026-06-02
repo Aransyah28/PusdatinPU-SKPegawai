@@ -30,7 +30,6 @@ export function useDocumentsSection(itemsPerPage = 10) {
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("all");
-  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<SortOrder>("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -140,7 +139,6 @@ export function useDocumentsSection(itemsPerPage = 10) {
     deleteConfirmOpen, setDeleteConfirmOpen,
     searchQuery, setSearchQuery,
     selectedYear, setSelectedYear,
-    yearDropdownOpen, setYearDropdownOpen,
     sortOrder, setSortOrder,
     currentPage, setCurrentPage,
     documents, isLoading, isError,
