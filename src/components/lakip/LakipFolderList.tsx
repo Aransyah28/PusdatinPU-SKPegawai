@@ -4,21 +4,21 @@ import { useState } from "react";
 import { FolderCard } from "@/components/shared/FolderCard";
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
-import { CreateFolderDialog } from "./CreateFolderDialog";
+import { CreateLakipFolderDialog } from "./CreateLakipFolderDialog";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
-import { useRenstraFolders } from "@/hooks/renstra/use-renstra-folders";
-import type { RenstraFolderSummary } from "@/lib/renstra/renstra-types";
+import { useLakipFolders } from "@/hooks/lakip/use-lakip-folders";
+import type { LakipFolderSummary } from "@/lib/lakip/lakip-types";
 
-interface RenstraFolderListProps {
-  initialData: RenstraFolderSummary[];
+interface LakipFolderListProps {
+  initialData: LakipFolderSummary[];
   isAdmin: boolean;
 }
 
-export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListProps) {
+export function LakipFolderList({ initialData, isAdmin }: LakipFolderListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: folders, isLoading } = useRenstraFolders(initialData);
+  const { data: folders, isLoading } = useLakipFolders(initialData);
 
   return (
     <div className="space-y-6">
@@ -37,13 +37,13 @@ export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListPro
       {isLoading ? (
         <YearCardSkeleton />
       ) : folders.length === 0 ? (
-        <YearCardEmptyState message="Belum ada folder dokumen Renstra." />
+        <YearCardEmptyState message="Belum ada folder dokumen LAKIP." />
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {folders.map((folder) => (
             <FolderCard
               key={folder.id}
-              href={`/renstra/${folder.slug}`}
+              href={`/lakip/${folder.slug}`}
               name={folder.name}
               count={folder.count}
             />
@@ -51,7 +51,7 @@ export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListPro
         </div>
       )}
 
-      <CreateFolderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <CreateLakipFolderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }

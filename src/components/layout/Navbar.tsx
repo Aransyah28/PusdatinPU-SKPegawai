@@ -23,7 +23,7 @@ export function Navbar({ user }: NavbarProps) {
   const isAdmin = user?.role === "admin";
   const pageTitle = getTitleFromPathname(pathname);
   const isSubPage =
-    pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara|renstra)\/([A-Za-z0-9-]+)$/) ||
+    pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara|renstra|lakip)\/([A-Za-z0-9-]+)$/) ||
     pathname.match(/^\/sop\/([^/]+)\/(\d+)$/);
 
   const handleLogout = async () => {

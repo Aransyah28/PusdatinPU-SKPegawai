@@ -235,3 +235,41 @@ export const renstraDocuments = sqliteTable("renstra_document", {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+/**
+ * Tabel Folder LAKIP.
+ */
+export const lakipFolders = sqliteTable("lakip_folder", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull().unique(), // Contoh: "LAKIP 2024"
+  slug: text("slug").notNull().unique(), // URL-safe slug, Contoh: "lakip-2024"
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+/**
+ * Tabel Dokumen LAKIP.
+ */
+export const lakipDocuments = sqliteTable("lakip_document", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  folderId: text("folder_id")
+    .notNull()
+    .references(() => lakipFolders.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  year: integer("year").notNull(),
+  description: text("description"),
+  fileUrl: text("file_url").notNull(),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size"),
+  uploadedBy: text("uploaded_by").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
