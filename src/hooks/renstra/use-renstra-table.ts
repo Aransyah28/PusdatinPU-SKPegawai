@@ -19,7 +19,6 @@ export function useRenstraTable(folderSlug: string, itemsPerPage = 10) {
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
-  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
 
   const { data: documents = [], isLoading, isError } = useQuery({
     queryKey: ["renstra-documents", folderSlug],
@@ -167,7 +166,6 @@ export function useRenstraTable(folderSlug: string, itemsPerPage = 10) {
     deletingId,
     downloadingId,
     deleteConfirmOpen,
-    yearDropdownOpen,
     isLoading,
     isError,
     filteredDocuments,
@@ -175,7 +173,6 @@ export function useRenstraTable(folderSlug: string, itemsPerPage = 10) {
     totalPages,
     setUploadOpen,
     setCurrentPage,
-    setYearDropdownOpen,
     handleSearchChange,
     handleYearChange,
     handleSortChange,
