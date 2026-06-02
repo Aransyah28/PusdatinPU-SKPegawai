@@ -26,7 +26,7 @@ export function useRenstraUploadForm(folderSlug: string) {
 
   const uploadMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      const res = await fetch(`/api/renstra/folders/${folderSlug}/documents`, {
+      const res = await fetch(`/api/renstra/folders/${encodeURIComponent(folderSlug)}/documents`, {
         method: "POST",
         body: formData,
       });

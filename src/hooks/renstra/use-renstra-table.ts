@@ -23,7 +23,7 @@ export function useRenstraTable(folderSlug: string, itemsPerPage = 10) {
   const { data: documents = [], isLoading, isError } = useQuery({
     queryKey: ["renstra-documents", folderSlug],
     queryFn: async () => {
-      const res = await fetch(`/api/renstra/folders/${folderSlug}/documents`);
+      const res = await fetch(`/api/renstra/folders/${encodeURIComponent(folderSlug)}/documents`);
       if (!res.ok) throw new Error("Gagal mengambil data dokumen");
       return res.json() as Promise<RenstraDocumentRow[]>;
     },

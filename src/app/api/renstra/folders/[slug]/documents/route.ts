@@ -36,7 +36,7 @@ export async function POST(
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
 
-  if (!session || session.user.role !== "admin") {
+  if (!session || session.user?.role !== "admin") {
     return NextResponse.json({ error: "Akses ditolak." }, { status: 403 });
   }
 
@@ -60,12 +60,12 @@ export async function POST(
     }
 
     const formData = await req.formData();
-    const file = formData.get("file") as File | null;
+    const file = formData.get("file");
     const title = formData.get("title") as string | null;
     const year = formData.get("year") as string | null;
     const description = formData.get("description") as string | null;
 
-    if (!file || !title || !year) {
+    if (!file || typeof file === "string" || !title || !year) {
       return NextResponse.json(
         { error: "File PDF, judul, dan tahun wajib diisi." },
         { status: 400 },
