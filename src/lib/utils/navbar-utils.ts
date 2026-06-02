@@ -9,7 +9,7 @@ export function getInitial(name: string): string {
 
 export function getTitleFromPathname(pathname: string): string {
   // Handle dynamic routes like /laporanbulanan/2026 or /rkakl/2025
-  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara|renstra)\/([A-Za-z0-9-]+)$/);
+  const yearMatch = pathname.match(/^\/(laporan\w+|rkakl|laporan-keuangan|lpj-bendahara|renstra|lakip)\/([A-Za-z0-9-]+)$/);
   if (yearMatch) {
     const [, reportType, yearOrId] = yearMatch;
     const typeMap: Record<string, string> = {
@@ -21,11 +21,13 @@ export function getTitleFromPathname(pathname: string): string {
       "laporan-keuangan": "Laporan Keuangan",
       "lpj-bendahara": "LPJ Bendahara",
       renstra: "Renstra",
+      lakip: "LAKIP",
     };
     const title = typeMap[reportType] || "Laporan";
-    // Jika Renstra, tampilkan "Folder Renstra" saja karena kita tidak tahu nama foldernya di sini tanpa fetching
+    // Jika Renstra/LAKIP, tampilkan "Folder ..." saja karena kita tidak tahu nama foldernya di sini tanpa fetching
     // Tapi bisa juga menampilkan ID/Year.
     if (reportType === "renstra") return "Folder Renstra";
+    if (reportType === "lakip") return "Folder LAKIP";
     return `${title} ${yearOrId}`;
   }
 
@@ -48,6 +50,7 @@ export function getTitleFromPathname(pathname: string): string {
     "/laporan-keuangan": "Laporan Keuangan",
     "/lpj-bendahara": "LPJ Bendahara",
     "/renstra": "Dokumen Renstra",
+    "/lakip": "Dokumen LAKIP",
   };
 
   return pathMap[pathname] || "Surat Keterangan Kepegawaian";
@@ -71,6 +74,7 @@ export function getBackUrlFromPathname(pathname: string): string {
     "/laporan-keuangan": URL_KEUANGAN,
     "/lpj-bendahara": URL_KEUANGAN,
     "/renstra": URL_KEUANGAN, // Asumsi renstra masuk ke keuangan atau perencanaan
+    "/lakip": URL_KEUANGAN, // Asumsi lakip masuk ke keuangan
   };
 
   return urlMap[pathname] || BASE_URL;

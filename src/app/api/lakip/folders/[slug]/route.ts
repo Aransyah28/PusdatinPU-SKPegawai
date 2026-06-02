@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db/client";
-import { renstraFolders, renstraDocuments } from "@/lib/db/schema";
+import { lakipFolders, lakipDocuments } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { del } from "@vercel/blob";
@@ -12,7 +12,7 @@ export async function DELETE(
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
 
-  if (!session || session.user.role !== "admin") {
+  if (!session || session.user?.role !== "admin") {
     return NextResponse.json({ error: "Akses ditolak." }, { status: 403 });
   }
 
@@ -25,9 +25,9 @@ export async function DELETE(
 
     // Cari folder berdasarkan slug
     const [folder] = await db
-      .select({ id: renstraFolders.id })
-      .from(renstraFolders)
-      .where(eq(renstraFolders.slug, slug))
+      .select({ id: lakipFolders.id })
+      .from(lakipFolders)
+      .where(eq(lakipFolders.slug, slug))
       .limit(1);
 
     if (!folder) {
@@ -36,26 +36,26 @@ export async function DELETE(
 
     // Ambil dokumen di dalam folder untuk menghapus blob-nya
     const docs = await db
-      .select({ fileUrl: renstraDocuments.fileUrl })
-      .from(renstraDocuments)
-      .where(eq(renstraDocuments.folderId, folder.id));
+      .select({ fileUrl: lakipDocuments.fileUrl })
+      .from(lakipDocuments)
+      .where(eq(lakipDocuments.folderId, folder.id));
 
 
     // Menghapus folder terlebih dahulu (dokumen akan terhapus jika di-set CASCADE)
-    await db.delete(renstraFolders).where(eq(renstraFolders.id, folder.id));
+    await db.delete(lakipFolders).where(eq(lakipFolders.id, folder.id));
     // Hapus blob dari Vercel Blob setelah data di database berhasil dihapus
     if (docs.length > 0) {
       const urlsToDelete = docs.map((doc) => doc.fileUrl);
       try {
         await del(urlsToDelete);
       } catch (blobErr) {
-        console.error("Gagal menghapus file dari Vercel Blob (Renstra Folders):", blobErr);
+        console.error("Gagal menghapus file dari Vercel Blob (Lakip Folders):", blobErr);
       }
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error("[DELETE /api/renstra/folders/[slug]] Error:", err);
+    console.error("[DELETE /api/lakip/folders/[slug]] Error:", err);
     return NextResponse.json(
       { error: "Gagal menghapus folder." },
       { status: 500 },
