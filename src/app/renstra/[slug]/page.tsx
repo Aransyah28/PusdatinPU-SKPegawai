@@ -31,12 +31,12 @@ export default async function RenstraFolderPage({ params }: { params: Promise<{ 
   return (
     <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
-        <PageBreadcrumbs current={`Folder: ${folder.name}`} />
+        <PageBreadcrumbs current={`Renstra ${folder.name}`} />
 
         <div className="space-y-8 mt-4">
           {/* Header */}
           <PageHeader
-            title={`Dokumen: ${folder.name}`}
+            title={`Renstra ${folder.name}`}
             description={`Kelola dan lihat dokumen yang berada di dalam folder ${folder.name}.`}
           />
 
