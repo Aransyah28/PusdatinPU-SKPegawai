@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { DocumentsSection } from "@/components/documents/DocumentsSection";
 import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -22,10 +22,7 @@ export default async function BerandaPage() {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb */}
         <nav className="mb-6 flex items-center gap-2 text-body-sm font-medium text-body/40">
           <a
@@ -57,7 +54,6 @@ export default async function BerandaPage() {
 
         {/* Komponen tabel */}
         <DocumentsSection isAdmin={isAdmin} />
-      </main>
-    </div>
+      </AppLayout>
   );
 }

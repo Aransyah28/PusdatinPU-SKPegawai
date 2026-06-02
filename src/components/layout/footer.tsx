@@ -32,7 +32,7 @@ export default function Footer() {
           {/* Tengah */}
           <div className="text-center">
             <p className="text-[12px] md:text-[13px] font-semibold">
-              Dashboard Monitoring Barang Milik Negara (BMN)
+              Penyimpanan Dokumen Kementerian PU Secara Digital & Terintegrasi
             </p>
           </div>
 

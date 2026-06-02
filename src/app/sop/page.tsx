@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { Suspense } from "react";
@@ -35,10 +35,7 @@ export default async function SOPPage() {
   const session = await sessionPromise;
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
         <PageBreadcrumbs current="SOP" />
 
@@ -69,8 +66,7 @@ export default async function SOPPage() {
             ))}
           </Tabs>
         </div>
-      </main>
-    </div>
+      </AppLayout>
   );
 }
 

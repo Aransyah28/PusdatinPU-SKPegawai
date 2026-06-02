@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumentsTable";
@@ -36,10 +36,7 @@ export default async function LaporanMingguanYearPage({
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         <div className="mb-6 flex items-center gap-3">
           <nav className="flex items-center gap-2 text-body-sm font-medium text-body/40">
             <a
@@ -72,7 +69,6 @@ export default async function LaporanMingguanYearPage({
           reportType="mingguan"
           year={yearNumber}
         />
-      </main>
-    </div>
+      </AppLayout>
   );
 }

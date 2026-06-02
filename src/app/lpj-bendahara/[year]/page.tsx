@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { LpjBendaharaDocumentsTable } from "@/components/lpj-bendahara/LpjBendaharaDocumentsTable";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -34,10 +34,7 @@ export default async function LpjBendaharaYearPage({ params }: PageProps) {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
         <div className="mb-6 flex items-center gap-3">
           <nav className="flex items-center gap-2 text-body-sm font-medium text-body/40">
@@ -64,7 +61,6 @@ export default async function LpjBendaharaYearPage({ params }: PageProps) {
         </div>
 
         <LpjBendaharaDocumentsTable year={year} isAdmin={isAdmin} />
-      </main>
-    </div>
+      </AppLayout>
   );
 }

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { getRenstraFolders } from "@/lib/renstra/renstra-queries";
@@ -28,10 +28,7 @@ export default async function RenstraPage() {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
         <PageBreadcrumbs current="Renstra" />
 
@@ -45,7 +42,6 @@ export default async function RenstraPage() {
           {/* Folder List */}
           <RenstraFolderList initialData={initialFolders} isAdmin={isAdmin} />
         </div>
-      </main>
-    </div>
+      </AppLayout>
   )
 }
