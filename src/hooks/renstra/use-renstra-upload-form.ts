@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useRenstraUploadForm(folderId: string) {
+export function useRenstraUploadForm(folderSlug: string) {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
@@ -26,9 +26,7 @@ export function useRenstraUploadForm(folderId: string) {
 
   const uploadMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      formData.append("folderId", folderId);
-      
-      const res = await fetch("/api/renstra/documents", {
+      const res = await fetch(`/api/renstra/folders/${encodeURIComponent(folderSlug)}/documents`, {
         method: "POST",
         body: formData,
       });
@@ -41,7 +39,7 @@ export function useRenstraUploadForm(folderId: string) {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["renstra-documents", folderId] });
+      queryClient.invalidateQueries({ queryKey: ["renstra-documents", folderSlug] });
     },
   });
 

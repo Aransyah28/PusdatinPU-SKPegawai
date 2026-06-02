@@ -7,19 +7,18 @@ import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
-import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
+import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { RenstraUploadDialog } from "./RenstraUploadDialog";
 import { useRenstraTable } from "@/hooks/renstra/use-renstra-table";
-import { FormSelectField } from "@/components/shared/FormSelectField";
 
 interface RenstraDocumentsTableProps {
-  folderId: string;
+  folderSlug: string;
   folderName: string;
   isAdmin?: boolean;
 }
 
-export function RenstraDocumentsTable({ folderId, folderName, isAdmin = false }: RenstraDocumentsTableProps) {
+export function RenstraDocumentsTable({ folderSlug, folderName, isAdmin = false }: RenstraDocumentsTableProps) {
   const {
     searchQuery,
     selectedYear,
@@ -45,47 +44,33 @@ export function RenstraDocumentsTable({ folderId, folderName, isAdmin = false }:
     cancelDelete,
     handleDownload,
     setDeleteConfirmOpen,
-  } = useRenstraTable(folderId);
+  } = useRenstraTable(folderSlug);
 
   if (isError) {
     return <TableErrorState message="Gagal memuat data dokumen Renstra." />;
   }
 
-  const yearOptions = [
-    { value: "all", label: "Semua Tahun" },
-    ...availableYears.map(y => ({ value: String(y), label: String(y) }))
-  ];
-
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex-1 min-w-0">
-          <DocumentsToolbar
-            searchQuery={searchQuery}
-            onSearchChange={handleSearchChange}
-            searchPlaceholder="Cari judul dokumen..."
-            sortOrder={sortOrder}
-            onSortChange={handleSortChange}
-            actionButton={
-              isAdmin ? (
-                <DocumentsAddButton
-                  onClick={() => setUploadOpen(true)}
-                  label="Tambah Dokumen"
-                />
-              ) : undefined
-            }
-          />
-        </div>
-        <div className="w-full sm:w-48">
-          <FormSelectField
-            label="Filter Tahun"
-            value={selectedYear}
-            onChange={(e) => handleYearChange(e.target.value)}
-            options={yearOptions}
-            placeholder="Filter Tahun"
-          />
-        </div>
-      </div>
+      <DocumentsToolbar
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        searchPlaceholder="Cari judul dokumen..."
+        sortOrder={sortOrder}
+        onSortChange={handleSortChange}
+        showYearFilter={true}
+        selectedYear={selectedYear}
+        availableYears={availableYears}
+        onYearChange={handleYearChange}
+        actionButton={
+          isAdmin ? (
+            <DocumentsAddButton
+              onClick={() => setUploadOpen(true)}
+              label="Tambah Dokumen"
+            />
+          ) : undefined
+        }
+      />
 
       {isLoading ? (
         <TableSkeleton />
@@ -128,7 +113,7 @@ export function RenstraDocumentsTable({ folderId, folderName, isAdmin = false }:
           <RenstraUploadDialog
             open={uploadOpen}
             onOpenChange={setUploadOpen}
-            folderId={folderId}
+            folderSlug={folderSlug}
           />
 
           <DeleteConfirmDialog

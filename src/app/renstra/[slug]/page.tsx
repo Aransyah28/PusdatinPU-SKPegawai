@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { getRenstraFolderBySlug } from "@/lib/renstra/renstra-queries";
@@ -29,24 +29,20 @@ export default async function RenstraFolderPage({ params }: { params: Promise<{ 
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
-        <PageBreadcrumbs current={`Folder: ${folder.name}`} />
+        <PageBreadcrumbs current={`Renstra ${folder.name}`} />
 
         <div className="space-y-8 mt-4">
           {/* Header */}
           <PageHeader
-            title={`Dokumen: ${folder.name}`}
+            title={`Renstra ${folder.name}`}
             description={`Kelola dan lihat dokumen yang berada di dalam folder ${folder.name}.`}
           />
 
           {/* Table */}
-          <RenstraDocumentsTable folderId={folder.id} folderName={folder.name} isAdmin={isAdmin} />
+          <RenstraDocumentsTable folderSlug={folder.slug} folderName={folder.name} isAdmin={isAdmin} />
         </div>
-      </main>
-    </div>
+      </AppLayout>
   );
 }

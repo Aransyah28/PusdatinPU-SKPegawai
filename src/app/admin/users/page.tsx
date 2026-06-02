@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { users } from "@/lib/db/schema";
 import { AdminUsersTable } from "@/components/admin/AdminUsersTable";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 export const metadata = {
   title: "Kelola Pengguna - Pusdatin PU",
@@ -30,18 +31,12 @@ export default async function AdminUsersPage() {
     .orderBy(users.createdAt);
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card px-4 py-3 shadow-sm">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <h1 className="text-title-lg text-heading">Kelola Pengguna</h1>
-          <a href="/" className="text-body-sm text-primary hover:underline">
-            ← Kembali
-          </a>
-        </div>
-      </header>
-      <main className="mx-auto max-w-5xl px-4 py-8">
-        <AdminUsersTable users={allUsers} currentUserId={session.user.id} />
-      </main>
-    </div>
+    <AppLayout user={session.user}>
+      <div className="mb-6">
+        <h1 className="text-title-lg text-heading">Kelola Pengguna</h1>
+        <p className="text-body-sm text-body/60">Manajemen role dan akun pengguna.</p>
+      </div>
+      <AdminUsersTable users={allUsers} currentUserId={session.user.id} />
+    </AppLayout>
   );
 }

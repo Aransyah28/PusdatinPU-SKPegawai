@@ -11,10 +11,10 @@ import { MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
 interface RenstraUploadDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  folderId: string;
+  folderSlug: string;
 }
 
-export function RenstraUploadDialog({ open, onOpenChange, folderId }: RenstraUploadDialogProps) {
+export function RenstraUploadDialog({ open, onOpenChange, folderSlug }: RenstraUploadDialogProps) {
   const {
     title, setTitle,
     year, setYear,
@@ -22,7 +22,7 @@ export function RenstraUploadDialog({ open, onOpenChange, folderId }: RenstraUpl
     file, handleFileChange,
     resetForm,
     uploadMutation
-  } = useRenstraUploadForm(folderId);
+  } = useRenstraUploadForm(folderSlug);
 
   useEffect(() => {
     if (!open) {
@@ -89,7 +89,7 @@ export function RenstraUploadDialog({ open, onOpenChange, folderId }: RenstraUpl
         required
         value={year}
         onChange={(event) => setYear(event.target.value)}
-        placeholder={file ? "Ketik tahun" : "Ketik tahun"}
+        placeholder="Contoh: 2024"
       />
 
       <FormTextField

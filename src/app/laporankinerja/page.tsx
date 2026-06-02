@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { ReportLandingSection } from "@/components/reports/ReportLandingSection";
 import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 
@@ -23,10 +23,7 @@ export default async function LaporanKinerjaPage() {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         <PageBreadcrumbs current="Laporan Kinerja" />
 
         <ReportLandingSection
@@ -36,7 +33,6 @@ export default async function LaporanKinerjaPage() {
           baseUrl="/laporankinerja"
           isAdmin={isAdmin}
         />
-      </main>
-    </div>
+      </AppLayout>
   );
 }

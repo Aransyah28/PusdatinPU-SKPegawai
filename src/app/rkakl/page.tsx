@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { Navbar } from "@/components/layout/Navbar";
+import { AppLayout } from "@/components/layout/AppLayout";
 import Link from "next/link"
 import { Suspense } from "react";
 import { getAvailableRkaklYears } from "@/lib/rkakl/rkakl-queries";
@@ -25,10 +25,7 @@ export default async function RKAKLPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background pt-20">
-      <Navbar user={session?.user ?? null} />
-
-      <main className="section-padding mx-auto max-w-[1600px]">
+    <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
         <PageBreadcrumbs current="RKAKL" />
 
@@ -44,8 +41,7 @@ export default async function RKAKLPage() {
             <RkaklYearList />
           </Suspense>
         </div>
-      </main>
-    </div>
+      </AppLayout>
   )
 }
 
