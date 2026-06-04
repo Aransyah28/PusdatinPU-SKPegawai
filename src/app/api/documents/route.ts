@@ -4,15 +4,27 @@ import { db } from "@/lib/db/client";
 import { documents, users } from "@/lib/db/schema";
 import { uploadSkPegawaiDocument } from "@/lib/documents/document-services";
 import { headers } from "next/headers";
-import { desc, eq, like } from "drizzle-orm";
+import { desc, eq, like, and } from "drizzle-orm";
 
 /**
  * GET /api/documents
  * Mengambil semua dokumen SK Kepegawaian beserta nama pengupload.
  * Dapat diakses oleh semua user (publik).
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const yearParam = searchParams.get("year");
+
+    const conditions = [like(documents.fileUrl, "%/SKPegawai/%")];
+    
+    if (yearParam) {
+      const yearNumber = Number.parseInt(yearParam, 10);
+      if (!Number.isNaN(yearNumber)) {
+        conditions.push(eq(documents.year, yearNumber));
+      }
+    }
+
     const docs = await db
       .select({
         id: documents.id,
@@ -28,7 +40,7 @@ export async function GET() {
       })
       .from(documents)
       .leftJoin(users, eq(documents.uploadedBy, users.id))
-      .where(like(documents.fileUrl, "%/SKPegawai/%"))
+      .where(and(...conditions))
       .orderBy(desc(documents.year), desc(documents.createdAt));
 
     return NextResponse.json(docs);

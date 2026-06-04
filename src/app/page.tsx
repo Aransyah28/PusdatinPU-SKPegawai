@@ -1,9 +1,12 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { DocumentsSection } from "@/components/documents/DocumentsSection";
-import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
+import { Suspense } from "react";
+import { getAvailableSKPegawaiYears } from "@/lib/documents/document-queries";
+import { YearCard } from "@/components/documents/YearCard";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
+import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
 
 export const metadata = {
   title: "SK Kepegawaian - Pusdatin PU",
@@ -13,12 +16,17 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function BerandaPage() {
-  let session = null;
-  try {
-    session = await auth.api.getSession({ headers: await headers() });
-  } catch (error) {
+  const headersList = await headers();
+  
+  // Initiate fetching in parallel to avoid waterfall
+  const sessionPromise = auth.api.getSession({ headers: headersList }).catch((error) => {
     console.error("Failed to fetch session:", error);
-  }
+    return null;
+  });
+  
+  const availableYearsPromise = getAvailableSKPegawaiYears();
+
+  const session = await sessionPromise;
   const isAdmin = session?.user?.role === "admin";
 
   return (
@@ -48,12 +56,35 @@ export default async function BerandaPage() {
             title="Surat Keterangan Kepegawaian"
             description={isAdmin
               ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU"
-              : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU melalui portal satu pintu."}
+              : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU berdasarkan tahun."}
           />
         </div>
 
-        {/* Komponen tabel */}
-        <DocumentsSection isAdmin={isAdmin} />
+        {/* Konten Card Tahun */}
+        <Suspense fallback={<YearCardSkeleton />}>
+          <SKPegawaiYearList promise={availableYearsPromise} />
+        </Suspense>
       </AppLayout>
+  );
+}
+
+async function SKPegawaiYearList({ promise }: { promise: Promise<Array<{ year: number; count: number }>> }) {
+  const availableYearsData = await promise;
+
+  if (availableYearsData.length === 0) {
+    return <YearCardEmptyState message="Belum ada dokumen SK Kepegawaian yang tersedia." />;
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
+      {availableYearsData.map((item) => (
+        <YearCard 
+          key={item.year}
+          href={`/sk-pegawai/${item.year}`}
+          year={item.year}
+          count={item.count}
+        />
+      ))}
+    </div>
   );
 }
