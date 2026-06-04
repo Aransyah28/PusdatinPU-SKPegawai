@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { SortOrder } from "@/components/shared/DocumentsToolbar";
@@ -21,22 +22,24 @@ async function forceDownload(fileUrl: string, fileName: string) {
   }
 }
 
-export function useDocumentsSection(itemsPerPage = 10) {
+export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState<string>("all");
+  const [selectedYear, setSelectedYear] = useState<string>(initialYear || "all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: documents = [], isLoading, isError } = useQuery<Document[]>({
-    queryKey: ["documents"],
+    queryKey: ["documents", initialYear],
     queryFn: async () => {
-      const res = await fetch("/api/documents");
+      const url = initialYear ? `/api/documents?year=${initialYear}` : "/api/documents";
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Gagal memuat data.");
       return res.json() as Promise<Document[]>;
     },
@@ -87,6 +90,7 @@ export function useDocumentsSection(itemsPerPage = 10) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
+      router.refresh();
       toast.success("Dokumen berhasil dihapus.");
       setDeletingId(null);
       setDeleteConfirmOpen(false);
@@ -130,6 +134,7 @@ export function useDocumentsSection(itemsPerPage = 10) {
 
   const handleUploadSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["documents"] });
+    router.refresh();
   };
 
   return {

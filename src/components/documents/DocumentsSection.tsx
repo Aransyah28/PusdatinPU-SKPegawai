@@ -26,9 +26,10 @@ export interface Document {
 
 interface DocumentsSectionProps {
   isAdmin: boolean;
+  year?: string;
 }
 
-export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
+export function DocumentsSection({ isAdmin, year }: DocumentsSectionProps) {
   const {
     uploadOpen, setUploadOpen,
     deleteConfirmOpen, setDeleteConfirmOpen,
@@ -50,7 +51,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
     handleSearchChange,
     handleUploadSuccess,
     itemsPerPage
-  } = useDocumentsSection();
+  } = useDocumentsSection(10, year);
 
   if (isError) {
     return <TableErrorState message="Gagal memuat data. Silakan muat ulang halaman." />;
@@ -64,7 +65,7 @@ export function DocumentsSection({ isAdmin }: DocumentsSectionProps) {
         searchPlaceholder="Cari nama SK..."
         sortOrder={sortOrder as SortOrder}
         onSortChange={(order) => setSortOrder(order as SortOrder)}
-        showYearFilter={true}
+        showYearFilter={!year}
         selectedYear={selectedYear}
         availableYears={uniqueYears}
         onYearChange={(year) => {
