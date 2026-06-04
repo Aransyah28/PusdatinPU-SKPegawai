@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { SortOrder } from "@/components/shared/DocumentsToolbar";
@@ -23,6 +24,7 @@ async function forceDownload(fileUrl: string, fileName: string) {
 
 export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
@@ -88,6 +90,7 @@ export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
+      router.refresh();
       toast.success("Dokumen berhasil dihapus.");
       setDeletingId(null);
       setDeleteConfirmOpen(false);
@@ -131,6 +134,7 @@ export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
 
   const handleUploadSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["documents"] });
+    router.refresh();
   };
 
   return {
