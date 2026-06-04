@@ -1,6 +1,6 @@
 import { db } from "@/lib/db/client";
 import { documents } from "@/lib/db/schema";
-import { sql, like } from "drizzle-orm";
+import { sql, like, desc } from "drizzle-orm";
 
 export interface SKPegawaiYearSummary {
   year: number;
@@ -23,7 +23,7 @@ export async function getAvailableSKPegawaiYears(): Promise<SKPegawaiYearSummary
       // dari route.ts sebelumnya filter SK Pegawai adalah: like(documents.fileUrl, "%/SKPegawai/%"))
       .where(like(documents.fileUrl, "%/SKPegawai/%"))
       .groupBy(documents.year)
-      .orderBy(sql`${documents.year} DESC`);
+      .orderBy(desc(documents.year));
 
     return results;
   } catch (error) {

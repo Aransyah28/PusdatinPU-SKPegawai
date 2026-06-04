@@ -28,9 +28,10 @@ export default async function SKPegawaiYearPage({ params }: PageProps) {
     notFound();
   }
 
-  const session = await headers()
-    .then((h) => auth.api.getSession({ headers: h }))
-    .catch(() => null);
+  const session = await auth.api.getSession({ headers: await headers() }).catch((error) => {
+    console.error("Failed to fetch session:", error);
+    return null;
+  });
 
   const isAdmin = session?.user?.role === "admin";
 
