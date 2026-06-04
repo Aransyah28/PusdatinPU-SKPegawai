@@ -16,11 +16,11 @@ export const users = sqliteTable("user", {
   // Fields wajib dari better-auth admin plugin
   banned: integer("banned", { mode: "boolean" }).default(false),
   banReason: text("ban_reason"),
-  banExpires: integer("ban_expires", { mode: "timestamp" }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -30,12 +30,12 @@ export const users = sqliteTable("user", {
  */
 export const sessions = sqliteTable("session", {
   id: text("id").primaryKey(),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
   token: text("token").notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
   ipAddress: text("ip_address"),
@@ -66,10 +66,10 @@ export const accounts = sqliteTable("account", {
   }),
   scope: text("scope"),
   password: text("password"),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -81,11 +81,11 @@ export const verifications = sqliteTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(
+  expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).default(
     sql`(unixepoch() * 1000)`,
   ),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).default(
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).default(
     sql`(unixepoch() * 1000)`,
   ),
 });
@@ -107,7 +107,7 @@ export const documents = sqliteTable("document", {
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -130,7 +130,7 @@ export const sopDocuments = sqliteTable("sop_document", {
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -151,7 +151,7 @@ export const rkaklDocuments = sqliteTable("rkakl_document", {
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -172,7 +172,7 @@ export const laporanKeuanganDocuments = sqliteTable("laporan_keuangan_document",
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -193,7 +193,7 @@ export const lpjBendaharaDocuments = sqliteTable("lpj_bendahara_document", {
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -207,7 +207,7 @@ export const renstraFolders = sqliteTable("renstra_folder", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull().unique(), // Contoh: "Renstra 2020-2024", "Renstra 2025-2029"
   slug: text("slug").notNull().unique(), // URL-safe slug, Contoh: "renstra-2020-2024"
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -231,7 +231,7 @@ export const renstraDocuments = sqliteTable("renstra_document", {
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -245,7 +245,7 @@ export const lakipFolders = sqliteTable("lakip_folder", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull().unique(), // Contoh: "LAKIP 2024"
   slug: text("slug").notNull().unique(), // URL-safe slug, Contoh: "lakip-2024"
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
@@ -269,7 +269,7 @@ export const lakipDocuments = sqliteTable("lakip_document", {
   uploadedBy: text("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 });
