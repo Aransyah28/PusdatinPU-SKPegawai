@@ -10,6 +10,7 @@ import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
+import { SopUploadAction } from "@/components/sops/SopUploadAction";
 
 const BIDANG_LIST = [
   { id: "mti", nama: "MTI" },
@@ -33,6 +34,7 @@ export default async function SOPPage() {
   });
 
   const session = await sessionPromise;
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <AppLayout user={session?.user ?? null}>
@@ -44,7 +46,9 @@ export default async function SOPPage() {
           <PageHeader 
             title="Standar Operasional Prosedur"
             description="Kelola dan lihat dokumen SOP Pusdatin PU berdasarkan bidang dan tahun."
+            action={isAdmin ? <SopUploadAction defaultBidang={"MTI"} /> : undefined}
           />
+
 
           {/* Navigasi Tabs */}
           <Tabs defaultValue={BIDANG_LIST[0].id} className="w-full">

@@ -3,13 +3,11 @@
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { DocumentsToolbar } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
-import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
-import { RkaklUploadDialog } from "./RkaklUploadDialog";
 import { useRkaklTable } from "@/hooks/rkakl/use-rkakl-table";
 
 interface RkaklDocumentsTableProps {
@@ -22,7 +20,6 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
     searchQuery,
     sortOrder,
     currentPage,
-    uploadOpen,
     deletingId,
     downloadingId,
     deleteConfirmOpen,
@@ -31,7 +28,6 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
     filteredDocuments,
     genericDocs,
     totalPages,
-    setUploadOpen,
     setCurrentPage,
     handleSearchChange,
     handleSortChange,
@@ -54,14 +50,6 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
         searchPlaceholder="Cari judul dokumen RKAKL..."
         sortOrder={sortOrder}
         onSortChange={handleSortChange}
-        actionButton={
-          isAdmin ? (
-            <DocumentsAddButton
-              onClick={() => setUploadOpen(true)}
-              label="Tambah Dokumen"
-            />
-          ) : undefined
-        }
       />
 
       {isLoading ? (
@@ -102,12 +90,6 @@ export function RkaklDocumentsTable({ year, isAdmin = false }: RkaklDocumentsTab
 
       {isAdmin && (
         <>
-          <RkaklUploadDialog
-            open={uploadOpen}
-            onOpenChange={setUploadOpen}
-            defaultYear={year}
-          />
-
           <DeleteConfirmDialog
             open={deleteConfirmOpen}
             onOpenChange={setDeleteConfirmOpen}

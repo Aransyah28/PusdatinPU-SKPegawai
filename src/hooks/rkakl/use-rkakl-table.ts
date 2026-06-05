@@ -10,7 +10,6 @@ export function useRkaklTable(year: string, itemsPerPage = 10) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   
@@ -120,7 +119,6 @@ export function useRkaklTable(year: string, itemsPerPage = 10) {
     searchQuery,
     sortOrder,
     currentPage,
-    uploadOpen,
     deletingId,
     downloadingId,
     deleteConfirmOpen,
@@ -129,7 +127,6 @@ export function useRkaklTable(year: string, itemsPerPage = 10) {
     filteredDocuments,
     genericDocs,
     totalPages,
-    setUploadOpen,
     setCurrentPage,
     handleSearchChange,
     handleSortChange,

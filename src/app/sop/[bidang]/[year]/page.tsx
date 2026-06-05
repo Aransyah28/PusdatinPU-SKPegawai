@@ -4,7 +4,9 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SopDocumentsTable } from "@/components/sops/SopDocumentsTable";
-import { isSopBidang } from "@/lib/sops/sop-types";
+import { isSopBidang, type SopBidang } from "@/lib/sops/sop-types";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { SopUploadAction } from "@/components/sops/SopUploadAction";
 
 export const dynamic = "force-dynamic";
 
@@ -61,10 +63,11 @@ export default async function SopYearPage({
         </div>
 
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg mb-1">SOP {bidangName} {year}</h1>
-          <p className="text-title-md mt-2 max-w-2xl text-body/80">
-            Berikut adalah daftar Standar Operasional Prosedur (SOP) Bidang {bidangName} Pusdatin PU untuk tahun {year}.
-          </p>
+          <PageHeader
+            title={`SOP ${bidangName} ${year}`}
+            description={`Berikut adalah daftar Standar Operasional Prosedur (SOP) Bidang ${bidangName} Pusdatin PU untuk tahun ${year}.`}
+            action={isAdmin ? <SopUploadAction defaultBidang={upperBidang as SopBidang} defaultYear={yearNumber} /> : undefined}
+          />
         </div>
 
         <SopDocumentsTable 

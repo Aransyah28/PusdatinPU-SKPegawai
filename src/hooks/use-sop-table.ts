@@ -12,7 +12,6 @@ export function useSopTable(bidang: SopBidang, year: number, itemsPerPage = 10) 
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   
@@ -115,17 +114,11 @@ export function useSopTable(bidang: SopBidang, year: number, itemsPerPage = 10) 
     setCurrentPage(1);
   };
 
-  const handleUploadSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["sops", bidang, year] });
-  };
-
   return {
     searchQuery,
     handleSearchChange,
     currentPage,
     setCurrentPage,
-    uploadOpen,
-    setUploadOpen,
     deletingId,
     downloadingId,
     filteredDocuments,
@@ -139,7 +132,6 @@ export function useSopTable(bidang: SopBidang, year: number, itemsPerPage = 10) 
     deleteConfirmOpen,
     setDeleteConfirmOpen,
     handleDownload,
-    handleUploadSuccess,
     itemsPerPage,
     sortOrder,
     setSortOrder

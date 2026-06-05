@@ -1,11 +1,10 @@
 "use client";
 
-import { UploadDialog } from "./UploadDialog";
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
-import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
+import { SKPegawaiUploadAction } from "@/components/documents/SKPegawaiUploadAction";
 import { TableErrorState } from "@/components/shared/TableErrorState";
 import { DocumentsDesktopList } from "./DocumentsDesktopList";
 import { DocumentsMobileList } from "./DocumentsMobileList";
@@ -31,7 +30,6 @@ interface DocumentsSectionProps {
 
 export function DocumentsSection({ isAdmin, year }: DocumentsSectionProps) {
   const {
-    uploadOpen, setUploadOpen,
     deleteConfirmOpen, setDeleteConfirmOpen,
     searchQuery,
     selectedYear, setSelectedYear,
@@ -49,7 +47,6 @@ export function DocumentsSection({ isAdmin, year }: DocumentsSectionProps) {
     cancelDelete,
     handleDownload,
     handleSearchChange,
-    handleUploadSuccess,
     itemsPerPage
   } = useDocumentsSection(10, year);
 
@@ -72,14 +69,7 @@ export function DocumentsSection({ isAdmin, year }: DocumentsSectionProps) {
           setSelectedYear(year);
           setCurrentPage(1);
         }}
-        actionButton={
-          isAdmin ? (
-            <DocumentsAddButton
-              onClick={() => setUploadOpen(true)}
-              label="Tambah SK"
-            />
-          ) : undefined
-        }
+        actionButton={isAdmin ? <SKPegawaiUploadAction /> : undefined}
       />
 
       {/* Content */}
@@ -122,12 +112,6 @@ export function DocumentsSection({ isAdmin, year }: DocumentsSectionProps) {
 
       {isAdmin && (
         <>
-          <UploadDialog
-            open={uploadOpen}
-            onOpenChange={setUploadOpen}
-            onSuccess={handleUploadSuccess}
-          />
-
           <DeleteConfirmDialog
             open={deleteConfirmOpen}
             onOpenChange={setDeleteConfirmOpen}

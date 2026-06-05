@@ -3,13 +3,11 @@
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { DocumentsToolbar } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
-import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
-import { LpjBendaharaUploadDialog } from "./LpjBendaharaUploadDialog";
 import { useLpjBendaharaTable } from "@/hooks/lpj-bendahara/use-lpj-bendahara-table";
 
 interface LpjBendaharaDocumentsTableProps {
@@ -22,7 +20,6 @@ export function LpjBendaharaDocumentsTable({ year, isAdmin = false }: LpjBendaha
     searchQuery,
     sortOrder,
     currentPage,
-    uploadOpen,
     deletingId,
     downloadingId,
     deleteConfirmOpen,
@@ -31,7 +28,6 @@ export function LpjBendaharaDocumentsTable({ year, isAdmin = false }: LpjBendaha
     filteredDocuments,
     genericDocs,
     totalPages,
-    setUploadOpen,
     setCurrentPage,
     handleSearchChange,
     handleSortChange,
@@ -54,14 +50,6 @@ export function LpjBendaharaDocumentsTable({ year, isAdmin = false }: LpjBendaha
         searchPlaceholder="Cari judul dokumen..."
         sortOrder={sortOrder}
         onSortChange={handleSortChange}
-        actionButton={
-          isAdmin ? (
-            <DocumentsAddButton
-              onClick={() => setUploadOpen(true)}
-              label="Tambah Dokumen"
-            />
-          ) : undefined
-        }
       />
 
       {isLoading ? (
@@ -102,12 +90,6 @@ export function LpjBendaharaDocumentsTable({ year, isAdmin = false }: LpjBendaha
 
       {isAdmin && (
         <>
-          <LpjBendaharaUploadDialog
-            open={uploadOpen}
-            onOpenChange={setUploadOpen}
-            defaultYear={year}
-          />
-
           <DeleteConfirmDialog
             open={deleteConfirmOpen}
             onOpenChange={setDeleteConfirmOpen}

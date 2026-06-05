@@ -9,6 +9,7 @@ import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
+import { LpjBendaharaUploadAction } from "@/components/lpj-bendahara/LpjBendaharaUploadAction";
 
 export const metadata = {
   title: "LPJ Bendahara - Pusdatin PU",
@@ -29,6 +30,7 @@ export default async function LpjBendaharaPage() {
   const availableYearsPromise = getAvailableLpjBendaharaYears();
 
   const session = await sessionPromise;
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <AppLayout user={session?.user ?? null}>
@@ -40,6 +42,7 @@ export default async function LpjBendaharaPage() {
           <PageHeader 
             title="Dokumen LPJ Bendahara"
             description="Kelola dan lihat dokumen LPJ Bendahara Pusdatin PU berdasarkan tahun."
+            action={isAdmin ? <LpjBendaharaUploadAction /> : undefined}
           />
 
           {/* Konten Card Tahun */}

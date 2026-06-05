@@ -13,7 +13,6 @@ export function useLakipTable(folderSlug: string, itemsPerPage = 10) {
   const [selectedYear, setSelectedYear] = useState<string>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("date-desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
@@ -162,7 +161,6 @@ export function useLakipTable(folderSlug: string, itemsPerPage = 10) {
     availableYears,
     sortOrder,
     currentPage,
-    uploadOpen,
     deletingId,
     downloadingId,
     deleteConfirmOpen,
@@ -171,7 +169,6 @@ export function useLakipTable(folderSlug: string, itemsPerPage = 10) {
     filteredDocuments,
     genericDocs,
     totalPages,
-    setUploadOpen,
     setCurrentPage,
     handleSearchChange,
     handleYearChange,

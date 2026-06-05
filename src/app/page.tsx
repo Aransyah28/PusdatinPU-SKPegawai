@@ -7,6 +7,7 @@ import { YearCard } from "@/components/documents/YearCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
+import { SKPegawaiUploadAction } from "@/components/documents/SKPegawaiUploadAction";
 
 export const metadata = {
   title: "SK Kepegawaian - Pusdatin PU",
@@ -41,7 +42,7 @@ export default async function BerandaPage() {
           </a>
           <span className="text-slate-300">&gt;</span>
           <a
-            href="https://htupusdatin.vercel.app/kepegawaian"
+            href="https://htupusdatin.vercel.app/surat-keputusan"
             className="transition-colors hover:text-primary"
           >
             Kepegawaian
@@ -57,10 +58,12 @@ export default async function BerandaPage() {
             description={isAdmin
               ? "Dashboard pengelola Surat Keterangan Kepegawaian Pusdatin PU"
               : "Akses dan unduh seluruh Surat Keterangan Kepegawaian resmi Pusdatin PU berdasarkan tahun."}
+            action={isAdmin ? <SKPegawaiUploadAction /> : undefined}
           />
         </div>
 
         {/* Konten Card Tahun */}
+
         <Suspense fallback={<YearCardSkeleton />}>
           <SKPegawaiYearList promise={availableYearsPromise} />
         </Suspense>
