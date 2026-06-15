@@ -25,7 +25,6 @@ async function forceDownload(fileUrl: string, fileName: string) {
 export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [uploadOpen, setUploadOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -132,13 +131,7 @@ export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
     setDownloadingId(null);
   };
 
-  const handleUploadSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["documents"] });
-    router.refresh();
-  };
-
   return {
-    uploadOpen, setUploadOpen,
     deletingId, setDeletingId,
     downloadingId, setDownloadingId,
     deleteConfirmOpen, setDeleteConfirmOpen,
@@ -156,7 +149,6 @@ export function useDocumentsSection(itemsPerPage = 10, initialYear?: string) {
     cancelDelete,
     handleDownload,
     handleSearchChange,
-    handleUploadSuccess,
     itemsPerPage
   };
 }

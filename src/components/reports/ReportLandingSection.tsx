@@ -22,12 +22,12 @@ export function ReportLandingSection({
 }: ReportLandingSectionProps) {
   return (
     <>
-      <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between lg:mb-12">
-        <div className="flex-1">
-          <PageHeader title={title} description={description} />
-        </div>
-
-        {isAdmin && <ReportUploadAction defaultReportType={reportType} />}
+      <div className="mb-10 lg:mb-12">
+        <PageHeader 
+          title={title} 
+          description={description} 
+          action={isAdmin ? <ReportUploadAction defaultReportType={reportType} /> : undefined}
+        />
       </div>
 
       <div className="mb-8">

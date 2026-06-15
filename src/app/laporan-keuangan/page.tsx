@@ -9,6 +9,7 @@ import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
+import { LaporanKeuanganUploadAction } from "@/components/laporan-keuangan/LaporanKeuanganUploadAction";
 
 export const metadata = {
   title: "Laporan Keuangan - Pusdatin PU",
@@ -29,6 +30,7 @@ export default async function LaporanKeuanganPage() {
   const availableYearsPromise = getAvailableLaporanKeuanganYears();
 
   const session = await sessionPromise;
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <AppLayout user={session?.user ?? null}>
@@ -40,6 +42,7 @@ export default async function LaporanKeuanganPage() {
           <PageHeader 
             title="Dokumen Laporan Keuangan"
             description="Kelola dan lihat dokumen Laporan Keuangan Pusdatin PU berdasarkan tahun."
+            action={isAdmin ? <LaporanKeuanganUploadAction /> : undefined}
           />
 
           {/* Konten Card Tahun */}

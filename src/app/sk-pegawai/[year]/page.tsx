@@ -48,7 +48,7 @@ export default async function SKPegawaiYearPage({ params }: PageProps) {
             </a>
             <span className="text-slate-300">&gt;</span>
             <a
-              href="https://htupusdatin.vercel.app/kepegawaian"
+              href="https://htupusdatin.vercel.app/surat-keputusan"
               className="transition-colors hover:text-primary"
             >
               Kepegawaian
@@ -68,7 +68,7 @@ export default async function SKPegawaiYearPage({ params }: PageProps) {
             description={isAdmin
               ? `Kelola dokumen Surat Keterangan Kepegawaian Pusdatin PU untuk tahun ${year}.`
               : `Akses dan unduh dokumen Surat Keterangan Kepegawaian resmi Pusdatin PU untuk tahun ${year}.`}
-          />
+            />
         </div>
 
         <DocumentsSection isAdmin={isAdmin} year={year} />

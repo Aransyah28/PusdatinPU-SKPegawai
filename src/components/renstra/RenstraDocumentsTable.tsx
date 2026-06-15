@@ -3,13 +3,11 @@
 import { CommonPagination } from "@/components/shared/CommonPagination";
 import { DocumentsToolbar } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
-import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
-import { RenstraUploadDialog } from "./RenstraUploadDialog";
 import { useRenstraTable } from "@/hooks/renstra/use-renstra-table";
 
 interface RenstraDocumentsTableProps {
@@ -25,7 +23,6 @@ export function RenstraDocumentsTable({ folderSlug, folderName, isAdmin = false 
     availableYears,
     sortOrder,
     currentPage,
-    uploadOpen,
     deletingId,
     downloadingId,
     deleteConfirmOpen,
@@ -34,7 +31,6 @@ export function RenstraDocumentsTable({ folderSlug, folderName, isAdmin = false 
     filteredDocuments,
     genericDocs,
     totalPages,
-    setUploadOpen,
     setCurrentPage,
     handleSearchChange,
     handleYearChange,
@@ -62,14 +58,6 @@ export function RenstraDocumentsTable({ folderSlug, folderName, isAdmin = false 
         selectedYear={selectedYear}
         availableYears={availableYears}
         onYearChange={handleYearChange}
-        actionButton={
-          isAdmin ? (
-            <DocumentsAddButton
-              onClick={() => setUploadOpen(true)}
-              label="Tambah Dokumen"
-            />
-          ) : undefined
-        }
       />
 
       {isLoading ? (
@@ -110,12 +98,6 @@ export function RenstraDocumentsTable({ folderSlug, folderName, isAdmin = false 
 
       {isAdmin && (
         <>
-          <RenstraUploadDialog
-            open={uploadOpen}
-            onOpenChange={setUploadOpen}
-            folderSlug={folderSlug}
-          />
-
           <DeleteConfirmDialog
             open={deleteConfirmOpen}
             onOpenChange={setDeleteConfirmOpen}

@@ -6,6 +6,7 @@ import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { getRenstraFolderBySlug } from "@/lib/renstra/renstra-queries";
 import { RenstraDocumentsTable } from "@/components/renstra/RenstraDocumentsTable";
+import { RenstraUploadAction } from "@/components/renstra/RenstraUploadAction";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function RenstraFolderPage({ params }: { params: Promise<{ 
           <PageHeader
             title={`Renstra ${folder.name}`}
             description={`Kelola dan lihat dokumen yang berada di dalam folder ${folder.name}.`}
+            action={isAdmin ? <RenstraUploadAction folderSlug={folder.slug} /> : undefined}
           />
 
           {/* Table */}

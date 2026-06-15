@@ -4,6 +4,8 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { RkaklDocumentsTable } from "@/components/rkakl/RkaklDocumentsTable";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { RkaklUploadAction } from "@/components/rkakl/RkaklUploadAction";
 
 export const dynamic = "force-dynamic";
 
@@ -54,10 +56,11 @@ export default async function RkaklYearPage({ params }: PageProps) {
         </div>
 
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg mb-1">RKAKL Tahun {year}</h1>
-          <p className="text-title-md mt-2 max-w-2xl text-body/80">
-            Berikut adalah daftar dokumen Rencana Kerja dan Anggaran Pusdatin PU untuk tahun {year}.
-          </p>
+          <PageHeader
+            title={`RKAKL Tahun ${year}`}
+            description={`Berikut adalah daftar dokumen Rencana Kerja dan Anggaran Pusdatin PU untuk tahun ${year}.`}
+            action={isAdmin ? <RkaklUploadAction /> : undefined}
+          />
         </div>
 
         <RkaklDocumentsTable year={year} isAdmin={isAdmin} />

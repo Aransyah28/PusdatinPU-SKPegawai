@@ -2,13 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { CommonPagination } from "@/components/shared/CommonPagination";
-import { SopUploadDialog } from "./SopUploadDialog";
 import { useSopTable } from "@/hooks/use-sop-table";
 import { DocumentsDesktopList } from "@/components/documents/DocumentsDesktopList";
 import { DocumentsMobileList } from "@/components/documents/DocumentsMobileList";
 import { DocumentsToolbar, type SortOrder } from "@/components/shared/DocumentsToolbar";
 import { DocumentsEmptyState } from "@/components/shared/DocumentsEmptyState";
-import { DocumentsAddButton } from "@/components/shared/DocumentsAddButton";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
 import { TableErrorState } from "@/components/shared/TableErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
@@ -33,8 +31,6 @@ export function SopDocumentsTable({
     handleSearchChange,
     currentPage,
     setCurrentPage,
-    uploadOpen,
-    setUploadOpen,
     deletingId,
     downloadingId,
     filteredDocuments,
@@ -48,7 +44,6 @@ export function SopDocumentsTable({
     deleteConfirmOpen,
     setDeleteConfirmOpen,
     handleDownload,
-    handleUploadSuccess,
     itemsPerPage,
     sortOrder,
     setSortOrder
@@ -79,14 +74,6 @@ export function SopDocumentsTable({
         searchPlaceholder="Cari judul SOP..."
         sortOrder={sortOrder as SortOrder}
         onSortChange={(order) => setSortOrder(order as SortOrder)}
-        actionButton={
-          isAdmin ? (
-            <DocumentsAddButton
-              onClick={() => setUploadOpen(true)}
-              label="Tambah SOP"
-            />
-          ) : undefined
-        }
       />
 
       {/* Content */}
@@ -128,14 +115,6 @@ export function SopDocumentsTable({
 
       {isAdmin && (
         <>
-          <SopUploadDialog
-            open={uploadOpen}
-            onOpenChange={setUploadOpen}
-            defaultBidang={bidang}
-            defaultYear={year}
-            onSuccess={handleUploadSuccess}
-          />
-          
           <DeleteConfirmDialog
             open={deleteConfirmOpen}
             onOpenChange={setDeleteConfirmOpen}

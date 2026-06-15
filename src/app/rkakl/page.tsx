@@ -9,6 +9,7 @@ import { PageBreadcrumbs } from "@/components/shared/PageBreadcrumbs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
+import { RkaklUploadAction } from "@/components/rkakl/RkaklUploadAction";
 
 export const metadata = {
   title: "RKAKL - Pusdatin PU",
@@ -24,6 +25,8 @@ export default async function RKAKLPage() {
     return null;
   });
 
+  const isAdmin = session?.user?.role === "admin";
+
   return (
     <AppLayout user={session?.user ?? null}>
         {/* Breadcrumb Navigation */}
@@ -34,6 +37,7 @@ export default async function RKAKLPage() {
           <PageHeader 
             title="Dokumen RKAKL"
             description="Kelola dan lihat dokumen RKAKL Pusdatin PU berdasarkan tahun."
+            action={isAdmin ? <RkaklUploadAction /> : undefined}
           />
 
           {/* Konten Card Tahun */}
