@@ -132,10 +132,12 @@ export function useReportUploadForm(
     file,
     handleFileChange,
     reportType,
-    reportTypeOptions: Object.entries(reportTypeMap).map(([value, config]) => ({
-      label: config.title,
-      value: value as ReportType,
-    })),
+    reportTypeOptions: Object.entries(reportTypeMap)
+      .filter(([_, config]) => !("standalone" in config && config.standalone))
+      .map(([value, config]) => ({
+        label: config.title,
+        value: value as ReportType,
+      })),
     resetForm,
     setDescription,
     setReportType,
