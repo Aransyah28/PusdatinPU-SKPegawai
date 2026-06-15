@@ -4,6 +4,8 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { LaporanKeuanganDocumentsTable } from "@/components/laporan-keuangan/LaporanKeuanganDocumentsTable";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LaporanKeuanganUploadAction } from "@/components/laporan-keuangan/LaporanKeuanganUploadAction";
 
 export const dynamic = "force-dynamic";
 
@@ -54,10 +56,11 @@ export default async function LaporanKeuanganYearPage({ params }: PageProps) {
         </div>
 
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg mb-1">Laporan Keuangan Tahun {year}</h1>
-          <p className="text-title-md mt-2 max-w-2xl text-body/80">
-            Berikut adalah daftar dokumen Laporan Keuangan Pusdatin PU untuk tahun {year}.
-          </p>
+          <PageHeader
+            title={`Laporan Keuangan Tahun ${year}`}
+            description={`Berikut adalah daftar dokumen Laporan Keuangan Pusdatin PU untuk tahun ${year}.`}
+            action={isAdmin ? <LaporanKeuanganUploadAction /> : undefined}
+          />
         </div>
 
         <LaporanKeuanganDocumentsTable year={year} isAdmin={isAdmin} />

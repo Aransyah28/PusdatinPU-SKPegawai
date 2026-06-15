@@ -4,6 +4,8 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { LpjBendaharaDocumentsTable } from "@/components/lpj-bendahara/LpjBendaharaDocumentsTable";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LpjBendaharaUploadAction } from "@/components/lpj-bendahara/LpjBendaharaUploadAction";
 
 export const dynamic = "force-dynamic";
 
@@ -54,10 +56,11 @@ export default async function LpjBendaharaYearPage({ params }: PageProps) {
         </div>
 
         <div className="mb-10 lg:mb-12">
-          <h1 className="text-headline-lg mb-1">LPJ Bendahara Tahun {year}</h1>
-          <p className="text-title-md mt-2 max-w-2xl text-body/80">
-            Berikut adalah daftar dokumen LPJ Bendahara Pusdatin PU untuk tahun {year}.
-          </p>
+          <PageHeader
+            title={`LPJ Bendahara Tahun ${year}`}
+            description={`Berikut adalah daftar dokumen LPJ Bendahara Pusdatin PU untuk tahun ${year}.`}
+            action={isAdmin ? <LpjBendaharaUploadAction /> : undefined}
+          />
         </div>
 
         <LpjBendaharaDocumentsTable year={year} isAdmin={isAdmin} />
