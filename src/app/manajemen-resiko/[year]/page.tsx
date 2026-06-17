@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { YearReportDocumentsTable } from "@/components/reports/YearReportDocumentsTable";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -40,9 +41,9 @@ export default async function ManajemenResikoYearPage({ params }: ManajemenResik
               Beranda
             </a>
             <span className="text-slate-300">&gt;</span>
-            <a href="/manajemen-resiko" className="transition-colors hover:text-primary">
+            <Link href="/manajemen-resiko" className="transition-colors hover:text-primary">
               Manajemen Resiko
-            </a>
+            </Link>
             <span className="text-slate-300">&gt;</span>
             <span className="font-black tracking-tight text-primary">{year}</span>
           </nav>

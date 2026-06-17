@@ -83,7 +83,7 @@ export function ReportUploadDialog({
         placeholder="Contoh: Laporan Kinerja 2025"
       />
 
-      {!((getReportTypeConfig(defaultReportType) as any)?.standalone) && (
+      {!((getReportTypeConfig(defaultReportType) as { standalone?: boolean })?.standalone) && (
         <FormSelectField
           label="Jenis Laporan"
           required
