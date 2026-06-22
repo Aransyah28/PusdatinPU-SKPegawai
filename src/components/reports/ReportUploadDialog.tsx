@@ -7,7 +7,7 @@ import { FileUploadDropzone } from "@/components/shared/FileUploadDropzone";
 import { BaseUploadDialog } from "@/components/shared/BaseUploadDialog";
 import { useReportUploadForm } from "@/hooks/use-report-upload-form";
 import { MAX_UPLOAD_FILE_SIZE_MB } from "@/lib/constants";
-import type { ReportType } from "@/lib/reports/report-types";
+import { reportTypeMap, getReportTypeConfig, type ReportType } from "@/lib/reports/report-types";
 
 interface ReportUploadDialogProps {
   open: boolean;
@@ -83,14 +83,16 @@ export function ReportUploadDialog({
         placeholder="Contoh: Laporan Kinerja 2025"
       />
 
-      <FormSelectField
-        label="Jenis Laporan"
-        required
-        value={reportType}
-        onChange={(event) => setReportType(event.target.value as ReportType)}
-        options={reportTypeOptions}
-        placeholder="Pilih jenis laporan"
-      />
+      {!((getReportTypeConfig(defaultReportType) as { standalone?: boolean })?.standalone) && (
+        <FormSelectField
+          label="Jenis Laporan"
+          required
+          value={reportType}
+          onChange={(event) => setReportType(event.target.value as ReportType)}
+          options={reportTypeOptions}
+          placeholder="Pilih jenis laporan"
+        />
+      )}
 
       <FormTextField
         label="Tahun"

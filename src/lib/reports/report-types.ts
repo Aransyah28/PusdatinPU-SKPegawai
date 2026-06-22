@@ -15,6 +15,16 @@ export const reportTypeMap = {
     blobDirectory: "laporantriwulan",
     title: "Laporan Triwulan",
   },
+  "manajemen-resiko": {
+    blobDirectory: "manajemenresiko",
+    title: "Manajemen Resiko",
+    standalone: true,
+  },
+  "perjanjian-kinerja": {
+    blobDirectory: "perjanjiankinerja",
+    title: "Perjanjian Kinerja",
+    standalone: true,
+  },
 } as const;
 
 export type ReportType = keyof typeof reportTypeMap;
