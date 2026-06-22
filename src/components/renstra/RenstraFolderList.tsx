@@ -5,6 +5,7 @@ import { FolderCard } from "@/components/shared/FolderCard";
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import { CreateFolderDialog } from "./CreateFolderDialog";
+import { DeleteFolderDialog } from "./DeleteFolderDialog";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
 import { useRenstraFolders } from "@/hooks/renstra/use-renstra-folders";
@@ -17,6 +18,7 @@ interface RenstraFolderListProps {
 
 export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [folderToDelete, setFolderToDelete] = useState<RenstraFolderSummary | null>(null);
 
   const { data: folders, isLoading } = useRenstraFolders(initialData);
 
@@ -46,12 +48,18 @@ export function RenstraFolderList({ initialData, isAdmin }: RenstraFolderListPro
               href={`/renstra/${folder.slug}`}
               name={folder.name}
               count={folder.count}
+              onDeleteClick={isAdmin ? () => setFolderToDelete(folder) : undefined}
             />
           ))}
         </div>
       )}
 
       <CreateFolderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <DeleteFolderDialog 
+        open={!!folderToDelete} 
+        onOpenChange={(open) => !open && setFolderToDelete(null)} 
+        folderToDelete={folderToDelete} 
+      />
     </div>
   );
 }

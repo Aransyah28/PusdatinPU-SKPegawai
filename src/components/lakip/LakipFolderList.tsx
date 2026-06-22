@@ -5,6 +5,7 @@ import { FolderCard } from "@/components/shared/FolderCard";
 import { Button } from "@/components/ui/button";
 import { FolderPlus } from "lucide-react";
 import { CreateLakipFolderDialog } from "./CreateLakipFolderDialog";
+import { DeleteLakipFolderDialog } from "./DeleteLakipFolderDialog";
 import { YearCardEmptyState } from "@/components/shared/YearCardEmptyState";
 import { YearCardSkeleton } from "@/components/shared/YearCardSkeleton";
 import { useLakipFolders } from "@/hooks/lakip/use-lakip-folders";
@@ -17,6 +18,7 @@ interface LakipFolderListProps {
 
 export function LakipFolderList({ initialData, isAdmin }: LakipFolderListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [folderToDelete, setFolderToDelete] = useState<LakipFolderSummary | null>(null);
 
   const { data: folders, isLoading } = useLakipFolders(initialData);
 
@@ -46,12 +48,18 @@ export function LakipFolderList({ initialData, isAdmin }: LakipFolderListProps) 
               href={`/lakip/${folder.slug}`}
               name={folder.name}
               count={folder.count}
+              onDeleteClick={isAdmin ? () => setFolderToDelete(folder) : undefined}
             />
           ))}
         </div>
       )}
 
       <CreateLakipFolderDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <DeleteLakipFolderDialog 
+        open={!!folderToDelete} 
+        onOpenChange={(open) => !open && setFolderToDelete(null)} 
+        folderToDelete={folderToDelete} 
+      />
     </div>
   );
 }
