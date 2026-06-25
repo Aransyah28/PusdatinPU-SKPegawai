@@ -45,6 +45,7 @@ export function DeleteConfirmDialog({
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
+              if (isPending) return;
               onConfirm();
             }}
             disabled={isPending}

@@ -1,9 +1,8 @@
 "use client";
 
-import { toast } from "sonner";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { RenstraFolderSummary } from "@/lib/renstra/renstra-types";
+import { useDeleteRenstraFolder } from "@/hooks/renstra/use-delete-renstra-folder";
 
 interface DeleteFolderDialogProps {
   open: boolean;
@@ -12,27 +11,8 @@ interface DeleteFolderDialogProps {
 }
 
 export function DeleteFolderDialog({ open, onOpenChange, folderToDelete }: DeleteFolderDialogProps) {
-  const queryClient = useQueryClient();
-
-  const deleteMutation = useMutation({
-    mutationFn: async (slug: string) => {
-      const res = await fetch(`/api/renstra/folders/${slug}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Gagal menghapus folder");
-      }
-      return res.json();
-    },
-    onSuccess: () => {
-      toast.success("Folder berhasil dihapus.");
-      queryClient.invalidateQueries({ queryKey: ["renstra-folders"] });
-      onOpenChange(false);
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
+  const deleteMutation = useDeleteRenstraFolder({
+    onSuccessCallback: () => onOpenChange(false),
   });
 
   const handleConfirm = () => {
